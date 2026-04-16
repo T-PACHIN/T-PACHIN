@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>T-PACHIN · 小丑系列專場 · 4.5.6號機完整版</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;500;700;900&family=Noto+Sans+JP:wght@300;500;700;900&family=Russo+One&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: #0a0c1a; color: #fff; font-family: 'Noto Sans JP', 'Orbitron', sans-serif; min-height: 100vh; display: flex; flex-direction: column; position: relative; }
+        body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-image: linear-gradient(rgba(74, 128, 192, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(153, 0, 255, 0.03) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; z-index: 0; }
+        .max-w-md { max-width: 448px; margin: 0 auto; height: 100vh; position: relative; z-index: 1; background: linear-gradient(145deg, #0f1425, #0a0e1f); box-shadow: 0 0 50px rgba(74, 128, 192, 0.2); border-left: 1px solid rgba(74, 128, 192, 0.2); border-right: 1px solid rgba(153, 0, 255, 0.2); display: flex; flex-direction: column; overflow: hidden; }
+        ::-webkit-scrollbar { width: 4px; height: 0px; background: transparent; }
+        ::-webkit-scrollbar-track { background: rgba(74, 128, 192, 0.1); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: rgba(74, 128, 192, 0.5); border-radius: 10px; }
+        .metal-header { background: linear-gradient(145deg, #2a2f3f, #1a1f2f); border-bottom: 2px solid #4a80c0; border-top: 2px solid #4a80c0; box-shadow: 0 5px 0 #0f121c, 0 10px 15px rgba(74, 128, 192, 0.3), inset 0 2px 5px rgba(255,255,255,0.3), inset 0 -3px 8px rgba(0,0,0,0.6); position: relative; overflow: hidden; border-radius: 0 0 30px 30px; padding: 0.75rem 1rem; flex-shrink: 0; }
+        .metal-header::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transform: skewX(-20deg); animation: shine 4s infinite; pointer-events: none; }
+        @keyframes shine { 0% { left: -100%; } 20% { left: 120%; } 100% { left: 120%; } }
+        .logo { display: flex; align-items: center; gap: 8px; font-family: 'Orbitron','Russo One',sans-serif; cursor: pointer; transition: transform 0.2s ease; text-decoration: none; color: inherit; }
+        .logo:active { transform: scale(0.97); }
+        .logo-icon { width: 40px; height: 40px; background: linear-gradient(135deg, #000, #111, #222); border-radius: 12px; position: relative; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(74,128,192,0.5), inset 0 0 10px rgba(255,215,0,0.2); overflow: hidden; border: 2px solid #ffd700; }
+        .logo-icon::before { content: ''; position: absolute; width: 100%; height: 100%; background: conic-gradient(from 0deg, transparent, #4a80c0, #c90a0a, #ffd700, transparent); animation: logoRotate 4s linear infinite; }
+        .logo-icon::after { content: ''; position: absolute; width: 30px; height: 30px; background: #000; border-radius: 8px; }
+        @keyframes logoRotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .logo-icon-inner { position: relative; z-index: 2; font-size: 16px; font-weight: 900; background: linear-gradient(45deg, #ffdf00, #ffec8b, #4a80c0); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .logo-text { display: flex; flex-direction: column; line-height: 1.1; }
+        .logo-main { font-size: 18px; font-weight: 900; background: linear-gradient(45deg, #ffdf00, #ffd700, #4a80c0); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: textShine 3s ease-in-out infinite alternate; }
+        .logo-sub { font-size: 9px; color: #4a80c0; font-weight: 500; letter-spacing: 0.8px; text-shadow: 0 0 4px rgba(74, 128, 192, 0.5); }
+        @keyframes textShine { from { filter: brightness(1); } to { filter: brightness(1.2); text-shadow: 0 0 10px #ffd700; } }
+        .nickname-link { color: #ffffff; text-shadow: 0 2px 3px black, 0 0 10px rgba(255,255,255,0.3); font-weight: 600; transition: all 0.2s ease; font-size: 1.3rem; line-height: 1.3; margin-bottom: 4px; letter-spacing: 0.5px; text-decoration: none; cursor: pointer; display: inline-block; }
+        .nickname-link:hover { color: #ffd966; text-shadow: 0 0 10px #ffd700, 0 2px 3px black; }
+        .nickname-link:active { transform: scale(0.98); }
+        .points-display { background: linear-gradient(145deg, #4a3a1a, #3a2a0a); padding: 0.15rem 1.5rem; border-radius: 30px; box-shadow: inset 0 2px 5px rgba(255,215,0,0.5), inset 0 -3px 5px rgba(0,0,0,0.6), 0 4px 0 #2a1f0a, 0 0 12px #ffd700; border: 1px solid #ffd700; color: #ffd966; font-weight: 900; font-size: 1.1rem; text-shadow: 0 2px 3px black; cursor: pointer; transition: all 0.1s ease; line-height: 1.3; min-width: 100px; text-align: center; }
+        .announcement-combo { background: linear-gradient(145deg, #2a2f3f, #1a1f2f); border: 1px solid #4a80c0; border-radius: 40px; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.75rem; margin-top: 0.5rem; margin-bottom: 0.5rem; }
+        .combo-announce-btn { background: linear-gradient(145deg, #3a5065, #2a4055); border: 1px solid #4a80c0; color: white; border-radius: 30px; padding: 0.25rem 1rem; display: flex; align-items: center; gap: 0.25rem; font-size: 0.8rem; font-weight: bold; cursor: pointer; }
+        .combo-marquee { flex: 1; overflow: hidden; color: #b3e4ff; font-size: 0.8rem; }
+        .marquee-content { display: inline-block; white-space: nowrap; animation: marqueeScroll 20s linear infinite; padding-left: 100%; }
+        @keyframes marqueeScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+        .top-banner { width: 100%; height: 180px; background-color: #1a1f2f; border-radius: 20px; margin: 0.5rem 0; overflow: hidden; position: relative; border: 2px solid #4a80c0; }
+        .banner-slider { width: 100%; height: 100%; display: flex; transition: transform 0.5s ease-in-out; }
+        .banner-slider img { width: 100%; height: 100%; object-fit: cover; flex-shrink: 0; }
+        .banner-dots { position: absolute; bottom: 8px; left: 0; right: 0; display: flex; justify-content: center; gap: 8px; z-index: 5; }
+        .banner-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.3); border: 1px solid #4a80c0; cursor: pointer; }
+        .banner-dot.active { background: #ffd700; border-color: #ffd700; }
+        .tab-container { position: relative; width: 100%; overflow: hidden; }
+        .tabs-wrapper { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 0 4px; }
+        .tabs-wrapper::-webkit-scrollbar { display: none; }
+        .tab-btn { flex: 0 0 auto; white-space: nowrap; cursor: pointer; padding: 0.5rem 1.25rem; border-radius: 30px; font-size: 0.875rem; font-weight: 700; background: linear-gradient(145deg, #3a4050, #2a2f40); border: 1px solid #4a80c0; color: #b0c4de; box-shadow: inset 0 2px 3px rgba(255,255,255,0.2), inset 0 -2px 3px rgba(0,0,0,0.3), 0 4px 0 #0f121c; transition: all 0.1s ease; }
+        .tab-btn:active { transform: translateY(2px); box-shadow: inset 0 2px 3px rgba(0,0,0,0.4), 0 1px 0 #0f121c; }
+        .tab-btn.tech-tab-active { background: linear-gradient(145deg, #4a5065, #3a4055); color: white; border-color: #ffd700; box-shadow: inset 0 2px 5px rgba(255,255,255,0.5), inset 0 -2px 5px rgba(0,0,0,0.4), 0 4px 0 #0f121c, 0 0 15px #4a80c0; }
+        .game-card-bg { background: linear-gradient(145deg, #1a1f2f, #0f1425); border: 2px solid #4a80c0; border-radius: 24px; position: relative; overflow: hidden; transition: all 0.2s ease; box-shadow: 0 8px 0 #0f121c, inset 0 1px 2px rgba(255,255,255,0.1); cursor: pointer; }
+        .game-card-bg:hover { transform: translateY(-3px); box-shadow: 0 11px 0 #0f121c, inset 0 1px 2px rgba(255,255,255,0.15); }
+        .game-card-bg:active { transform: translateY(4px); box-shadow: 0 4px 0 #0f121c; }
+        .game-card-bg img { width: 100%; height: 120px; object-fit: cover; border-bottom: 2px solid #4a80c0; }
+        .card-title-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 8px; width: 100%; }
+        .card-title-wrapper { flex: 1; overflow: hidden; position: relative; }
+        .card-title-scroll { display: inline-block; font-size: 1rem; font-weight: 700; color: #ffd966; text-shadow: 0 1px 2px black; white-space: nowrap; will-change: transform; }
+        .card-title-wrapper.scrollable { overflow: hidden; }
+        .card-title-wrapper.scrollable .card-title-scroll { animation: scrollText 10s linear infinite; padding-left: 100%; }
+        @keyframes scrollText { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+        .machine-badge { display: inline-block; padding: 4px 10px; font-size: 0.7rem; font-weight: 700; border-radius: 30px; background: linear-gradient(145deg, #2a2f3f, #1a1f2f); border: 1px solid #4a80c0; box-shadow: inset 0 1px 1px rgba(255,255,255,0.2), 0 2px 3px rgba(0,0,0,0.3); flex-shrink: 0; }
+        .badge-4 { background: linear-gradient(145deg, #4a1a6e, #3a0a5e); border-color: #ff66ff; color: #ffccff; }
+        .badge-5 { background: linear-gradient(145deg, #1a4a6e, #0a3a5e); border-color: #66ffff; color: #ccffff; }
+        .badge-6 { background: linear-gradient(145deg, #6e4a1a, #5e3a0a); border-color: #ffaa66; color: #ffe6cc; }
+        .vendor-info { display: flex; align-items: center; justify-content: space-between; margin: 8px 0; }
+        .vendor-name { background: linear-gradient(145deg, #2a3a4a, #1a2a3a); border: 1px solid #4a80c0; border-radius: 30px; padding: 3px 12px; font-size: 0.7rem; color: #aaffff; box-shadow: inset 0 1px 1px rgba(255,255,255,0.1), 0 2px 3px rgba(0,0,0,0.2); }
+        .status-stats { display: flex; gap: 8px; }
+        .stat-icon-only { display: flex; align-items: center; gap: 4px; font-size: 0.7rem; padding: 2px 8px; border-radius: 30px; background: linear-gradient(145deg, #1a2a2a, #0a1a1a); border: 1px solid #4a80c0; box-shadow: inset 0 1px 1px rgba(255,255,255,0.1), 0 2px 2px rgba(0,0,0,0.2); }
+        .stat-icon-only i { font-size: 0.7rem; }
+        .stat-icon-only .empty-count { color: #00ff00; text-shadow: 0 0 3px #00ff00; }
+        .stat-icon-only .using-count { color: #ff4444; text-shadow: 0 0 3px #ff4444; }
+        .popular-badge { position: absolute; top: 8px; left: 8px; background: linear-gradient(145deg, #ef4444, #dc2626); color: white; font-size: 0.7rem; font-weight: bold; padding: 2px 10px; border-radius: 30px; z-index: 10; box-shadow: inset 0 1px 2px rgba(255,255,255,0.3), 0 2px 4px rgba(0,0,0,0.4); }
+        .new-machine-badge { position: absolute; top: 6px; right: 6px; z-index: 10; width: 70px; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.5)); }
+        .new-machine-badge img { width: 100%; height: auto; }
+        .enter-btn { background: linear-gradient(145deg, #3a5065, #2a4055); border: 1px solid #4a80c0; color: white; font-size: 0.75rem; padding: 8px 0; border-radius: 30px; font-weight: 700; width: 100%; cursor: pointer; margin-top: 8px; font-family: 'Orbitron', 'Noto Sans TC', sans-serif; letter-spacing: 1px; box-shadow: inset 0 2px 3px rgba(255,255,255,0.3), inset 0 -2px 3px rgba(0,0,0,0.4), 0 5px 0 #0f121c; transition: all 0.08s linear; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+        .enter-btn:active { transform: translateY(3px); box-shadow: inset 0 3px 5px rgba(0,0,0,0.5), inset 0 -1px 2px rgba(255,255,255,0.2), 0 2px 0 #0f121c; }
+        .category-title { color: #fff; font-weight: 700; padding: 12px 20px; background: linear-gradient(145deg, #2a2f3f, #1a1f2f); margin-bottom: 1rem; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; border-radius: 30px; border: 2px solid #4a80c0; box-shadow: inset 0 1px 2px rgba(255,255,255,0.2), 0 5px 0 #0f121c; }
+        .vertical-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.5rem; }
+        .bottom-nav { width: 100%; max-width: 448px; padding: 0.6rem 1.5rem; background: linear-gradient(145deg, #2a2f3f, #1a1f2f); border-top: 2px solid #4a80c0; border-bottom: 2px solid #4a80c0; border-radius: 30px 30px 30px 30px; box-shadow: 0 -5px 15px rgba(74, 128, 192, 0.3), 0 8px 10px rgba(0, 0, 0, 0.6), inset 0 2px 5px rgba(255, 255, 255, 0.3), inset 0 -3px 8px rgba(0, 0, 0, 0.6); position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 50; display: flex; justify-content: space-between; align-items: center; overflow: hidden; }
+        .bottom-nav::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent); transform: skewX(-20deg); animation: shine 4s infinite; pointer-events: none; }
+        .nav-item { position: relative; display: flex; flex-direction: column; align-items: center; padding: 0.5rem 0.75rem; border-radius: 20px; text-decoration: none; outline: none; background: linear-gradient(145deg, #3a4050, #2a2f40); box-shadow: 0 5px 0 #0f121c, inset 0 2px 5px rgba(255, 255, 255, 0.3), inset 0 -3px 5px rgba(0, 0, 0, 0.3); text-shadow: 0 2px 3px rgba(0, 0, 0, 0.5); border: 1px solid rgba(74, 128, 192, 0.2); color: #b0c4de; transition: all 0.1s ease; font-family: 'Noto Sans TC', 'Noto Sans JP', 'Orbitron', sans-serif; flex: none; width: 50px; }
+        .nav-item i { font-size: 1.4rem; margin-bottom: 2px; filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.5)); }
+        .nav-item span { font-weight: 700; letter-spacing: 0.5px; font-size: 0.7rem; }
+        .nav-item:active { transform: translateY(3px); box-shadow: 0 2px 0 #0f121c, inset 0 5px 8px rgba(0, 0, 0, 0.5), inset 0 -2px 5px rgba(255, 255, 255, 0.2); color: #4a80c0; }
+        .nav-item.current-page { background: linear-gradient(145deg, #4a5065, #3a4055); box-shadow: 0 5px 0 #0f121c, 0 10px 15px rgba(74, 128, 192, 0.5), inset 0 2px 8px rgba(255, 255, 255, 0.6), inset 0 -3px 8px rgba(0, 0, 0, 0.4); color: white; border: 1px solid #4a80c0; transform: scale(1.05); text-shadow: 0 0 8px #4a80c0; }
+        .main-content { flex: 1; overflow-y: auto; padding: 0 1rem 80px 1rem; scrollbar-width: thin; scrollbar-color: #4a80c0 transparent; }
+        .main-content::-webkit-scrollbar { width: 3px; }
+        .main-content::-webkit-scrollbar-track { background: transparent; }
+        .main-content::-webkit-scrollbar-thumb { background: #4a80c0; border-radius: 10px; }
+        .filter-drawer { position: fixed; top: 0; right: -100%; width: 85%; max-width: 360px; height: 100vh; background: linear-gradient(165deg, #0f1428, #080c1a); border-left: 3px solid #4a80c0; z-index: 10000; transition: right 0.3s; overflow-y: auto; padding: 2rem 1.5rem; box-shadow: -5px 0 25px rgba(0,0,0,0.5); scrollbar-width: thin; }
+        .filter-drawer.open { right: 0; }
+        .drawer-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 9999; display: none; }
+        .drawer-overlay.open { display: block; }
+        .filter-section { margin-bottom: 1.5rem; }
+        .filter-section h3 { color: #ffd966; margin-bottom: 0.8rem; font-size: 1rem; text-shadow: 0 1px 2px black; }
+        .filter-options { display: flex; flex-wrap: wrap; gap: 8px; }
+        .filter-chip { background: radial-gradient(circle at 30% 25%, #2a3042, #1a1f30); border-radius: 30px; padding: 0.5rem 1rem; font-size: 0.75rem; font-weight: 600; color: #cce6ff; cursor: pointer; box-shadow: inset 0 1px 1px rgba(255,255,255,0.1), 0 2px 4px rgba(0,0,0,0.3); transition: all 0.1s ease; }
+        .filter-chip:active { transform: translateY(1px); }
+        .filter-chip.selected { background: radial-gradient(circle at 30% 25%, #4a80c0, #2a5a8a); color: white; box-shadow: 0 0 12px #4a80c0, inset 0 1px 2px rgba(255,255,255,0.3); }
+        .drawer-actions { display: flex; gap: 1rem; margin-top: 2rem; }
+        .drawer-btn { flex: 1; padding: 0.8rem; border-radius: 30px; font-weight: bold; text-align: center; cursor: pointer; box-shadow: inset 0 1px 2px rgba(255,255,255,0.2), 0 4px 0 #0f121c; transition: all 0.08s linear; }
+        .drawer-btn:active { transform: translateY(2px); box-shadow: inset 0 1px 2px rgba(0,0,0,0.4), 0 1px 0 #0f121c; }
+        .drawer-btn.clear { background: linear-gradient(145deg, #4a2a2a, #2a1a1a); color: #ffaaaa; }
+        .drawer-btn.apply { background: linear-gradient(145deg, #2a5a7a, #1a4a6a); color: white; }
+        .machine-modal, .sub-confirm-modal, .hologram-loading, .settlement-modal, .confirm-leave-modal, .alert-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); backdrop-filter: blur(8px); z-index: 20000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: 0.2s; }
+        .machine-modal.show, .sub-confirm-modal.show, .hologram-loading.show, .settlement-modal.show, .confirm-leave-modal.show, .alert-modal.show { opacity: 1; visibility: visible; }
+        .alert-content { background: linear-gradient(145deg, #2a2f3f, #1a1f2f); border: 2px solid #ffd700; border-radius: 40px; max-width: 300px; width: 90%; padding: 1.8rem 1.5rem; text-align: center; box-shadow: 0 20px 40px rgba(74, 128, 192, 0.5), inset 0 2px 5px rgba(255,255,255,0.3), inset 0 -3px 8px rgba(0,0,0,0.6), 0 8px 0 #0f121c; }
+        .alert-icon { font-size: 48px; margin-bottom: 12px; }
+        .alert-title { font-size: 1.4rem; font-weight: 900; color: #ffd700; margin-bottom: 8px; }
+        .alert-message { color: #b3e4ff; font-size: 0.9rem; margin-bottom: 20px; }
+        .alert-btn { background: linear-gradient(145deg, #ffaa33, #ff8c00); border: 1px solid #ffd700; border-radius: 40px; padding: 10px 20px; font-weight: bold; cursor: pointer; color: #2a1f0a; display: inline-block; }
+        .alert-btn:active { transform: scale(0.96); }
+        .modal-content { background: linear-gradient(145deg, #2a2f3f, #1a1f2f); border: 2px solid #4a80c0; border-radius: 30px; width: 90%; max-width: 400px; max-height: 80vh; overflow-y: auto; padding: 1rem; box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.1); scrollbar-width: thin; }
+        .modal-header { display: flex; justify-content: space-between; border-bottom: 1px solid #4a80c0; padding-bottom: 0.5rem; margin-bottom: 1rem; }
+        .modal-close { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(145deg, #3a4050, #2a2f40); display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: inset 0 1px 2px rgba(255,255,255,0.2), 0 2px 3px rgba(0,0,0,0.3); }
+        .modal-close:active { transform: translateY(1px); }
+        .data-mini-tabs { display: flex; gap: 8px; margin-bottom: 1rem; align-items: center; justify-content: space-between; }
+        .tabs-left { display: flex; gap: 8px; }
+        .data-mini-tab { background: linear-gradient(145deg, #3a4050, #2a2f40); border-radius: 20px; padding: 4px 12px; font-size: 0.7rem; cursor: pointer; box-shadow: inset 0 1px 1px rgba(255,255,255,0.1), 0 2px 2px rgba(0,0,0,0.2); }
+        .data-mini-tab.active { background: linear-gradient(145deg, #ffd700, #ffaa00); color: #000; box-shadow: 0 0 10px #ffd700; }
+        .ratio-select-mini { background: linear-gradient(145deg, #2a2f3f, #1a1f2f); border: 1px solid #ffd700; border-radius: 30px; padding: 4px 10px; color: #ffd966; font-weight: bold; font-size: 0.7rem; font-family: 'Orbitron', monospace; cursor: pointer; outline: none; box-shadow: inset 0 1px 2px rgba(0,0,0,0.3), 0 1px 3px rgba(0,0,0,0.2); background-color: #1a1f2f; }
+        .submachine-container { display: flex; flex-direction: column; gap: 0.8rem; max-height: 55vh; overflow-y: auto; scrollbar-width: thin; }
+        .sub-card { background: linear-gradient(145deg, #1a2a3a, #0a1a2a); border: 2px solid #4a80c0; border-radius: 20px; padding: 10px; cursor: pointer; position: relative; transition: all 0.2s ease; box-shadow: 0 4px 0 #0a1a2a; }
+        .sub-card:active { transform: translateY(2px); box-shadow: 0 2px 0 #0a1a2a; }
+        .sub-card.occupied-card { background: linear-gradient(145deg, #2a4a3a, #1a3a2a); border: 3px solid #ffaa44; box-shadow: 0 0 15px rgba(255, 170, 68, 0.6); }
+        .sub-card.using-card { border: 2px solid #ff4444; background: linear-gradient(145deg, #2a1a1a, #1a0a0a); box-shadow: 0 0 10px rgba(255,68,68,0.3); }
+        .sub-card.maintenance-card { background: linear-gradient(145deg, #3a2a2a, #2a1a1a); border: 3px solid #ff6666; box-shadow: 0 0 20px rgba(255,102,102,0.9), inset 0 0 15px rgba(255,0,0,0.3); animation: maintenancePulse 1.2s ease-in-out infinite; }
+        @keyframes maintenancePulse { 0%, 100% { border-color: #ff6666; box-shadow: 0 0 15px rgba(255,102,102,0.7); } 50% { border-color: #ff0000; box-shadow: 0 0 30px rgba(255,0,0,1); } }
+        .sub-title-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 5px; width: 100%; }
+        .sub-machine-name { font-size: 0.85rem; color: #ffd966; font-weight: bold; text-shadow: 0 1px 2px black; display: inline-flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+        .using-badge-small { background: linear-gradient(145deg, #ff4444, #cc2222); color: white; font-size: 0.65rem; font-weight: bold; border-radius: 20px; padding: 3px 8px; display: inline-flex; align-items: center; gap: 4px; box-shadow: inset 0 1px 2px rgba(255,255,255,0.3), 0 1px 2px rgba(0,0,0,0.3); animation: pulseRed 1.5s infinite; }
+        .occupied-badge-small { background: linear-gradient(135deg, #ffaa44, #ff8844); color: #2a2a0a; font-size: 0.65rem; font-weight: bold; border-radius: 20px; padding: 3px 8px; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 0 5px rgba(255,170,68,0.5); }
+        .maintenance-badge-small { background: linear-gradient(135deg, #ff6666, #cc3333); color: white; font-size: 0.65rem; font-weight: bold; border-radius: 20px; padding: 3px 8px; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 0 8px rgba(255,0,0,0.8); animation: pulseRed 1s infinite; }
+        .empty-badge-small { background: linear-gradient(145deg, #00aa55, #008844); color: white; font-size: 0.65rem; font-weight: bold; border-radius: 20px; padding: 3px 8px; display: inline-flex; align-items: center; gap: 4px; }
+        .maintenance-time { font-size: 0.75rem; color: #ffaa66; margin-top: 6px; font-weight: bold; background: rgba(0,0,0,0.4); padding: 4px 8px; border-radius: 16px; display: inline-block; width: auto; }
+        @keyframes pulseRed { 0%, 100% { box-shadow: 0 0 5px rgba(255,68,68,0.5); } 50% { box-shadow: 0 0 15px rgba(255,68,68,1); } }
+        .rate-info-group { display: inline-flex; gap: 6px; align-items: center; flex-shrink: 0; margin-left: auto; }
+        .sub-ratio-badge { background: linear-gradient(145deg, #2a2f3f, #1a1f2f); border: 1px solid #ffd700; border-radius: 20px; padding: 2px 8px; font-size: 0.65rem; color: #ffd700; box-shadow: inset 0 1px 1px rgba(255,255,255,0.1); flex-shrink: 0; }
+        .point-value-badge { background: linear-gradient(145deg, #3a2a4a, #2a1a3a); border: 1px solid #ff66cc; border-radius: 20px; padding: 2px 8px; font-size: 0.65rem; color: #ffaaee; box-shadow: inset 0 1px 1px rgba(255,255,255,0.1); flex-shrink: 0; }
+        .sub-page { display: none; }
+        .sub-page.active { display: block; }
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin: 8px 0; }
+        .stat-cell { background: linear-gradient(145deg, #0e1a2a, #061016); border: 1px solid #4a80c0; border-radius: 12px; padding: 6px; text-align: center; box-shadow: inset 0 1px 2px rgba(255,255,255,0.05), 0 1px 2px rgba(0,0,0,0.2); }
+        .stat-label { font-size: 0.65rem; color: #9ac2f0; }
+        .stat-number { font-size: 1rem; font-weight: bold; }
+        .bb-number { color: #ff7b7b; }
+        .rb-number { color: #73d98e; }
+        .curr-number { color: #7ec8ff; }
+        .total-number { color: #ffd966; }
+        .mini-cards-row { display: flex; gap: 5px; justify-content: space-between; padding: 6px 0; flex-wrap: nowrap; overflow: visible; width: 100%; }
+        .mini-card { flex: 1; min-width: 0; background: linear-gradient(145deg, #0e1a2a, #061016); border: 1px solid #4a80c0; border-radius: 8px; padding: 5px 2px; text-align: center; box-shadow: inset 0 1px 1px rgba(255,255,255,0.05), 0 1px 2px rgba(0,0,0,0.2); }
+        .card-number { font-size: 0.6rem; font-weight: 800; color: #ffd966; margin-bottom: 4px; text-shadow: 0 1px 2px black; }
+        .card-bars { display: flex; flex-direction: column-reverse; gap: 2px; min-height: 20px; margin-bottom: 4px; }
+        .card-bar-segment { width: 100%; height: 4px; border-radius: 2px; background: #2a4055; }
+        .card-bar-segment.filled-red { background: linear-gradient(90deg, #ff5555, #cc0000); box-shadow: 0 0 1px #ff5555; }
+        .card-bar-segment.filled-green { background: linear-gradient(90deg, #55ff55, #00aa00); box-shadow: 0 0 1px #55ff55; }
+        .card-value { font-size: 0.55rem; font-weight: 700; color: #ffd966; font-family: 'Orbitron'; text-shadow: 0 1px 2px black; }
+        .sub-page-indicator { display: flex; justify-content: center; gap: 6px; margin: 6px 0; }
+        .sub-dot { width: 6px; height: 6px; border-radius: 50%; background: #3a4050; border: 1px solid #4a80c0; cursor: pointer; transition: all 0.1s; }
+        .sub-dot.active { background: #ffd700; transform: scale(1.2); }
+        .sub-card-actions { display: flex; gap: 8px; margin-top: 6px; }
+        .enter-small { flex: 1; background: linear-gradient(145deg, #3a5065, #2a4055); border: 1px solid #4a80c0; color: white; font-size: 0.7rem; padding: 6px 0; border-radius: 20px; text-align: center; cursor: pointer; font-weight: 600; box-shadow: inset 0 1px 2px rgba(255,255,255,0.2), 0 2px 3px rgba(0,0,0,0.3); transition: all 0.08s linear; }
+        .enter-small:active:not(.disabled) { transform: translateY(1px); box-shadow: inset 0 1px 2px rgba(0,0,0,0.4), 0 1px 0 #0f121c; }
+        .leave-small { flex: 1; background: linear-gradient(145deg, #aa5533, #884422); border: 1px solid #ffaa66; color: #ffe6cc; font-size: 0.7rem; padding: 6px 0; border-radius: 20px; text-align: center; cursor: pointer; font-weight: 600; box-shadow: inset 0 1px 2px rgba(255,255,255,0.2), 0 2px 3px rgba(0,0,0,0.3); transition: all 0.08s linear; }
+        .leave-small:active { transform: translateY(1px); }
+        .favorite-small { width: 32px; height: 32px; background: linear-gradient(145deg, #3a4050, #2a2f40); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: inset 0 1px 2px rgba(255,255,255,0.2), 0 2px 3px rgba(0,0,0,0.3); transition: all 0.08s linear; flex-shrink: 0; }
+        .favorite-small:active { transform: translateY(1px); }
+        .favorite-small.active { background: linear-gradient(145deg, #ff69b4, #d43f8a); color: white; box-shadow: 0 0 10px #ff69b4; }
+        .sub-confirm-content, .settlement-content, .confirm-leave-content { background: linear-gradient(145deg, #2a2f3f, #1a1f2f); border: 2px solid #ffd700; border-radius: 40px; max-width: 340px; width: 100%; padding: 1.8rem 1.5rem; box-shadow: 0 20px 40px rgba(74, 128, 192, 0.5), inset 0 2px 5px rgba(255,255,255,0.3), inset 0 -3px 8px rgba(0,0,0,0.6), 0 8px 0 #0f121c; transform: scale(0.95); transition: transform 0.2s; position: relative; }
+        .modal-close-x { position: absolute; top: 15px; right: 15px; width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(145deg, #3a4050, #2a2f40); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1rem; color: #b0c4de; transition: all 0.2s ease; border: 1px solid #4a80c0; z-index: 10; }
+        .modal-close-x:hover { background: linear-gradient(145deg, #ff4444, #cc2222); color: white; border-color: #ffd700; }
+        .modal-close-x:active { transform: scale(0.95); }
+        .sub-confirm-modal.show .sub-confirm-content, .settlement-modal.show .settlement-content, .confirm-leave-modal.show .confirm-leave-content { transform: scale(1); }
+        .sub-confirm-header { text-align: center; margin-bottom: 1.2rem; border-bottom: 2px solid rgba(74, 128, 192, 0.5); padding-bottom: 0.8rem; }
+        .sub-confirm-header h3 { font-size: 1.6rem; font-weight: 900; background: linear-gradient(135deg, #ffd700, #ffaa33, #ffd966); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.25rem; text-shadow: 0 2px 5px rgba(0,0,0,0.3); letter-spacing: 1px; }
+        .sub-confirm-header p { color: #7ec8ff; font-size: 0.9rem; font-weight: 500; text-shadow: 0 1px 2px black; }
+        .sub-confirm-detail { background: linear-gradient(145deg, #1a2a3a, #0a1a2a); border: 1px solid #4a80c0; border-radius: 28px; padding: 1rem 1.2rem; margin-bottom: 1.2rem; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.1); }
+        .detail-row { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 0; border-bottom: 1px solid rgba(74, 128, 192, 0.3); }
+        .detail-row:last-child { border-bottom: none; }
+        .detail-label { color: #b3e4ff; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.5px; }
+        .detail-value { color: #ffd966; font-size: 1.1rem; font-weight: 800; font-family: 'Orbitron', monospace; text-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+        .sub-confirm-input-group { margin: 1.2rem 0; }
+        .sub-confirm-input-group label { display: block; color: #b3e4ff; margin-bottom: 0.6rem; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.5px; }
+        .sub-confirm-input-group label i { color: #ffaa33; margin-right: 4px; }
+        .sub-confirm-input-group input { width: 100%; padding: 0.8rem 1rem; background: linear-gradient(145deg, #1a2a3a, #0e1a2a); border: 2px solid #4a80c0; border-radius: 40px; color: #ffd966; font-size: 1rem; font-weight: 700; font-family: 'Orbitron', monospace; text-align: center; -moz-appearance: textfield; appearance: textfield; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5), 0 0 0 1px rgba(74,128,192,0.3); transition: all 0.2s ease; }
+        .sub-confirm-input-group input:focus { outline: none; border-color: #ffd700; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5), 0 0 15px rgba(255,215,0,0.4); }
+        .sub-confirm-input-group input::-webkit-inner-spin-button, .sub-confirm-input-group input::-webkit-outer-spin-button { opacity: 0; display: none; }
+        .sub-confirm-balance { text-align: right; color: #ffaa66; font-size: 0.8rem; margin-top: 0.5rem; font-weight: 500; }
+        .sub-confirm-balance i { margin-right: 4px; }
+        .sub-confirm-actions { display: flex; gap: 1rem; margin-top: 1.2rem; }
+        .sub-confirm-btn { flex: 1; padding: 0.8rem; border-radius: 40px; font-weight: 800; cursor: pointer; text-align: center; transition: all 0.1s ease; font-family: 'Noto Sans TC', 'Noto Sans JP', sans-serif; letter-spacing: 1px; font-size: 0.9rem; }
+        .sub-confirm-btn:active { transform: translateY(3px); }
+        .sub-confirm-btn.secondary { background: linear-gradient(145deg, #3a4050, #2a2f40); border: 1px solid #4a80c0; color: #b0c4de; box-shadow: inset 0 2px 5px rgba(255,255,255,0.2), inset 0 -3px 5px rgba(0,0,0,0.4), 0 5px 0 #0f121c; }
+        .sub-confirm-btn.secondary:active { box-shadow: inset 0 5px 8px rgba(0,0,0,0.6), inset 0 -2px 5px rgba(255,255,255,0.2), 0 2px 0 #0f121c; }
+        .sub-confirm-btn.primary { background: linear-gradient(145deg, #ffaa33, #ff8c00); border: 1px solid #ffd700; color: #2a1f0a; text-shadow: 0 1px 2px rgba(255,255,255,0.3); box-shadow: inset 0 2px 5px rgba(255,255,255,0.5), inset 0 -3px 5px rgba(0,0,0,0.2), 0 5px 0 #b85e00; }
+        .sub-confirm-btn.primary:active { box-shadow: inset 0 5px 8px rgba(0,0,0,0.4), inset 0 -2px 5px rgba(255,255,255,0.3), 0 2px 0 #b85e00; transform: translateY(3px); }
+        .settlement-detail, .confirm-leave-detail { background: linear-gradient(145deg, #1a2a3a, #0a1a2a); border: 1px solid #4a80c0; border-radius: 28px; padding: 1rem 1.2rem; margin-bottom: 1.2rem; }
+        .settlement-row { display: flex; justify-content: space-between; padding: 0.8rem 0; border-bottom: 1px solid rgba(74,128,192,0.3); }
+        .settlement-row:last-child { border-bottom: none; }
+        .settlement-label { color: #b3e4ff; font-size: 1rem; }
+        .settlement-value { color: #ffd966; font-weight: bold; font-size: 1.1rem; }
+        .settlement-actions, .confirm-leave-actions { display: flex; gap: 1rem; margin-top: 1.2rem; }
+        .settlement-btn, .confirm-leave-btn { flex: 1; padding: 0.8rem; border-radius: 40px; font-weight: 800; cursor: pointer; text-align: center; transition: all 0.1s ease; }
+        .settlement-btn:active, .confirm-leave-btn:active { transform: translateY(3px); }
+        .hologram-content { position: relative; width: 90%; max-width: 400px; min-height: 450px; text-align: center; }
+        .loading-video { width: 100%; height: auto; border-radius: 20px; box-shadow: 0 0 30px rgba(74,128,192,0.5); }
+        .loading-text { font-size: 24px; font-weight: 900; color: #ffd700; text-shadow: 0 0 10px #ffd700; margin-top: 10px; }
+        .progress-bar { width: 80%; height: 6px; background: rgba(255,255,255,0.2); border-radius: 10px; margin: 10px auto; overflow: hidden; }
+        .progress-fill { height: 100%; width: 60%; background: linear-gradient(90deg, #ffd700, #4a80c0); animation: loadingMove 1s ease-in-out infinite alternate; }
+        @keyframes loadingMove { from { width: 20%; } to { width: 80%; } }
+        .back-to-top { position: fixed; bottom: 85px; right: 15px; width: 40px; height: 40px; background: linear-gradient(145deg, #3a5065, #2a4055); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 100; opacity: 0; visibility: hidden; transition: 0.2s; box-shadow: inset 0 1px 2px rgba(255,255,255,0.2), 0 3px 0 #0f121c; }
+        .back-to-top:active { transform: translateY(2px); box-shadow: inset 0 1px 2px rgba(0,0,0,0.4), 0 1px 0 #0f121c; }
+        .back-to-top.show { opacity: 1; visibility: visible; }
+        .p-2 { padding: 0.5rem; }
+        .mt-2 { margin-top: 0.5rem; }
+        .mt-4 { margin-top: 1rem; }
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .gap-1 { gap: 0.25rem; }
+        .gap-2 { gap: 0.5rem; }
+        .text-right { text-align: right; }
+        .flex-col { flex-direction: column; }
+        .items-end { align-items: flex-end; }
+        .flex-shrink-0 { flex-shrink: 0; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .flex-1 { flex: 1; }
+        .mr-2 { margin-right: 0.5rem; }
+        .ml-2 { margin-left: 0.5rem; }
+        .text-xs { font-size: 0.7rem; }
+        .text-center { text-align: center; }
+        .w-full { width: 100%; }
+        .relative { position: relative; }
+        .overflow-hidden { overflow: hidden; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        @media (max-width: 420px) { .bottom-nav { padding: 0.5rem 1rem; } .nav-item { padding: 0.4rem 0; width: 45px; } .nav-item i { font-size: 1.2rem; } .nav-item span { font-size: 0.6rem; } }
+        .toast-message { position: fixed; top: 80px; left: 50%; transform: translateX(-50%); z-index: 30000; background: linear-gradient(145deg, #2a2f3f, #1a1f2f); border: 1px solid #ffd700; color: #ffd966; padding: 10px 20px; border-radius: 40px; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3); animation: fadeInOut 2s ease forwards; white-space: nowrap; }
+        @keyframes fadeInOut { 0% { opacity: 0; transform: translateX(-50%) translateY(-10px); } 15% { opacity: 1; transform: translateX(-50%) translateY(0); } 85% { opacity: 1; transform: translateX(-50%) translateY(0); } 100% { opacity: 0; transform: translateX(-50%) translateY(-10px); } }
+    </style>
+</head>
+<body>
+
+<div id="drawerOverlay" class="drawer-overlay"></div>
+<div id="filterDrawer" class="filter-drawer">
+    <div class="filter-section"><h3><i class="fa fa-building"></i> 廠商</h3><div class="filter-options" id="vendorFilters"><span class="filter-chip selected" data-vendor="all">全部</span><span class="filter-chip" data-vendor="ELECO">ELECO</span><span class="filter-chip" data-vendor="ENTER RISE">ENTER RISE</span><span class="filter-chip" data-vendor="Olympia">Olympia</span><span class="filter-chip" data-vendor="Kita Denshi">Kita Denshi</span><span class="filter-chip" data-vendor="Sammy">Sammy</span><span class="filter-chip" data-vendor="Daito">Daito</span><span class="filter-chip" data-vendor="HEIWA">HEIWA</span><span class="filter-chip" data-vendor="Bellco">Bellco</span><span class="filter-chip" data-vendor="Mizuho">Mizuho</span><span class="filter-chip" data-vendor="Universal Bros">Universal Bros</span><span class="filter-chip" data-vendor="Rodeo">Rodeo</span></div></div>
+    <div class="filter-section"><h3><i class="fa fa-cube"></i> 機種</h3><div class="filter-options" id="modelFilters"><span class="filter-chip selected" data-model="all">全部</span><span class="filter-chip" data-model="新機">新機</span><span class="filter-chip" data-model="人氣機台">人氣機台</span><span class="filter-chip" data-model="4號機">4號機</span><span class="filter-chip" data-model="5號機">5號機</span><span class="filter-chip" data-model="6號機">6號機</span></div></div>
+    <div class="filter-section"><h3><i class="fa fa-star"></i> 狀態</h3><div class="filter-options" id="statusFilters"><span class="filter-chip selected" data-status="all">全部</span><span class="filter-chip" data-status="empty">空檯</span><span class="filter-chip" data-status="using">使用中</span></div></div>
+    <div class="drawer-actions"><div class="drawer-btn clear" id="clearFilters">清除</div><div class="drawer-btn apply" id="applyFilters">套用</div></div>
+</div>
+
+<div class="max-w-md mx-auto flex flex-col">
+    <header class="metal-header">
+        <div class="flex items-center justify-between">
+            <div class="logo"><div class="logo-icon"><div class="logo-icon-inner">TP</div></div><div class="logo-text"><div class="logo-main">T-PACHIN</div><div class="logo-sub">JOKER SERIES</div></div></div>
+            <div class="text-right">
+                <a href="#" class="nickname-link" id="nicknameDisplay">夫人會生氣</a>
+                <div class="points-display" id="tokenBtn">6,600</div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="px-4">
+        <div class="announcement-combo"><div class="combo-announce-btn"><i class="fa fa-bullhorn"></i><span>公告</span></div><div class="combo-marquee"><div class="marquee-content">⚡ 小丑系列完全集結 · 4·5·6號機 榮耀回歸 ⚡ 1點=1/倍率枚代幣 · 離座可得代幣 × 0.9 ⚡</div></div></div>
+    </div>
+    
+    <main class="main-content" id="machineList">
+        <div class="top-banner"><div class="banner-slider" id="bannerSlider"><img src="https://static.wixstatic.com/media/d5e540_1bfb6d303ce34c4394eca6174051cf06~mv2.png" alt="banner"><img src="https://static.wixstatic.com/media/d5e540_d6e33437908a49dc82146dd9e34c928d~mv2.png" alt="banner"><img src="https://static.wixstatic.com/media/d5e540_db0d1fd5688a425986b0b4d04479bdfc~mv2.png" alt="banner"></div><div class="banner-dots" id="bannerDots"><span class="banner-dot active"></span><span class="banner-dot"></span><span class="banner-dot"></span></div></div>
+        
+        <div class="flex items-center justify-between py-2">
+            <div class="flex-1 mr-2 relative tab-container"><div class="tabs-wrapper" id="tabsWrapper"><button class="tab-btn tech-tab-active" data-tab="全部">全部</button><button class="tab-btn" data-tab="新機">新機</button><button class="tab-btn" data-tab="人氣機台">人氣機台</button><button class="tab-btn" data-tab="4號機">4號機</button><button class="tab-btn" data-tab="5號機">5號機</button><button class="tab-btn" data-tab="6號機">6號機</button></div></div>
+            <button id="openDrawerBtn"><i class="fa fa-sliders"></i> 篩選</button>
+        </div>
+        
+        <div id="allMachinesContainer"></div>
+    </main>
+</div>
+
+<nav class="bottom-nav">
+    <a href="#" class="nav-item current-page"><i class="fa fa-home"></i><span>首頁</span></a>
+    <a href="machines.html" class="nav-item"><i class="fa fa-gamepad"></i><span>機台</span></a>
+    <a href="news.html" class="nav-item"><i class="fa fa-bell"></i><span>公告</span></a>
+    <a href="about.html" class="nav-item"><i class="fa fa-user"></i><span>我的</span></a>
+</nav>
+<div class="back-to-top" id="backToTop"><i class="fa fa-arrow-up"></i></div>
+
+<div class="machine-modal" id="machineModal"><div class="modal-content"><div class="modal-header"><h2 id="modalMachineName">GOGO 小丑</h2><div class="modal-close" id="modalCloseBtn"><i class="fa fa-times"></i></div></div><div id="submachineContainer"></div></div></div>
+
+<div class="sub-confirm-modal" id="subConfirmModal">
+    <div class="sub-confirm-content">
+        <div class="modal-close-x" id="closeXBtn"><i class="fa fa-times"></i></div>
+        <div class="sub-confirm-header">
+            <h3 id="confirmMachineName">GOGO 小丑</h3>
+            <p id="confirmSubName">1號機</p>
+        </div>
+        <div class="sub-confirm-detail">
+            <div class="detail-row"><span class="detail-label"><i class="fa fa-ticket"></i> 每枚代幣</span><span class="detail-value" id="confirmRatio">4.0</span></div>
+            <div class="detail-row"><span class="detail-label"><i class="fa fa-exchange"></i> 兌換代幣</span><span class="detail-value" id="exchangeTokens">250 枚</span></div>
+            <div class="detail-row"><span class="detail-label"><i class="fa fa-database"></i> 目前點數</span><span class="detail-value" id="confirmPoints">6,600</span></div>
+        </div>
+        <div class="sub-confirm-input-group">
+            <label><i class="fa fa-arrow-down"></i> 使用點數兌換代幣 <span style="color:#ffaa66;">(最低 50)</span></label>
+            <input type="number" id="confirmTokenInput" placeholder="請輸入點數" value="1000" style="-moz-appearance: textfield; appearance: textfield;">
+            <div class="sub-confirm-balance" id="confirmTokenRemain"><i class="fa fa-credit-card"></i> 剩餘點數: 6,600</div>
+        </div>
+        <div class="sub-confirm-actions">
+            <button class="sub-confirm-btn secondary" id="confirmCancelBtn">取消</button>
+            <button class="sub-confirm-btn primary" id="confirmOk">確認進入</button>
+        </div>
+    </div>
+</div>
+
+<div class="alert-modal" id="minPointsAlert">
+    <div class="alert-content">
+        <div class="alert-icon">⚠️</div>
+        <div class="alert-title">兌換限制</div>
+        <div class="alert-message">最低兌換為 <strong style="color:#ffd700; font-size:1.2rem;">50 點數</strong><br>請輸入 50 點以上</div>
+        <button class="alert-btn" id="closeAlertBtn">我知道了</button>
+    </div>
+</div>
+
+<div class="settlement-modal" id="settlementModal">
+    <div class="settlement-content">
+        <div class="sub-confirm-header"><h3>📊 離座結算</h3><p id="settlementSubName">GOGO 小丑 1號機</p></div>
+        <div class="settlement-detail" id="settlementDetail"></div>
+        <div class="settlement-actions">
+            <button class="settlement-btn" id="settlementCancelBtn" style="background: linear-gradient(145deg, #3a4050, #2a2f40); border-color: #4a80c0; color: #b0c4de;">取消</button>
+            <button class="settlement-btn" id="settlementNextBtn" style="background: linear-gradient(145deg, #ffaa33, #ff8c00); border: 1px solid #ffd700; color: #2a1f0a;">下一步</button>
+        </div>
+    </div>
+</div>
+
+<div class="confirm-leave-modal" id="confirmLeaveModal">
+    <div class="confirm-leave-content">
+        <div class="sub-confirm-header"><h3>⚠️ 確認離座</h3><p id="confirmLeaveSubName">GOGO 小丑 1號機</p></div>
+        <div class="settlement-detail" id="confirmLeaveDetail"></div>
+        <div class="confirm-leave-actions">
+            <button class="confirm-leave-btn" id="confirmLeaveCancelBtn" style="background: linear-gradient(145deg, #3a4050, #2a2f40); border-color: #4a80c0; color: #b0c4de;">再想想</button>
+            <button class="confirm-leave-btn" id="confirmLeaveOkBtn" style="background: linear-gradient(145deg, #ffaa33, #ff8c00); border: 1px solid #ffd700; color: #2a1f0a;">確認離座</button>
+        </div>
+    </div>
+</div>
+
+<div class="hologram-loading" id="hologramLoading">
+    <div class="hologram-content">
+        <video id="mascotVideo" autoplay muted loop playsinline src="https://video.wixstatic.com/video/d5e540_d63f842135e8416f891842373bc0f582/720p/mp4/file.mp4" style="width:100%;border-radius:20px"></video>
+        <div class="loading-text" id="loadingMachineTitle">LOADING</div>
+        <div class="progress-bar"><div class="progress-fill"></div></div>
+    </div>
+</div>
+
+<script src="shared.js"></script>
+<script>
+(function() {
+    // ==================== 從 shared.js 讀取點數 ====================
+    let userPoints = 6600;
+    let currentOccupiedTokens = {};
+    let currentSubDataInfo = null;
+    let pendingLeaveInfo = null;
+    let currentRatioFilter = "all";
+    
+    // 機台資料
+    const machines = [
+        { name:"GOGO 小丑", vendor:"Olympia", model:"6號機", setting:"6", status:"using", popular:true, isNew:true, img:"https://i.pinimg.com/736x/b1/f1/ec/b1f1ec3a191e62e3d0e300ce79c9b593.jpg" },
+        { name:"我是小丑-EX", vendor:"Sanyo", model:"5號機", setting:"5", status:"using", popular:true, isNew:true, img:"https://i.pinimg.com/736x/4a/2a/30/4a2a3089197d997984a7a75921faf2d9.jpg" },
+        { name:"快樂小丑 VII", vendor:"HEIWA", model:"6號機", setting:"4", status:"empty", popular:false, isNew:true, img:"https://i.pinimg.com/736x/76/a7/ec/76a7eca59c0b7f7a8404e67e043841cb.jpg" },
+        { name:"小丑狂歡夜", vendor:"Daito", model:"4號機", setting:"4", status:"empty", popular:true, isNew:false, img:"https://i.pinimg.com/736x/4a/2a/30/4a2a3089197d997984a7a75921faf2d9.jpg" }
+    ];
+    
+    // 子機台資料
+    const subData = {
+        "GOGO 小丑": { ratios:[1.0,2.0,2.5,3.0,4.0,5.0], ids:[1,2,3,4,5,6], bb:[1200,1100,1300,1250,1400,1500], rb:[600,550,650,620,700,750], curr:[180,200,210,195,220,230], total:[4200,4300,4400,4250,4600,4800], status:["occupied","using","maintenance","empty","empty","empty"], maintenanceTime:["佔用中 (您的機台)","","維護中 預計 2025/03/28 14:00 恢復","","",""] },
+        "我是小丑-EX": { ratios:[1.0,2.0,2.5,3.0,4.0,5.0], ids:[1,2,3,4,5,6], bb:[1100,1150,1200,1180,1300,1350], rb:[520,540,560,550,600,620], curr:[210,220,230,215,240,250], total:[3800,3900,4000,3850,4100,4300], status:["using","occupied","maintenance","empty","empty","empty"], maintenanceTime:["","佔用中 (您的機台)","維護中 預計 2025/03/29 10:30 恢復","","",""] },
+        "快樂小丑 VII": { ratios:[1.0,2.0,2.5,3.0,4.0,5.0], ids:[1,2,3,4,5,6], bb:[1000,1050,1100,1080,1200,1250], rb:[480,500,520,510,550,580], curr:[160,170,180,175,190,200], total:[3500,3600,3700,3550,3800,4000], status:["empty","using","occupied","maintenance","empty","empty"], maintenanceTime:["","","佔用中 (您的機台)","維護中 預計 2025/03/30 09:00 恢復","",""] },
+        "小丑狂歡夜": { ratios:[1.0,2.0,2.5,3.0,4.0,5.0], ids:[1,2,3,4,5,6], bb:[900,950,1000,980,1050,1100], rb:[450,470,490,480,500,520], curr:[140,150,160,155,170,180], total:[3200,3300,3400,3350,3600,3800], status:["empty","empty","empty","empty","empty","empty"], maintenanceTime:["","","","","",""] }
+    };
+    
+    // ==================== 點數同步 ====================
+    function updatePointsDisplay() {
+        const tokenBtn = document.getElementById('tokenBtn');
+        if (tokenBtn) tokenBtn.textContent = userPoints.toLocaleString();
+        const confirmPoints = document.getElementById('confirmPoints');
+        if (confirmPoints) confirmPoints.textContent = userPoints.toLocaleString();
+        const tokenRemain = document.getElementById('confirmTokenRemain');
+        if (tokenRemain) tokenRemain.innerHTML = `<i class="fa fa-credit-card"></i> 剩餘點數: ${userPoints.toLocaleString()}`;
+    }
+    
+    function updatePoints(changeAmount) {
+        if (window.T_PACHIN_STORAGE) {
+            userPoints = T_PACHIN_STORAGE.updatePoints(changeAmount);
+        } else {
+            userPoints += changeAmount;
+        }
+        updatePointsDisplay();
+        return userPoints;
+    }
+    
+    function syncPointsWithStorage() {
+        if (window.T_PACHIN_STORAGE) {
+            const syncedPoints = T_PACHIN_STORAGE.getPoints();
+            if (userPoints !== syncedPoints) {
+                userPoints = syncedPoints;
+                updatePointsDisplay();
+            }
+        }
+    }
+    
+    // ==================== 機台統計 ====================
+    function getMachineStats(machineName) {
+        let data = subData[machineName];
+        if(!data) return { empty: 0, using: 0 };
+        let empty = 0, using = 0;
+        data.status.forEach(s => { if(s === 'empty') empty++; else if(s === 'using') using++; });
+        return { empty, using };
+    }
+    
+    // ==================== 子機台生成 ====================
+    function generateMiniCards(data, idx) {
+        const values = [ Math.floor(data.bb[idx]/4), Math.floor(data.bb[idx]/3.5), Math.floor(data.bb[idx]/3), Math.floor(data.rb[idx]/2.5), Math.floor(data.rb[idx]/2), Math.floor(data.rb[idx]/1.8), data.curr[idx], Math.floor(data.total[idx]/5) ];
+        let cardsHtml = '';
+        for (let i = 0; i < 8; i++) {
+            let fillCount = values[i] > 400 ? 5 : values[i] > 300 ? 4 : values[i] > 200 ? 3 : values[i] > 100 ? 2 : 1;
+            let colorClass = (i < 3) ? 'filled-red' : 'filled-green';
+            let barsHtml = '';
+            for (let s = 0; s < 5; s++) barsHtml += `<div class="card-bar-segment ${(s < fillCount) ? colorClass : ''}"></div>`;
+            cardsHtml += `<div class="mini-card"><div class="card-number">${i+1}</div><div class="card-bars">${barsHtml}</div><div class="card-value">${values[i].toLocaleString()}</div></div>`;
+        }
+        return cardsHtml;
+    }
+    
+    function switchCardPage(card) {
+        let p1 = card.querySelector('.page1'), p2 = card.querySelector('.page2'), d = card.querySelectorAll('.sub-dot');
+        if(p1.classList.contains('active')) { p1.classList.remove('active'); p2.classList.add('active'); d[0].classList.remove('active'); d[1].classList.add('active'); }
+        else { p1.classList.add('active'); p2.classList.remove('active'); d[0].classList.add('active'); d[1].classList.remove('active'); }
+    }
+    
+    function switchPage(dot, pageNum) {
+        let card = dot.closest('.sub-card'), p1 = card.querySelector('.page1'), p2 = card.querySelector('.page2'), d = card.querySelectorAll('.sub-dot');
+        if(pageNum === 1) { p1.classList.add('active'); p2.classList.remove('active'); d[0].classList.add('active'); d[1].classList.remove('active'); }
+        else { p1.classList.remove('active'); p2.classList.add('active'); d[0].classList.remove('active'); d[1].classList.add('active'); }
+    }
+    
+    function switchAllPages(pageNum) {
+        let tabs = document.querySelectorAll('.data-mini-tab');
+        tabs.forEach((t,i) => t.classList.toggle('active', i === pageNum-1));
+        document.querySelectorAll('.sub-card').forEach(card => {
+            let p1 = card.querySelector('.page1'), p2 = card.querySelector('.page2'), d = card.querySelectorAll('.sub-dot');
+            if(pageNum === 1) { p1.classList.add('active'); p2.classList.remove('active'); d[0].classList.add('active'); d[1].classList.remove('active'); }
+            else { p1.classList.remove('active'); p2.classList.add('active'); d[0].classList.remove('active'); d[1].classList.add('active'); }
+        });
+    }
+    
+    function filterSubByRatio() {
+        const subCards = document.querySelectorAll('#submachineContainer .sub-card');
+        if(!subCards.length) return;
+        subCards.forEach(card => {
+            const ratioValue = parseFloat(card.getAttribute('data-ratio-value'));
+            if (isNaN(ratioValue)) return;
+            let show = true;
+            if(currentRatioFilter !== "all") show = Math.abs(ratioValue - parseFloat(currentRatioFilter)) < 0.01;
+            card.style.display = show ? 'block' : 'none';
+        });
+    }
+    
+    function generateRatioOptions(machineName) {
+        const data = subData[machineName];
+        if(!data) return '<option value="all">全部倍率</option>';
+        const uniqueRatios = [...new Set(data.ratios.map(r => r.toString()))];
+        uniqueRatios.sort((a,b) => parseFloat(a)-parseFloat(b));
+        let options = '<option value="all">全部倍率</option>';
+        uniqueRatios.forEach(ratio => { options += `<option value="${ratio}">${ratio}</option>`; });
+        return options;
+    }
+    
+    function generateSubMachines(machineName) {
+        let data = subData[machineName];
+        if(!data) return;
+        let container = document.getElementById('submachineContainer');
+        if(!container) return;
+        
+        let subItems = [];
+        for(let i = 0; i < data.ids.length; i++) {
+            let status = data.status[i];
+            let weight = status === 'empty' ? 1 : status === 'occupied' ? 2 : status === 'using' ? 3 : 4;
+            subItems.push({ idx: i, weight: weight, status: status });
+        }
+        subItems.sort((a,b) => a.weight - b.weight);
+        
+        const ratioOptions = generateRatioOptions(machineName);
+        let html = `<div class="data-mini-tabs"><div class="tabs-left"><div class="data-mini-tab active" onclick="window.switchAllPages(1)">數據1</div><div class="data-mini-tab" onclick="window.switchAllPages(2)">數據2</div></div><select id="subRatioSelect" class="ratio-select-mini" onchange="window.currentRatioFilter=this.value; window.filterSubByRatio();">${ratioOptions}</select></div><div class="submachine-container" id="submachineList">`;
+        
+        for(let item of subItems) {
+            let i = item.idx;
+            let status = data.status[i];
+            let isMaint = status === 'maintenance', isUsing = status === 'using', isOccupied = status === 'occupied';
+            let statusClass = '', statusBadge = '';
+            if(isOccupied) { statusClass = 'occupied-card'; statusBadge = '<span class="occupied-badge-small"><i class="fa fa-user"></i> 佔用中</span>'; }
+            else if(isUsing) { statusClass = 'using-card'; statusBadge = '<span class="using-badge-small"><i class="fa fa-bolt"></i> 使用中</span>'; }
+            else if(isMaint) { statusClass = 'maintenance-card'; statusBadge = '<span class="maintenance-badge-small"><i class="fa fa-wrench"></i> 維護中</span>'; }
+            else { statusBadge = '<span class="empty-badge-small"><i class="fa fa-circle-o"></i> 空檯</span>'; }
+            let maintTimeHtml = (isMaint && data.maintenanceTime[i]) ? `<div class="maintenance-time"><i class="fa fa-calendar"></i> ${data.maintenanceTime[i]}</div>` : '';
+            let miniCardsHtml = generateMiniCards(data, i);
+            let canEnter = (status === 'empty' || status === 'occupied');
+            let btnText = isUsing ? '🔴 使用中' : isMaint ? '🔧 維護中' : isOccupied ? '🎮 進入遊戲' : '進入遊戲';
+            let leaveBtnHtml = isOccupied ? `<div class="leave-small" onclick="event.stopPropagation(); window.openSettlementModal('${machineName}','${data.ids[i]}號機',${data.ids[i]}, ${data.ratios[i]})"><i class="fa fa-sign-out"></i> 離座</div>` : '';
+            let ratioValue = data.ratios[i];
+            html += `<div class="sub-card ${statusClass}" onclick="window.switchCardPage(this)" data-ratio-value="${ratioValue}">
+                <div class="sub-title-row"><span class="sub-machine-name">${machineName} ${data.ids[i]}號機 ${statusBadge}</span>
+                <div class="rate-info-group"><span class="sub-ratio-badge"><i class="fa fa-ticket"></i> 每枚 ${ratioValue}</span><span class="point-value-badge"><i class="fa fa-exchange"></i> 得點 0.9</span></div></div>
+                ${maintTimeHtml}
+                <div class="sub-page page1 active"><div class="stats-grid"><div class="stat-cell"><div class="stat-label">BIG BONUS</div><div class="stat-number bb-number">${data.bb[i].toLocaleString()}</div></div><div class="stat-cell"><div class="stat-label">REG BONUS</div><div class="stat-number rb-number">${data.rb[i].toLocaleString()}</div></div><div class="stat-cell"><div class="stat-label">目前累積</div><div class="stat-number curr-number">${data.curr[i].toLocaleString()}</div></div><div class="stat-cell"><div class="stat-label">總計</div><div class="stat-number total-number">${data.total[i].toLocaleString()}</div></div></div></div>
+                <div class="sub-page page2"><div class="mini-cards-row">${miniCardsHtml}</div></div>
+                <div class="sub-page-indicator"><span class="sub-dot active" onclick="event.stopPropagation(); window.switchPage(this,1)"></span><span class="sub-dot" onclick="event.stopPropagation(); window.switchPage(this,2)"></span></div>
+                <div class="sub-card-actions"><div class="enter-small ${!canEnter ? 'disabled' : ''}" onclick="event.stopPropagation(); ${canEnter ? `window.openSubConfirm('${machineName}','${data.ids[i]}號機','${ratioValue}',${data.ids[i]})` : `alert('此機台${isUsing?'使用中':isMaint?'維護中':''}，無法進入！');`}">${btnText}</div>${leaveBtnHtml}<div class="favorite-small" onclick="event.stopPropagation(); window.toggleFavorite('${machineName}', ${data.ids[i]}, '${ratioValue}')"><i class="fa fa-heart-o"></i></div></div>
+            </div>`;
+        }
+        html += `</div>`;
+        container.innerHTML = html;
+        const ratioSelect = document.getElementById('subRatioSelect');
+        if(ratioSelect) ratioSelect.onchange = function() { currentRatioFilter = this.value; filterSubByRatio(); };
+        filterSubByRatio();
+    }
+    
+    // ==================== 收藏功能 (使用 shared.js) ====================
+    function toggleFavorite(machineName, machineId, ratio) {
+        const machine = { id: machineId, name: machineName, number: `J${machineId}`, ratio: ratio, image: '' };
+        if (window.T_PACHIN_STORAGE) {
+            T_PACHIN_STORAGE.toggleFavorite(machine);
+            showToast(`❤️ ${T_PACHIN_STORAGE.isFavorite(machineId) ? '已收藏' : '已取消收藏'} ${machineName}`);
+        } else {
+            showToast(`❤️ ${machineName} 收藏功能需要 shared.js`);
+        }
+    }
+    
+    function showToast(message) {
+        const toast = document.createElement('div');
+        toast.className = 'toast-message';
+        toast.innerHTML = `<i class="fa fa-info-circle mr-2"></i>${message}`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2000);
+    }
+    
+    // ==================== 離座結算 ====================
+    function openSettlementModal(machineName, subName, machineId, ratioValue) {
+        let usedTokens = currentOccupiedTokens[`${machineName}_${machineId}`] || Math.floor(1000 / ratioValue);
+        let totalRedeemPoints = Math.floor(usedTokens * 0.9);
+        pendingLeaveInfo = { machineName, machineId, usedTokens, totalRedeemPoints, subName };
+        document.getElementById('settlementSubName').textContent = `${machineName} ${subName}`;
+        document.getElementById('settlementDetail').innerHTML = `<div class="settlement-row"><span class="settlement-label">持有代幣</span><span class="settlement-value">${usedTokens.toLocaleString()} 枚</span></div><div class="settlement-row"><span class="settlement-label">可得點數</span><span class="settlement-value">${totalRedeemPoints.toLocaleString()} 點</span></div>`;
+        document.getElementById('settlementModal').classList.add('show');
+    }
+    
+    function closeSettlementModal() { document.getElementById('settlementModal').classList.remove('show'); }
+    
+    function openConfirmLeaveModal() {
+        if(pendingLeaveInfo) {
+            let { machineName, subName, usedTokens, totalRedeemPoints } = pendingLeaveInfo;
+            document.getElementById('confirmLeaveSubName').textContent = `${machineName} ${subName}`;
+            document.getElementById('confirmLeaveDetail').innerHTML = `<div class="settlement-row"><span class="settlement-label">持有代幣</span><span class="settlement-value">${usedTokens.toLocaleString()} 枚</span></div><div class="settlement-row"><span class="settlement-label">可得點數</span><span class="settlement-value">${totalRedeemPoints.toLocaleString()} 點</span></div>`;
+            document.getElementById('settlementModal').classList.remove('show');
+            document.getElementById('confirmLeaveModal').classList.add('show');
+        }
+    }
+    
+    function closeConfirmLeaveModal() { document.getElementById('confirmLeaveModal').classList.remove('show'); pendingLeaveInfo = null; }
+    
+    function executeLeave() {
+        if(pendingLeaveInfo) {
+            let { machineName, machineId, usedTokens, totalRedeemPoints, subName } = pendingLeaveInfo;
+            if(subData[machineName] && subData[machineName].status[machineId-1]) {
+                subData[machineName].status[machineId-1] = 'empty';
+                subData[machineName].maintenanceTime[machineId-1] = '';
+                updatePoints(totalRedeemPoints);
+                delete currentOccupiedTokens[`${machineName}_${machineId}`];
+                if (window.T_PACHIN_STORAGE) {
+                    const occupied = T_PACHIN_STORAGE.getOccupiedTokens();
+                    delete occupied[`${machineName}_${machineId}`];
+                    T_PACHIN_STORAGE.saveOccupiedTokens(occupied);
+                }
+            }
+            generateSubMachines(machineName);
+            document.getElementById('confirmLeaveModal').classList.remove('show');
+            showToast(`✅ 離座成功！獲得 ${totalRedeemPoints.toLocaleString()} 點數`);
+            pendingLeaveInfo = null;
+        }
+    }
+    
+    // ==================== 兌換代幣 ====================
+    function showMinPointsAlert() { document.getElementById('minPointsAlert').classList.add('show'); }
+    function closeMinPointsAlert() { document.getElementById('minPointsAlert').classList.remove('show'); }
+    
+    function openSubConfirm(machineName, subName, ratioValue, machineId) {
+        currentSubDataInfo = { machineName, subName, ratioValue: parseFloat(ratioValue), machineId: machineId };
+        document.getElementById('confirmMachineName').textContent = machineName;
+        document.getElementById('confirmSubName').textContent = subName;
+        document.getElementById('confirmRatio').textContent = ratioValue;
+        document.getElementById('confirmPoints').textContent = userPoints;
+        document.getElementById('confirmTokenInput').value = 1000;
+        function updateRemain() {
+            let val = parseInt(document.getElementById('confirmTokenInput').value) || 0;
+            let tokens = Math.floor(val / currentSubDataInfo.ratioValue);
+            document.getElementById('confirmTokenRemain').innerHTML = `<i class="fa fa-credit-card"></i> 剩餘點數: ${(userPoints - val).toLocaleString()}`;
+            document.getElementById('exchangeTokens').textContent = `${tokens.toLocaleString()} 枚`;
+        }
+        updateRemain();
+        document.getElementById('confirmTokenInput').oninput = updateRemain;
+        document.getElementById('subConfirmModal').classList.add('show');
+    }
+    
+    function closeConfirmModalOnly() { document.getElementById('subConfirmModal').classList.remove('show'); currentSubDataInfo = null; }
+    
+    function doEnterGame() {
+        if(currentSubDataInfo) {
+            const usedPoints = parseInt(document.getElementById('confirmTokenInput').value) || 0;
+            if(usedPoints <= 0) { showToast('請輸入大於 0 的點數'); return; }
+            if(usedPoints < 50) { showMinPointsAlert(); return; }
+            if(usedPoints > userPoints) { showToast('❌ 點數不足！'); return; }
+            const exchangeTokens = Math.floor(usedPoints / currentSubDataInfo.ratioValue);
+            updatePoints(-usedPoints);
+            const occupiedKey = `${currentSubDataInfo.machineName}_${currentSubDataInfo.machineId}`;
+            currentOccupiedTokens[occupiedKey] = exchangeTokens;
+            if(window.T_PACHIN_STORAGE) {
+                const occupied = T_PACHIN_STORAGE.getOccupiedTokens();
+                occupied[occupiedKey] = exchangeTokens;
+                T_PACHIN_STORAGE.saveOccupiedTokens(occupied);
+            }
+            if(subData[currentSubDataInfo.machineName] && subData[currentSubDataInfo.machineName].status[currentSubDataInfo.machineId-1]) {
+                subData[currentSubDataInfo.machineName].status[currentSubDataInfo.machineId-1] = 'occupied';
+                subData[currentSubDataInfo.machineName].maintenanceTime[currentSubDataInfo.machineId-1] = '佔用中 (您的機台)';
+            }
+            const machineInfo = { name: currentSubDataInfo.machineName, subName: currentSubDataInfo.subName, ratio: currentSubDataInfo.ratioValue, machineId: currentSubDataInfo.machineId, coins: exchangeTokens };
+            localStorage.setItem('t_pachin_machine_info', JSON.stringify(machineInfo));
+            const video = document.getElementById('mascotVideo');
+            if(video) video.play().catch(e=>{});
+            document.getElementById('hologramLoading').classList.add('show');
+            setTimeout(() => {
+                document.getElementById('subConfirmModal').classList.remove('show');
+                document.getElementById('hologramLoading').classList.remove('show');
+                if(video) { video.pause(); video.currentTime = 0; }
+                window.location.href = 'simulator.html';
+            }, 2500);
+        }
+    }
+    
+    // ==================== 主要渲染 ====================
+    function renderMachines() {
+        let container = document.getElementById('allMachinesContainer');
+        if(!container) return;
+        let categories = { 
+            "新機": machines.filter(m => m.isNew === true), 
+            "人氣機台": machines.filter(m => m.popular === true), 
+            "4號機": machines.filter(m => m.model === "4號機"), 
+            "5號機": machines.filter(m => m.model === "5號機"), 
+            "6號機": machines.filter(m => m.model === "6號機") 
+        };
+        let html = '';
+        for(let [catName, catMachines] of Object.entries(categories)) {
+            if(catMachines.length === 0) continue;
+            html += `<div class="category-section mt-4" data-category="${catName}"><h2 class="category-title"><i class="fa fa-gamepad"></i> ${catName} <span class="text-xs ml-2">共${catMachines.length}款</span></h2><div class="vertical-grid">`;
+            for(let m of catMachines) {
+                let stats = getMachineStats(m.name);
+                let modelNum = m.model.charAt(0);
+                let showPopularBadge = m.popular;
+                let showNewBadge = m.isNew;
+                html += `<div class="game-card-bg machine-card" data-vendor="${m.vendor}" data-model="${m.model}" data-setting="${m.setting}" data-status="${m.status}">
+                    ${showPopularBadge ? '<span class="popular-badge"><i class="fa fa-fire"></i> 人氣</span>' : ''}
+                    ${showNewBadge ? '<div class="new-machine-badge"><img src="https://4boom.jp/blog/wp-content/uploads/2019/08/shin_aut-3_y-240x89.png" alt="新機入替"></div>' : ''}
+                    <img src="${m.img}" alt="${m.name}" onerror="this.src='https://i.pinimg.com/736x/4a/2a/30/4a2a3089197d997984a7a75921faf2d9.jpg'">
+                    <div class="p-2">
+                        <div class="card-title-row"><div class="card-title-wrapper"><span class="card-title-scroll">${m.name}</span></div><span class="machine-badge badge-${modelNum}">${m.model}</span></div>
+                        <div class="vendor-info"><span class="vendor-name">${m.vendor}</span><div class="status-stats"><span class="stat-icon-only"><i class="fa fa-circle-o empty-count"></i> ${stats.empty}</span><span class="stat-icon-only"><i class="fa fa-bolt using-count"></i> ${stats.using}</span></div></div>
+                        <button class="enter-btn" data-machine="${m.name}">進入遊戲</button>
+                    </div>
+                </div>`;
+            }
+            html += `</div></div>`;
+        }
+        container.innerHTML = html;
+        document.querySelectorAll('.enter-btn').forEach(btn => btn.addEventListener('click', (e) => { e.stopPropagation(); openMachineModal(btn.dataset.machine); }));
+        setTimeout(() => {
+            document.querySelectorAll('.card-title-wrapper').forEach(wrapper => {
+                const span = wrapper.querySelector('.card-title-scroll');
+                if (span && span.scrollWidth > wrapper.clientWidth) wrapper.classList.add('scrollable');
+                else wrapper.classList.remove('scrollable');
+            });
+        }, 100);
+    }
+    
+    function openMachineModal(name) { document.getElementById('modalMachineName').textContent = name; generateSubMachines(name); document.getElementById('machineModal').classList.add('show'); }
+    function closeMachineModal() { document.getElementById('machineModal').classList.remove('show'); }
+    
+    // ==================== 輪播 ====================
+    let bannerIndex = 0;
+    function initBanner() {
+        let slider = document.getElementById('bannerSlider'), dots = document.querySelectorAll('.banner-dot');
+        if(!slider) return;
+        function updateBanner(idx) { slider.style.transform = `translateX(-${idx * 100}%)`; dots.forEach((d,i) => d.classList.toggle('active', i === idx)); bannerIndex = idx; }
+        dots.forEach((dot,i) => dot.addEventListener('click', () => updateBanner(i)));
+        setInterval(() => updateBanner((bannerIndex + 1) % dots.length), 5000);
+    }
+    
+    // ==================== 篩選器 ====================
+    let currentFilters = { vendor: 'all', model: 'all', status: 'all' };
+    function initFilters() {
+        document.querySelectorAll('#vendorFilters .filter-chip, #modelFilters .filter-chip, #statusFilters .filter-chip').forEach(chip => {
+            chip.addEventListener('click', function() {
+                let parent = this.parentElement;
+                parent.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+                if(parent.id === 'vendorFilters') currentFilters.vendor = this.dataset.vendor;
+                if(parent.id === 'modelFilters') currentFilters.model = this.dataset.model;
+                if(parent.id === 'statusFilters') currentFilters.status = this.dataset.status;
+            });
+        });
+        document.getElementById('clearFilters')?.addEventListener('click', () => {
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                if(chip.dataset.vendor === 'all' || chip.dataset.model === 'all' || chip.dataset.status === 'all') chip.classList.add('selected');
+                else chip.classList.remove('selected');
+            });
+            currentFilters = { vendor: 'all', model: 'all', status: 'all' };
+        });
+        document.getElementById('applyFilters')?.addEventListener('click', () => {
+            document.querySelectorAll('.machine-card').forEach(card => {
+                let show = true;
+                if(currentFilters.vendor !== 'all' && card.dataset.vendor !== currentFilters.vendor) show = false;
+                if(currentFilters.model !== 'all' && card.dataset.model !== currentFilters.model) show = false;
+                if(currentFilters.status !== 'all' && card.dataset.status !== currentFilters.status) show = false;
+                card.style.display = show ? 'block' : 'none';
+            });
+            document.querySelectorAll('.category-section').forEach(section => {
+                let hasVisible = Array.from(section.querySelectorAll('.machine-card')).some(c => c.style.display !== 'none');
+                section.style.display = hasVisible ? 'block' : 'none';
+            });
+            document.getElementById('filterDrawer').classList.remove('open');
+            document.getElementById('drawerOverlay').classList.remove('open');
+        });
+    }
+    
+    // ==================== 標籤頁 ====================
+    function initTabs() {
+        let tabs = document.querySelectorAll('.tab-btn'), sections = document.querySelectorAll('.category-section');
+        function filterByTab(tab) { sections.forEach(s => { s.style.display = (tab === '全部' || s.dataset.category === tab) ? 'block' : 'none'; }); }
+        tabs.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tabs.forEach(b => b.classList.remove('tech-tab-active'));
+                btn.classList.add('tech-tab-active');
+                filterByTab(btn.dataset.tab);
+            });
+        });
+    }
+    
+    // ==================== 監聽事件 (與 shared.js 同步) ====================
+    function bindStorageEvents() {
+        if (!window.T_PACHIN_STORAGE) return;
+        
+        window.addEventListener('points-updated', function(e) {
+            if (e.detail && e.detail.points !== undefined) {
+                userPoints = e.detail.points;
+                updatePointsDisplay();
+            }
+        });
+        
+        window.addEventListener('t-pachin:favorites-updated', function() {
+            renderMachines();
+        });
+        
+        window.addEventListener('t-pachin:reserves-updated', function() {
+            renderMachines();
+        });
+        
+        // 載入佔用代幣
+        currentOccupiedTokens = T_PACHIN_STORAGE.getOccupiedTokens();
+    }
+    
+    // ==================== 初始化 ====================
+    function init() {
+        syncPointsWithStorage();
+        bindStorageEvents();
+        renderMachines();
+        initBanner();
+        initFilters();
+        initTabs();
+        
+        document.getElementById('modalCloseBtn')?.addEventListener('click', closeMachineModal);
+        document.getElementById('machineModal')?.addEventListener('click', (e) => { if(e.target === document.getElementById('machineModal')) closeMachineModal(); });
+        document.getElementById('confirmCancelBtn')?.addEventListener('click', closeConfirmModalOnly);
+        document.getElementById('closeXBtn')?.addEventListener('click', closeConfirmModalOnly);
+        document.getElementById('confirmOk')?.addEventListener('click', doEnterGame);
+        document.getElementById('settlementCancelBtn')?.addEventListener('click', closeSettlementModal);
+        document.getElementById('settlementNextBtn')?.addEventListener('click', openConfirmLeaveModal);
+        document.getElementById('confirmLeaveCancelBtn')?.addEventListener('click', closeConfirmLeaveModal);
+        document.getElementById('confirmLeaveOkBtn')?.addEventListener('click', executeLeave);
+        document.getElementById('closeAlertBtn')?.addEventListener('click', closeMinPointsAlert);
+        document.getElementById('minPointsAlert')?.addEventListener('click', (e) => { if(e.target === e.currentTarget) closeMinPointsAlert(); });
+        
+        let openDrawer = document.getElementById('openDrawerBtn'), drawer = document.getElementById('filterDrawer'), overlay = document.getElementById('drawerOverlay');
+        if(openDrawer && drawer && overlay) {
+            openDrawer.addEventListener('click', () => { drawer.classList.add('open'); overlay.classList.add('open'); });
+            overlay.addEventListener('click', () => { drawer.classList.remove('open'); overlay.classList.remove('open'); });
+        }
+        
+        let mainScroller = document.getElementById('machineList'), backTop = document.getElementById('backToTop');
+        if(mainScroller) mainScroller.addEventListener('scroll', () => backTop?.classList.toggle('show', mainScroller.scrollTop > 200));
+        if(backTop) backTop.addEventListener('click', () => mainScroller?.scrollTo({ top: 0, behavior: 'smooth' }));
+        
+        if (window.T_PACHIN_STORAGE) {
+            document.getElementById('nicknameDisplay').textContent = T_PACHIN_STORAGE.getNickname();
+        } else {
+            document.getElementById('nicknameDisplay').textContent = '夫人會生氣';
+        }
+        updatePointsDisplay();
+    }
+    
+    // 暴露全域函數
+    window.switchAllPages = switchAllPages;
+    window.switchCardPage = switchCardPage;
+    window.switchPage = switchPage;
+    window.openSubConfirm = openSubConfirm;
+    window.filterSubByRatio = filterSubByRatio;
+    window.openSettlementModal = openSettlementModal;
+    window.toggleFavorite = toggleFavorite;
+    window.currentRatioFilter = currentRatioFilter;
+    
+    init();
+})();
+</script>
+</body>
+</html>

@@ -48,8 +48,7 @@
         .video-section { position: relative; margin: 15px 8px; }
         .video-area { background: #000; border-radius: 16px; overflow: hidden; border: 2px solid #4a80c0; position: relative; height: 600px; cursor: pointer; }
         video { width: 100%; height: 100%; object-fit: cover; pointer-events: auto; cursor: pointer; }
-        .pip-btn { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); border-radius: 30px; padding: 6px 12px; cursor: pointer; color: rgba(255,255,255,0.8); z-index: 45; font-size: 20px; border: 1px solid rgba(255,255,255,0.3); font-weight: normal; line-height: 1; text-shadow: 0 0 2px rgba(0,0,0,0.5); transition: all 0.2s ease; }
-        .pip-btn:active { transform: scale(0.92); opacity: 0.7; background: rgba(0,0,0,0.7); }
+        .pip-btn { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.6); border-radius: 30px; padding: 6px 12px; cursor: pointer; color: white; z-index: 45; font-size: 16px; border: 1px solid #ffaa66; }
         .manual-control-panel { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(180deg, rgba(20,30,45,0.96), rgba(10,20,30,0.98)); backdrop-filter: blur(10px); border-top: 1px solid #ffaa66; border-radius: 16px 16px 0 0; padding: 10px 16px; transition: transform 0.3s; z-index: 35; }
         .manual-control-panel.show { transform: translateY(0); }
         .manual-control-panel.hide { transform: translateY(100%); }
@@ -123,7 +122,7 @@
         .points-alert-message { color: #ffd966; font-size: 0.85rem; margin-bottom: 12px; line-height: 1.4; }
         .points-alert-btn { background: linear-gradient(145deg, #ffaa33, #ff8c00); border: none; border-radius: 30px; padding: 6px 16px; font-weight: bold; cursor: pointer; color: #2a1f0a; display: inline-block; font-size: 0.85rem; }
         .points-alert-btn:active { transform: scale(0.96); }
-        @media (max-width: 430px) { .video-area { height: 500px; } .machine-name { font-size: 22px; } .pip-btn { font-size: 18px; padding: 4px 10px; } }
+        @media (max-width: 430px) { .video-area { height: 500px; } .machine-name { font-size: 22px; } .pip-btn { font-size: 24px; top: 8px; right: 8px; } }
     </style>
 </head>
 <body>
@@ -134,9 +133,9 @@
     <div class="video-section">
         <div class="video-area" id="videoArea">
             <video id="gameVideo" autoplay muted loop playsinline webkit-playsinline>
-                <source src="https://video.wixstatic.com/video/d5e540_711a5270f88b42e795b8d11b3f679505/480p/mp4/file.mp4" type="video/mp4">
+                <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
             </video>
-            <div class="pip-btn" id="pipButton">◲</div>
+            <div class="pip-btn" id="pipButton">◲ PiP</div>
             <div class="manual-control-panel show" id="manualPanel">
                 <div class="control-group">
                     <button class="max-btn" id="maxSpinBtn">MAX</button>

@@ -285,7 +285,7 @@
 <div class="max-w-md mx-auto flex flex-col">
     <header class="metal-header">
         <div class="flex items-center justify-between">
-            <div class="logo"><div class="logo-icon"><div class="logo-icon-inner">TP</div></div><div class="logo-text"><div class="logo-main">T-PACHIN</div><div class="logo-sub">JOKER SERIES</div></div></div>
+            <div class="logo" data-page="index"><div class="logo-icon"><div class="logo-icon-inner">TP</div></div><div class="logo-text"><div class="logo-main">T-PACHIN</div><div class="logo-sub">JOKER SERIES</div></div></div>
             <div class="text-right">
                 <a href="#" class="nickname-link" id="nicknameDisplay">夫人會生氣</a>
                 <div class="points-display" id="tokenBtn">6,600</div>
@@ -294,7 +294,7 @@
     </header>
     
     <div class="px-4">
-        <div class="announcement-combo"><div class="combo-announce-btn"><i class="fa fa-bullhorn"></i><span>公告</span></div><div class="combo-marquee"><div class="marquee-content">⚡ 小丑系列完全集結 · 4·5·6號機 榮耀回歸 ⚡ 1點=1/倍率枚代幣 · 離座可得代幣 × 0.9 ⚡</div></div></div>
+        <div class="announcement-combo"><div class="combo-announce-btn" data-page="news"><i class="fa fa-bullhorn"></i><span>公告</span></div><div class="combo-marquee"><div class="marquee-content">⚡ 小丑系列完全集結 · 4·5·6號機 榮耀回歸 ⚡ 1點=1/倍率枚代幣 · 離座可得代幣 × 0.9 ⚡</div></div></div>
     </div>
     
     <main class="main-content" id="machineList">
@@ -310,10 +310,10 @@
 </div>
 
 <nav class="bottom-nav">
-    <a href="#" class="nav-item current-page" data-page="home"><i class="fa fa-home"></i><span>首頁</span></a>
+    <a href="#" class="nav-item" data-page="index"><i class="fa fa-home"></i><span>首頁</span></a>
     <a href="#" class="nav-item" data-page="machines"><i class="fa fa-gamepad"></i><span>機台</span></a>
     <a href="#" class="nav-item" data-page="news"><i class="fa fa-bell"></i><span>公告</span></a>
-    <a href="#" class="nav-item" data-page="profile"><i class="fa fa-user"></i><span>我的</span></a>
+    <a href="#" class="nav-item" data-page="about"><i class="fa fa-user"></i><span>我的</span></a>
 </nav>
 <div class="back-to-top" id="backToTop"><i class="fa fa-arrow-up"></i></div>
 
@@ -360,6 +360,7 @@
     </div>
 </div>
 
+<script src="shared.js"></script>
 <script>
 (function() {
     // ==================== 點數與佔用紀錄 ====================
@@ -368,6 +369,11 @@
     let currentSubDataInfo = null;
     let pendingLeaveInfo = null;
     let currentRatioFilter = "all";
+    
+    // 同步 shared.js 的點數
+    if (window.T_PACHIN_STORAGE) {
+        userPoints = T_PACHIN_STORAGE.getPoints();
+    }
     
     // 主機台資料
     const machines = [
@@ -389,6 +395,7 @@
         document.getElementById('tokenBtn').textContent = userPoints.toLocaleString();
         if(document.getElementById('confirmPoints')) document.getElementById('confirmPoints').textContent = userPoints.toLocaleString();
         if(document.getElementById('confirmTokenRemain')) document.getElementById('confirmTokenRemain').innerHTML = `<i class="fa fa-credit-card"></i> 剩餘點數: ${userPoints.toLocaleString()}`;
+        if(window.T_PACHIN_STORAGE) T_PACHIN_STORAGE.setPoints(userPoints);
     }
     
     function updatePoints(changeAmount) {
@@ -519,7 +526,13 @@
     
     // 收藏功能
     function toggleFavorite(machineName, machineId, ratio) {
-        showToast(`❤️ ${machineName} ${machineId}號機 已收藏`);
+        const machine = { id: machineId, name: machineName, ratio: ratio };
+        if(window.T_PACHIN_STORAGE) {
+            T_PACHIN_STORAGE.toggleFavorite(machine);
+            showToast(`❤️ ${machineName} ${machineId}號機 已${T_PACHIN_STORAGE.isFavorite(machineId) ? '加入收藏' : '取消收藏'}`);
+        } else {
+            showToast(`❤️ ${machineName} ${machineId}號機 已收藏`);
+        }
     }
     
     // 離座結算相關函數
@@ -756,23 +769,30 @@
         filterByTab('全部');
     }
     
-    // 導航欄處理
-    function handleNavigation() {
+    // ==================== 導航欄跳轉 ====================
+    function initNavigation() {
+        // 導覽列按鈕跳轉
         document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', (e) => {
                 e.preventDefault();
-                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('current-page'));
-                item.classList.add('current-page');
                 const page = item.dataset.page;
-                if(page === 'home' || page === 'machines') {
-                    renderMachines();
-                } else if(page === 'news') {
-                    document.getElementById('allMachinesContainer').innerHTML = '<div class="text-center p-4"><i class="fa fa-bell fa-2x mb-2"></i><p>📢 最新公告：小丑系列全面升級！4/6號機新規格導入</p></div>';
-                } else if(page === 'profile') {
-                    document.getElementById('allMachinesContainer').innerHTML = `<div class="text-center p-4"><i class="fa fa-user-circle fa-3x mb-2"></i><p>👤 會員名稱：夫人會生氣</p><p>💰 持有點數：${userPoints.toLocaleString()} 點</p><p>⚙️ 更多功能開發中</p></div>`;
-                }
-                document.querySelector('.main-content').scrollTop = 0;
+                if (page === 'index') window.location.href = 'index.html';
+                else if (page === 'machines') window.location.href = 'machines.html';
+                else if (page === 'news') window.location.href = 'news.html';
+                else if (page === 'about') window.location.href = 'about.html';
             });
+        });
+        
+        // Logo 跳轉
+        document.querySelector('.logo')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = 'index.html';
+        });
+        
+        // 公告按鈕跳轉
+        document.querySelector('.combo-announce-btn')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = 'news.html';
         });
     }
     
@@ -805,7 +825,7 @@
         if(mainScroller) mainScroller.addEventListener('scroll', () => backTop?.classList.toggle('show', mainScroller.scrollTop > 200));
         if(backTop) backTop.addEventListener('click', () => mainScroller?.scrollTo({ top: 0, behavior: 'smooth' }));
         
-        document.getElementById('nicknameDisplay').textContent = '夫人會生氣';
+        document.getElementById('nicknameDisplay').textContent = window.T_PACHIN_STORAGE ? T_PACHIN_STORAGE.getNickname() : '夫人會生氣';
         updatePointsDisplay();
     }
     
@@ -824,8 +844,8 @@
         initBanner();
         initFilters();
         initTabs();
+        initNavigation();
         bindEvents();
-        handleNavigation();
     }
     
     init();

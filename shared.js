@@ -6,6 +6,52 @@ const T_PACHIN_STORAGE = {
     USER_KEY: 't_pachin_user',
     PLAYED_KEY: 't_pachin_played',
     POINTS_KEY: 't_pachin_user_points',
+    // 設定 KEY
+    SETTINGS_KEY: 't_pachin_settings',
+    
+    // ==================== 設定管理 ====================
+    getSettings() {
+        const defaultSettings = {
+            darkMode: true,      // true = 深色模式, false = 淺色模式
+            language: 'zh-TW',
+            sound: true,
+            notify: true
+        };
+        const stored = localStorage.getItem(this.SETTINGS_KEY);
+        if (stored) {
+            try {
+                return { ...defaultSettings, ...JSON.parse(stored) };
+            } catch (e) {
+                return defaultSettings;
+            }
+        }
+        return defaultSettings;
+    },
+    
+    saveSettings(settings) {
+        localStorage.setItem(this.SETTINGS_KEY, JSON.stringify(settings));
+        window.dispatchEvent(new CustomEvent('t-pachin:settings-updated', {
+            detail: settings
+        }));
+        return settings;
+    },
+    
+    updateSetting(key, value) {
+        const settings = this.getSettings();
+        settings[key] = value;
+        this.saveSettings(settings);
+        this.applySettingsToBody(settings);
+        return settings;
+    },
+    
+    applySettingsToBody(settings) {
+        const body = document.body;
+        if (!settings.darkMode) {
+            body.classList.add('light-mode');
+        } else {
+            body.classList.remove('light-mode');
+        }
+    },
     
     // ==================== 使用者資料 ====================
     getUserData() {
@@ -361,8 +407,18 @@ const CountdownManager = {
 
 // ==================== 初始化所有頁面共用功能 ====================
 function initializeSharedFeatures() {
+    // 套用儲存的深色模式設定
+    const settings = T_PACHIN_STORAGE.getSettings();
+    T_PACHIN_STORAGE.applySettingsToBody(settings);
+    
     T_PACHIN_STORAGE.updateAllPointsDisplay();
     T_PACHIN_STORAGE.highlightCurrentNav();
+    
+    // 監聽設定更新事件
+    window.addEventListener('t-pachin:settings-updated', function(e) {
+        const newSettings = e.detail;
+        T_PACHIN_STORAGE.applySettingsToBody(newSettings);
+    });
     
     window.addEventListener('t-pachin:user-updated', () => {
         T_PACHIN_STORAGE.updateAllPointsDisplay();
@@ -446,5 +502,13 @@ window.TPachin = {
     user: {
         getNickname: () => T_PACHIN_STORAGE.getNickname(),
         setNickname: (name) => T_PACHIN_STORAGE.setNickname(name)
+    },
+    settings: {
+        get: () => T_PACHIN_STORAGE.getSettings(),
+        set: (key, value) => T_PACHIN_STORAGE.updateSetting(key, value),
+        on: (callback) => {
+            window.addEventListener('t-pachin:settings-updated', (e) => callback(e.detail));
+            callback(T_PACHIN_STORAGE.getSettings());
+        }
     }
 };

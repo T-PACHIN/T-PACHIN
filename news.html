@@ -504,6 +504,7 @@
             box-shadow: 0 5px 0 #0f121c, inset 0 2px 5px rgba(255, 255, 255, 0.3), inset 0 -3px 5px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(74, 128, 192, 0.2);
             width: 50px;
+            cursor: pointer;
         }
         .nav-item.current-page {
             background: linear-gradient(145deg, #4a5065, #3a4055);
@@ -550,13 +551,84 @@
         .w-full { width: 100%; }
         .rounded-full { border-radius: 9999px; }
         .border { border-width: 1px; }
+        
+        /* 深色模式支援 - 與其他頁面一致 */
+        body.light-mode {
+            background: #e8ecf2;
+            color: #1a1a2e;
+        }
+        body.light-mode .app-container {
+            background: linear-gradient(145deg, #f0f2f8, #e8ecf2);
+        }
+        body.light-mode .metal-header,
+        body.light-mode .bottom-nav {
+            background: linear-gradient(145deg, #dce0e8, #d0d4e0);
+        }
+        body.light-mode .announce-tab {
+            background: linear-gradient(145deg, #e0e4ec, #d0d4e0);
+            color: #2a4055;
+        }
+        body.light-mode .announce-tab.active {
+            background: linear-gradient(145deg, #c0c8d8, #b0b8c8);
+            color: #1a1a2e;
+        }
+        body.light-mode .system-card,
+        body.light-mode .qa-scroll-card,
+        body.light-mode .letter-container {
+            background: linear-gradient(145deg, #ffffff, #f5f7fa);
+        }
+        body.light-mode .system-card .text-white {
+            color: #1a1a2e !important;
+        }
+        body.light-mode .system-card .text-gray-300 {
+            color: #4a6a8a !important;
+        }
+        body.light-mode .qa-header h3 {
+            color: #1a1a2e;
+        }
+        body.light-mode .qa-item .question {
+            color: #1a1a2e;
+        }
+        body.light-mode .qa-item .answer {
+            color: #4a6a8a;
+        }
+        body.light-mode .letter-info h4 {
+            color: #1a1a2e;
+        }
+        body.light-mode .letter-info p {
+            color: #4a6a8a;
+        }
+        body.light-mode .nav-item {
+            background: linear-gradient(145deg, #e0e4ec, #d0d4e0);
+            color: #2a4055;
+        }
+        body.light-mode .nav-item.current-page {
+            background: linear-gradient(145deg, #c0c8d8, #b0b8c8);
+            color: #1a1a2e;
+        }
+        body.light-mode .points-display {
+            background: linear-gradient(145deg, #e0d6b0, #d0c6a0);
+            color: #1a1a2e;
+            border-color: #c9a03d;
+            text-shadow: none;
+        }
+        body.light-mode .nickname-display {
+            color: #1a1a2e;
+            text-shadow: none;
+        }
+        body.light-mode .modal-card {
+            background: linear-gradient(145deg, #ffffff, #f0f2f8);
+        }
+        body.light-mode .modal-card .text-gray-200 {
+            color: #1a1a2e !important;
+        }
     </style>
 </head>
 <body>
 <div class="app-container">
     <header class="metal-header flex-shrink-0">
         <div class="flex items-center justify-between">
-            <a href="index.html" class="logo">
+            <a href="javascript:void(0)" class="logo" data-page="index">
                 <div class="logo-icon"><div class="logo-icon-inner">TP</div></div>
                 <div class="logo-text"><div class="logo-main">T-PACHIN</div><div class="logo-sub">CYBER PACHINKO SYSTEM</div></div>
             </a>
@@ -689,10 +761,10 @@
     </div>
 
     <nav class="bottom-nav mx-auto flex-shrink-0">
-        <a href="index.html" class="nav-item"><i class="fa fa-home"></i><span>首頁</span></a>
-        <a href="machines.html" class="nav-item"><i class="fa fa-gamepad"></i><span>機台</span></a>
-        <a href="news.html" class="nav-item current-page"><i class="fa fa-bell"></i><span>公告</span><span class="nav-badge" id="newsBadge"></span></a>
-        <a href="about.html" class="nav-item"><i class="fa fa-user"></i><span>我的</span></a>
+        <a href="javascript:void(0)" class="nav-item" data-page="index"><i class="fa fa-home"></i><span>首頁</span></a>
+        <a href="javascript:void(0)" class="nav-item" data-page="machines"><i class="fa fa-gamepad"></i><span>機台</span></a>
+        <a href="javascript:void(0)" class="nav-item current-page" data-page="news"><i class="fa fa-bell"></i><span>公告</span><span class="nav-badge" id="newsBadge"></span></a>
+        <a href="javascript:void(0)" class="nav-item" data-page="about"><i class="fa fa-user"></i><span>我的</span></a>
     </nav>
 </div>
 
@@ -713,25 +785,55 @@
 <script src="shared.js"></script>
 <script>
 (function(){
+    // 從 shared.js 讀取點數
     let userPoints = 6600;
     
-    function initPoints() {
+    // 初始化點數和深色模式
+    function initPointsAndTheme() {
         if (window.T_PACHIN_STORAGE) {
             userPoints = T_PACHIN_STORAGE.getPoints();
-            window.addEventListener('t-pachin:user-updated', function(e) {
-                if (e.detail && e.detail.points !== undefined) {
-                    userPoints = e.detail.points;
-                    updatePointsDisplay();
-                }
-            });
+            updatePointsDisplay();
+            
+            // 監聽點數更新事件
             window.addEventListener('points-updated', function(e) {
                 if (e.detail && e.detail.points !== undefined) {
                     userPoints = e.detail.points;
                     updatePointsDisplay();
                 }
             });
+            
+            // 監聽使用者更新事件（暱稱、點數等）
+            window.addEventListener('t-pachin:user-updated', function(e) {
+                if (e.detail && e.detail.points !== undefined) {
+                    userPoints = e.detail.points;
+                    updatePointsDisplay();
+                }
+                if (e.detail && e.detail.nickname) {
+                    document.getElementById('nicknameDisplay').textContent = e.detail.nickname;
+                }
+            });
+            
+            // 讀取暱稱
             const nickname = T_PACHIN_STORAGE.getNickname();
             document.getElementById('nicknameDisplay').textContent = nickname;
+            
+            // 讀取並套用深色模式設定
+            const settings = T_PACHIN_STORAGE.getSettings();
+            if (!settings.darkMode) {
+                document.body.classList.add('light-mode');
+            } else {
+                document.body.classList.remove('light-mode');
+            }
+            
+            // 監聽設定更新事件
+            window.addEventListener('t-pachin:settings-updated', function(e) {
+                const newSettings = e.detail;
+                if (!newSettings.darkMode) {
+                    document.body.classList.add('light-mode');
+                } else {
+                    document.body.classList.remove('light-mode');
+                }
+            });
         }
         updatePointsDisplay();
     }
@@ -741,18 +843,26 @@
         if (tokenBtn) tokenBtn.textContent = userPoints.toLocaleString();
     }
     
-    // 監聽暱稱更新事件
+    // 導航欄連動
+    function initNavigation() {
+        document.querySelectorAll('.nav-item, .logo, [data-page]').forEach(el => {
+            if (el.classList && (el.classList.contains('nav-item') || el.classList.contains('logo') || el.hasAttribute('data-page'))) {
+                el.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = this.dataset.page;
+                    if (page === 'index') window.location.href = 'index.html';
+                    else if (page === 'machines') window.location.href = 'machines.html';
+                    else if (page === 'news') window.location.href = 'news.html';
+                    else if (page === 'about') window.location.href = 'about.html';
+                });
+            }
+        });
+    }
+    
+    // 暱稱修改功能
     function bindNicknameEvent() {
         if (!window.T_PACHIN_STORAGE) return;
         
-        // 監聽點數更新時同時更新暱稱顯示
-        window.addEventListener('t-pachin:user-updated', function(e) {
-            if (e.detail && e.detail.nickname) {
-                document.getElementById('nicknameDisplay').textContent = e.detail.nickname;
-            }
-        });
-        
-        // 點擊暱稱修改
         const nicknameEl = document.getElementById('nicknameDisplay');
         if (nicknameEl) {
             nicknameEl.addEventListener('click', function() {
@@ -766,7 +876,8 @@
         }
     }
     
-    initPoints();
+    initPointsAndTheme();
+    initNavigation();
     bindNicknameEvent();
     
     // 標籤切換

@@ -407,6 +407,37 @@
             }
         }
         
+        /* ==================== Loading 動畫 - 與 index.html 一致 ==================== */
+        .hologram-loading { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(8px); 
+            z-index: 20000; display: flex; align-items: center; justify-content: center; 
+            opacity: 0; visibility: hidden; transition: 0.2s; 
+        }
+        .hologram-loading.show { opacity: 1; visibility: visible; }
+        .hologram-content { 
+            position: relative; width: 90%; max-width: 400px; min-height: 450px; text-align: center; 
+        }
+        .loading-video { 
+            width: 100%; height: auto; border-radius: 20px; 
+            box-shadow: 0 0 30px rgba(74,128,192,0.5); 
+        }
+        .loading-text { 
+            font-size: 24px; font-weight: 900; color: #ffd700; 
+            text-shadow: 0 0 10px #ffd700; margin-top: 10px; 
+        }
+        .progress-bar { 
+            width: 80%; height: 6px; background: rgba(255,255,255,0.2); 
+            border-radius: 10px; margin: 10px auto; overflow: hidden; 
+        }
+        .progress-fill { 
+            height: 100%; width: 60%; background: linear-gradient(90deg, #ffd700, #4a80c0); 
+            animation: loadingMove 1s ease-in-out infinite alternate; 
+        }
+        @keyframes loadingMove { 
+            from { width: 20%; } to { width: 80%; } 
+        }
+        
         .section-title { color: #ffd966; font-size: 18px; font-weight: bold; border-bottom: 2px solid #ffaa33; padding-bottom: 8px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
         .flex { display: flex; }
         .items-center { align-items: center; }
@@ -435,7 +466,7 @@
                 </div>
                 <div>
                     <div class="flex items-center gap-1">
-                        <span id="displayNickname" class="nickname-edit">郝可愛</span>
+                        <span id="displayNickname" class="nickname-edit">夫人會生氣</span>
                         <i class="fa fa-pencil-square-o text-blue-400 text-sm"></i>
                     </div>
                     <div class="flex items-center gap-2 mt-1">
@@ -446,7 +477,7 @@
             </div>
             <div class="flex items-center gap-2">
                 <div class="points-display" id="headerPoints">💰 <span id="userPoints">6,600</span></div>
-                <a href="index.html" class="bg-gray-700 w-10 h-10 rounded-full flex items-center justify-center"><i class="fa fa-home"></i></a>
+                <div class="bg-gray-700 w-10 h-10 rounded-full flex items-center justify-center cursor-pointer" id="homeIconBtn"><i class="fa fa-home"></i></div>
             </div>
         </div>
         <div class="progress-bar mt-2"><div class="progress-fill"></div></div>
@@ -500,25 +531,34 @@
     <!-- 下方導覽列 (按鈕寬度固定 50px，間距自動平均分配) -->
     <nav class="bottom-nav">
         <div class="nav-items-container">
-            <a href="index.html" class="nav-item" id="navHome">
+            <div class="nav-item" data-page="index">
                 <i class="fa fa-home"></i>
                 <span>首頁</span>
-            </a>
-            <a href="machines.html" class="nav-item" id="navMachines">
+            </div>
+            <div class="nav-item" data-page="machines">
                 <i class="fa fa-gamepad"></i>
                 <span>機台</span>
-            </a>
-            <a href="news.html" class="nav-item" id="navNews">
+            </div>
+            <div class="nav-item" data-page="news">
                 <i class="fa fa-bell"></i>
                 <span>公告</span>
                 <span class="nav-badge show" id="newsBadge"></span>
-            </a>
-            <a href="#" class="nav-item current-page" id="navProfile">
+            </div>
+            <div class="nav-item current-page" data-page="about">
                 <i class="fa fa-user"></i>
                 <span>我的</span>
-            </a>
+            </div>
         </div>
     </nav>
+</div>
+
+<!-- Loading 動畫 - 與 index.html 一致 -->
+<div class="hologram-loading" id="hologramLoading">
+    <div class="hologram-content">
+        <video id="mascotVideo" class="loading-video" autoplay muted loop playsinline src="https://video.wixstatic.com/video/d5e540_d63f842135e8416f891842373bc0f582/720p/mp4/file.mp4" style="width:100%;border-radius:20px"></video>
+        <div class="loading-text" id="loadingMachineTitle">LOADING</div>
+        <div class="progress-bar"><div class="progress-fill"></div></div>
+    </div>
 </div>
 
 <!-- 注單明細彈窗 -->
@@ -557,6 +597,32 @@
     const videoUrls = ["https://www.w3schools.com/html/mov_bbb.mp4", "https://www.w3schools.com/html/movie.mp4", "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4", "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/earth.mp4"];
     
     const JOKER_IMAGE_URL = "https://i.pinimg.com/736x/c3/72/db/c372db1b020ebf778ef707f63c122bf7.jpg";
+    
+    // 從 shared.js 同步點數和暱稱
+    if (window.T_PACHIN_STORAGE) {
+        userPoints = T_PACHIN_STORAGE.getPoints();
+        const nickname = T_PACHIN_STORAGE.getNickname();
+        document.getElementById('displayNickname').innerText = nickname;
+    }
+    
+    // ==================== 導航欄連動 ====================
+    function initNavigation() {
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const page = this.dataset.page;
+                if (page === 'index') window.location.href = 'index.html';
+                else if (page === 'machines') window.location.href = 'machines.html';
+                else if (page === 'news') window.location.href = 'news.html';
+                else if (page === 'about') window.location.href = 'about.html';
+            });
+        });
+        
+        // 首頁圖標跳轉
+        document.getElementById('homeIconBtn')?.addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
+    }
     
     // ==================== 從 localStorage 讀取收藏和保留 ====================
     let favoriteMachines = [];
@@ -723,11 +789,24 @@
                 updatePointsDisplay();
             }
         });
+        
+        window.addEventListener('t-pachin:user-updated', function(e) {
+            if (e.detail && e.detail.points !== undefined) {
+                userPoints = e.detail.points;
+                updatePointsDisplay();
+            }
+            if (e.detail && e.detail.nickname) {
+                document.getElementById('displayNickname').innerText = e.detail.nickname;
+            }
+        });
     }
     
     function updatePointsDisplay() {
         const pointsSpan = document.getElementById('userPoints');
-        if (pointsSpan) pointsSpan.innerText = userPoints;
+        if (pointsSpan) pointsSpan.innerText = userPoints.toLocaleString();
+        if (window.T_PACHIN_STORAGE && userPoints !== T_PACHIN_STORAGE.getPoints()) {
+            T_PACHIN_STORAGE.setPoints(userPoints);
+        }
     }
     
     function syncPointsWithStorage() {
@@ -936,20 +1015,22 @@
     document.getElementById('filterSelect').addEventListener('change', (e) => { currentFilter = e.target.value; render(); });
     document.getElementById('avatarContainer').onclick = () => { let av = ['https://i.pravatar.cc/150?img=7', 'https://i.pravatar.cc/150?img=5', 'https://i.pravatar.cc/150?img=9']; document.getElementById('avatarImage').src = av[Math.floor(Math.random() * av.length)]; alert('更換頭像'); };
     document.getElementById('displayNickname').onclick = () => { 
-        let n = prompt('新暱稱', '郝可愛'); 
+        let n = prompt('新暱稱', document.getElementById('displayNickname').innerText); 
         if (n && n.trim()) { 
             document.getElementById('displayNickname').innerText = n; 
             if (window.T_PACHIN_STORAGE) T_PACHIN_STORAGE.setNickname(n); 
         } 
     };
-    document.getElementById('headerPoints').onclick = () => alert(`點數: ${userPoints}`);
+    document.getElementById('headerPoints').onclick = () => alert(`點數: ${userPoints.toLocaleString()}`);
     document.getElementById('vipBadge').onclick = () => alert('VIP1 特權: 返水0.2%');
     
     // ==================== 初始化 ====================
+    initNavigation();
     initFavoriteAndReserve();
     syncPointsWithStorage();
     bindStorageEvents();
     updateBadges();
+    updatePointsDisplay();
     document.getElementById('transactionContainer').style.display = 'block';
     document.getElementById('sessionsContainer').style.display = 'none';
     render();

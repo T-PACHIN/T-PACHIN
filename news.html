@@ -3,266 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>我的 · 注單明細 · 小丑系列</title>
+    <title>公告中心 · 初始系統公告 | T-PACHIN</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;500;700;900&family=Noto+Sans+JP:wght@300;500;700;900&family=Russo+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Russo+One&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #0a0c1a; color: #fff; font-family: 'Noto Sans TC', 'Orbitron', sans-serif; min-height: 100vh; }
-        .max-w-md { max-width: 448px; margin: 0 auto; height: 100vh; background: linear-gradient(145deg, #0f1425, #0a0e1f); display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 0 50px rgba(74,128,192,0.2); border-left: 1px solid rgba(74,128,192,0.2); border-right: 1px solid rgba(153,0,255,0.2); }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         
-        ::-webkit-scrollbar { width: 4px; background: transparent; }
-        ::-webkit-scrollbar-track { background: rgba(74, 128, 192, 0.1); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb { background: rgba(74, 128, 192, 0.5); border-radius: 10px; }
-        
-        .metal-header { background: linear-gradient(145deg, #2a2f3f, #1a1f2f); border-bottom: 2px solid #4a80c0; padding: 16px; flex-shrink: 0; border-radius: 0 0 24px 24px; }
-        .avatar-container { width: 65px; height: 65px; border-radius: 50%; background: linear-gradient(145deg, #2a2f3f, #1a1f2f); border: 2px solid #4a80c0; overflow: hidden; cursor: pointer; position: relative; }
-        .avatar-container img { width: 100%; height: 100%; object-fit: cover; }
-        .avatar-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); font-size: 10px; text-align: center; }
-        .nickname-edit { font-size: 1.3rem; font-weight: bold; cursor: pointer; border-bottom: 1px dashed #4a80c0; }
-        .vip-badge { background: linear-gradient(135deg, #b8860b, #ffd700); color: #000; padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; cursor: pointer; }
-        .points-display { background: linear-gradient(145deg, #4a3a1a, #3a2a0a); padding: 5px 14px; border-radius: 30px; color: #ffd966; font-weight: bold; border: 1px solid #ffd700; cursor: pointer; }
-        .progress-bar { height: 5px; background: #2a2f3f; border-radius: 10px; overflow: hidden; margin-top: 12px; }
-        .progress-fill { width: 28%; height: 100%; background: linear-gradient(90deg, #ffd966, #ffaa33); border-radius: 10px; }
-        
-        .action-grid-btn { background: linear-gradient(145deg, #3a4050, #2a2f40); border: 1px solid #4a80c0; border-radius: 16px; padding: 12px; text-align: center; cursor: pointer; position: relative; box-shadow: 0 4px 0 #0f121c; }
-        .count-badge { position: absolute; top: -8px; right: -8px; background: #ff4444; color: white; font-size: 11px; min-width: 22px; height: 22px; border-radius: 30px; display: flex; align-items: center; justify-content: center; border: 1px solid #ffd966; }
-        
-        .search-layout { display: grid; gap: 10px; margin-bottom: 16px; }
-        .search-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .date-group { background: linear-gradient(145deg, #2a2f3f, #1a1f2f); border: 1px solid #4a80c0; border-radius: 30px; padding: 8px 12px; display: flex; gap: 6px; }
-        .date-group input { background: transparent; border: none; color: white; font-size: 12px; width: 100px; cursor: pointer; }
-        .date-group input::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
-        .search-btn { background: linear-gradient(145deg, #3a5065, #2a4055); border: 1px solid #4a80c0; border-radius: 30px; padding: 8px; color: white; cursor: pointer; text-align: center; font-weight: bold; }
-        .search-box { background: linear-gradient(145deg, #2a2f3f, #1a1f2f); border: 1px solid #4a80c0; border-radius: 30px; padding: 8px 14px; display: flex; gap: 8px; flex: 1; }
-        .search-box input { background: transparent; border: none; color: white; width: 100%; outline: none; }
-        .filter-select { width: 100%; background: #ffffff; border: 2px solid #4a80c0; border-radius: 30px; padding: 6px 28px 6px 14px; color: #1a1f2f; font-weight: 600; font-size: 0.75rem; appearance: none; cursor: pointer; height: 40px; }
-        
-        .stats-card { background: linear-gradient(145deg, #002b4a, #001a2a); border-radius: 16px; padding: 14px; margin-bottom: 16px; border: 1px solid #4a80c0; }
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); text-align: center; }
-        .stats-label { font-size: 11px; color: #80e4ff; }
-        .stats-value { font-size: 18px; font-weight: bold; color: #ffd966; }
-        
-        .main-row { background: linear-gradient(145deg, #1a1f2f, #0f1425); border: 2px solid #4a80c0; border-radius: 16px; margin-bottom: 12px; cursor: pointer; padding: 14px 16px; transition: 0.2s; }
-        .main-row:hover { border-color: #ffd700; transform: translateY(-2px); }
-        .machine-title .name { font-size: 16px; font-weight: bold; color: #ffd966; }
-        .machine-title .number { font-size: 12px; color: #80e4ff; margin-left: 6px; }
-        .date-range { font-size: 11px; color: #b0c4de; margin: 8px 0; }
-        .bring-in { color: #88ffaa; }
-        .bring-out { color: #ffaa88; }
-        .net-profit.positive { color: #ffaa66; }
-        .net-profit.negative { color: #ff6666; }
-        
-        .tx-card { background: linear-gradient(145deg, #1a2a3a, #0f1f2f); border: 2px solid #4a80c0; border-radius: 20px; padding: 12px 16px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; }
-        .tx-card:hover { border-color: #ffd966; transform: translateY(-1px); }
-        .tx-name { font-size: 1rem; font-weight: bold; color: #ffd966; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
-        .tx-platform { font-size: 0.8rem; color: #80e4ff; margin-bottom: 6px; }
-        .tx-points { font-size: 1rem; font-weight: bold; margin-bottom: 6px; }
-        .tx-points.positive-red { color: #ff6666; }
-        .tx-points.negative-green { color: #88ff88; }
-        .tx-date { font-size: 0.65rem; color: #aaccff; display: flex; align-items: center; gap: 4px; }
-        
-        .tx-detail-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.96); backdrop-filter: blur(12px); display: none; justify-content: center; align-items: center; z-index: 1000; }
-        .tx-detail-modal.active { display: flex; }
-        .tx-detail-modal .modal-content { width: 90%; max-width: 380px; background: linear-gradient(145deg, #1a1f2f, #0f1425); border: 3px solid #4a80c0; border-radius: 28px; padding: 20px; }
-        
-        .bet-modal, .favorite-modal, .keep-modal, .video-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.96); backdrop-filter: blur(12px); display: none; justify-content: center; align-items: center; z-index: 1000; }
-        .bet-modal.active, .favorite-modal.active, .keep-modal.active, .video-modal.active { display: flex; }
-        .bet-modal-content { width: 92%; max-width: 550px; height: 85vh; background: linear-gradient(145deg, #1a1f2f, #0f1425); border: 3px solid #4a80c0; border-radius: 28px; padding: 20px; display: flex; flex-direction: column; overflow: hidden; }
-        .favorite-modal-content, .keep-modal-content { width: 90%; max-width: 420px; max-height: 80vh; background: linear-gradient(145deg, #1a1f2f, #0f1425); border: 3px solid #ff6680; border-radius: 28px; padding: 20px; overflow-y: auto; }
-        .video-modal-content { width: 90%; max-width: 500px; background: #000; border-radius: 28px; border: 3px solid #ff66aa; overflow: hidden; }
-        .video-modal-content video { width: 100%; max-height: 60vh; background: #000; }
-        .video-header { background: linear-gradient(145deg, #2a2f3f, #1a1f2f); padding: 12px 16px; display: flex; justify-content: space-between; color: #ffd966; border-bottom: 1px solid #ff66aa; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; color: #ffd966; font-size: 18px; font-weight: bold; margin-bottom: 16px; }
-        .modal-close { cursor: pointer; font-size: 24px; width: 32px; text-align: center; }
-        .stats-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
-        .stat-card { background: #2a2f3f; padding: 4px 12px; border-radius: 30px; font-size: 11px; }
-        .bet-modal-table-container { flex: 1; overflow: auto; border-radius: 16px; border: 1px solid #4a80c0; }
-        .bet-modal-table { width: 100%; border-collapse: collapse; font-size: 11px; min-width: 650px; }
-        .bet-modal-table th, .bet-modal-table td { padding: 10px 6px; border-bottom: 1px solid #2a4f7a; text-align: left; }
-        .bet-modal-table th { background: #2a2f3f; color: #ffd966; position: sticky; top: 0; cursor: pointer; user-select: none; }
-        .bet-modal-table th:hover { background: #3a4055; }
-        .sort-icon { display: inline-block; margin-left: 4px; font-size: 10px; }
-        .record-type { display: inline-block; padding: 2px 10px; border-radius: 30px; font-size: 10px; font-weight: bold; }
-        .type-bringin { background: #1a4530; color: #a0ffc0; }
-        .type-bringout { background: #452a2a; color: #ffb0b0; }
-        .type-spin { background: #554a1a; color: #ffd966; }
-        .amount-negative { color: #88ff88; }
-        .amount-positive { color: #ff8888; }
-        .amount-total { font-weight: bold; color: #ffd966; }
-        .total-positive { color: #88ff88; font-weight: bold; }
-        .total-negative { color: #ff8888; font-weight: bold; }
-        .video-bet-row { cursor: pointer; background: linear-gradient(90deg, rgba(59,130,246,0.25), transparent); border-left: 4px solid #3b82f6; }
-        .video-bet-row:hover { background: linear-gradient(90deg, rgba(59,130,246,0.45), rgba(59,130,246,0.1)); }
-        .play-hint { display: inline-flex; align-items: center; gap: 4px; background: #1e3a8a; padding: 2px 8px; border-radius: 20px; font-size: 9px; margin-left: 8px; color: #93c5fd; }
-        
-        /* 收藏/保留卡片增強樣式 */
-        .machine-card {
-            background: linear-gradient(145deg, #1a1f2f, #0f1425);
-            border: 2px solid #4a80c0;
-            border-radius: 24px;
-            padding: 16px;
-            margin-bottom: 12px;
+        body {
+            background: #0a0c1a;
+            color: #fff;
+            font-family: 'Noto Sans JP', 'Noto Sans TC', 'Orbitron', sans-serif;
+            min-height: 100vh;
             display: flex;
-            gap: 14px;
-            align-items: center;
-            transition: all 0.2s ease;
+            flex-direction: column;
             position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                linear-gradient(rgba(74, 128, 192, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(153, 0, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .app-container {
+            max-width: 448px;
+            margin: 0 auto;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(145deg, #0f1425, #0a0e1f);
+            box-shadow: 0 0 50px rgba(74, 128, 192, 0.2);
+            border-left: 1px solid rgba(74, 128, 192, 0.2);
+            border-right: 1px solid rgba(153, 0, 255, 0.2);
             overflow: hidden;
         }
-        .machine-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.1), transparent);
-            transition: left 0.5s ease;
-        }
-        .machine-card:hover::before {
-            left: 100%;
-        }
-        .machine-card:hover {
-            transform: translateX(4px);
-            border-color: #ffd966;
-            box-shadow: 0 0 15px rgba(255,217,102,0.3);
-        }
-        .machine-card img {
-            width: 70px;
-            height: 70px;
-            border-radius: 18px;
-            object-fit: cover;
-            border: 2px solid #ffd966;
-            box-shadow: 0 0 12px rgba(255,217,102,0.5);
-            background: linear-gradient(145deg, #2a2a3a, #1a1a2a);
-        }
-        .machine-info {
-            flex: 1;
-        }
-        .machine-name {
-            font-weight: bold;
-            color: #ffd966;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .machine-stats {
-            display: flex;
-            gap: 8px;
-            margin: 8px 0;
-            font-size: 0.7rem;
-            flex-wrap: wrap;
-        }
-        .machine-stats span {
-            background: rgba(74,128,192,0.2);
-            padding: 2px 8px;
-            border-radius: 20px;
-            color: #80e4ff;
-        }
-        .hot-badge {
-            background: linear-gradient(135deg, #ff4444, #cc0000);
-            color: white;
-            font-size: 0.6rem;
-            padding: 2px 8px;
-            border-radius: 20px;
-            margin-left: 8px;
-        }
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 8px;
-        }
-        .play-btn {
-            background: linear-gradient(145deg, #2a6a4a, #1a4a3a);
-            padding: 6px 16px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: bold;
-            text-align: center;
-            display: inline-block;
-            transition: all 0.15s ease;
-            border: 1px solid #88ffaa;
-            box-shadow: 0 3px 0 #0a2a1a;
-        }
-        .play-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 0 #0a2a1a;
-            background: linear-gradient(145deg, #3a8a5a, #2a5a4a);
-        }
-        .play-btn:active {
-            transform: translateY(2px);
-            box-shadow: 0 1px 0 #0a2a1a;
-        }
-        .cancel-btn {
-            background: linear-gradient(145deg, #7f2a2a, #5f1a1a);
-            padding: 6px 16px;
-            border-radius: 30px;
-            font-size: 12px;
-            font-weight: bold;
-            cursor: pointer;
-            border: 1px solid #ff8888;
-            box-shadow: 0 3px 0 #3a0a0a;
-            transition: all 0.15s ease;
-        }
-        .cancel-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 0 #3a0a0a;
-            background: linear-gradient(145deg, #9f3a3a, #7f2a2a);
-        }
-        .cancel-btn:active {
-            transform: translateY(2px);
-            box-shadow: 0 1px 0 #3a0a0a;
-        }
-        .empty-state {
-            text-align: center;
-            padding: 48px 24px;
-            color: #9ca3af;
-        }
-        .empty-state i {
-            font-size: 4rem;
-            color: #4a80c0;
-            margin-bottom: 16px;
-            opacity: 0.5;
-        }
-        .empty-state p {
-            font-size: 0.9rem;
-        }
-        .empty-state .hint {
-            font-size: 0.7rem;
-            margin-top: 12px;
-            color: #ffd966;
-        }
         
-        /* ========== 下方導覽列樣式 - 按鈕寬度 50px，間距自動平均分配 ========== */
-        .bottom-nav {
+        .metal-header {
             background: linear-gradient(145deg, #2a2f3f, #1a1f2f);
-            border-top: 2px solid #4a80c0;
             border-bottom: 2px solid #4a80c0;
-            box-shadow: 
-                0 -5px 15px rgba(74, 128, 192, 0.3),
-                0 8px 10px rgba(0, 0, 0, 0.6),
-                inset 0 2px 5px rgba(255, 255, 255, 0.3),
-                inset 0 -3px 8px rgba(0, 0, 0, 0.6);
-            width: 100%;
-            padding: 0.75rem 1.5rem;
+            border-top: 2px solid #4a80c0;
+            box-shadow: 0 5px 0 #0f121c, 0 10px 15px rgba(74, 128, 192, 0.3), inset 0 2px 5px rgba(255, 255, 255, 0.3), inset 0 -3px 8px rgba(0, 0, 0, 0.6);
             position: relative;
             overflow: hidden;
-            border-radius: 30px 30px 30px 30px;
-            transition: all 0.2s;
+            border-radius: 0 0 30px 30px;
+            padding: 0.75rem 1rem;
             flex-shrink: 0;
-            margin-top: auto;
         }
-
-        /* 金屬流光特效 */
-        .bottom-nav::after {
+        
+        .metal-header::after {
             content: '';
             position: absolute;
-            top: 0;
-            left: -100%;
+            top: 0; left: -100%;
             width: 50%;
             height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
@@ -270,141 +70,461 @@
             animation: shine 4s infinite;
             pointer-events: none;
         }
-
+        
         @keyframes shine {
             0% { left: -100%; }
             20% { left: 120%; }
             100% { left: 120%; }
         }
-
-        /* 導覽項目容器 - 自動平均分配間距 */
-        .nav-items-container {
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Orbitron', 'Russo One', sans-serif;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            text-decoration: none;
+            color: inherit;
+            background: transparent;
+            border: none;
+            padding: 0;
+            z-index: 2;
+        }
+        .logo:active { transform: scale(0.97); }
+        .logo-icon {
+            width: 40px; height: 40px;
+            background: linear-gradient(135deg, #000, #111, #222);
+            border-radius: 12px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(74, 128, 192, 0.5), inset 0 0 10px rgba(255, 215, 0, 0.2);
+            overflow: hidden;
+            border: 2px solid #ffd700;
+        }
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: conic-gradient(from 0deg, transparent, #4a80c0, #c90a0a, #ffd700, transparent);
+            animation: logoRotate 4s linear infinite;
+        }
+        .logo-icon::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: #000;
+            border-radius: 8px;
+        }
+        @keyframes logoRotate { 
+            from { transform: rotate(0deg); } 
+            to { transform: rotate(360deg); } 
+        }
+        .logo-icon-inner {
+            position: relative;
+            z-index: 2;
+            font-size: 16px;
+            font-weight: 900;
+            background: linear-gradient(45deg, #ffdf00, #ffec8b, #4a80c0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+        .logo-main {
+            font-size: 18px;
+            font-weight: 900;
+            background: linear-gradient(45deg, #ffdf00, #ffd700, #4a80c0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: textShine 3s ease-in-out infinite alternate;
+        }
+        .logo-sub {
+            font-size: 9px;
+            color: #4a80c0;
+            font-weight: 500;
+            letter-spacing: 0.8px;
+            text-shadow: 0 0 4px rgba(74, 128, 192, 0.5);
+        }
+        @keyframes textShine {
+            from { filter: brightness(1); }
+            to { filter: brightness(1.2); text-shadow: 0 0 10px #ffd700; }
+        }
+        
+        .nickname-display {
+            color: #ffffff;
+            font-size: 1.3rem;
+            font-weight: 600;
+            text-shadow: 0 2px 3px black, 0 0 10px rgba(255,255,255,0.3);
+            transition: all 0.2s ease;
+            line-height: 1.3;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .nickname-display:hover {
+            color: #ffd966;
+            text-shadow: 0 0 10px #ffd700, 0 2px 3px black;
+        }
+        
+        .points-display {
+            background: linear-gradient(145deg, #4a3a1a, #3a2a0a);
+            padding: 0.15rem 1.5rem;
+            border-radius: 30px;
+            box-shadow: inset 0 2px 5px rgba(255, 215, 0, 0.5), inset 0 -3px 5px rgba(0, 0, 0, 0.6), 0 4px 0 #2a1f0a, 0 0 12px #ffd700;
+            border: 1px solid #ffd700;
+            color: #ffd966;
+            font-weight: 900;
+            font-size: 1.1rem;
+            text-shadow: 0 2px 3px black;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            line-height: 1.3;
+            min-width: 100px;
+            text-align: center;
+            letter-spacing: 0.5px;
+            display: inline-block;
+        }
+        .points-display:hover {
+            transform: translateY(-2px);
+            box-shadow: inset 0 2px 5px rgba(255, 215, 0, 0.6), inset 0 -3px 5px rgba(0, 0, 0, 0.5), 0 6px 0 #2a1f0a, 0 0 20px #ffd700;
+        }
+        .points-display:active {
+            transform: translateY(2px);
+            box-shadow: inset 0 5px 8px rgba(0, 0, 0, 0.6), inset 0 -2px 5px rgba(255, 215, 0, 0.3), 0 2px 0 #2a1f0a;
+        }
+        
+        .banner-area {
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(145deg, #2a2f3f, #1a1f2f);
+            border: 2px solid #4a80c0;
+            border-radius: 30px;
+            overflow: hidden;
+            position: relative;
+            touch-action: pan-y pinch-zoom;
+            box-shadow: inset 0 2px 5px rgba(255,255,255,0.3), inset 0 -3px 8px rgba(0,0,0,0.6), 0 5px 0 #0f121c, 0 10px 15px rgba(74, 128, 192, 0.3);
+        }
+        .banner-slider {
+            display: flex;
+            height: 100%;
+            width: 100%;
+            transition: transform 0.3s ease-in-out;
+            cursor: grab;
+        }
+        .banner-slider:active { cursor: grabbing; }
+        .banner-slide {
+            flex: 0 0 100%;
+            height: 100%;
+            position: relative;
+            user-select: none;
+            pointer-events: none;
+        }
+        .banner-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+        }
+        .banner-dots {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+            z-index: 20;
+            pointer-events: auto;
+        }
+        .banner-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid #4a80c0;
+        }
+        .banner-dot.active {
+            background: #4a80c0;
+            transform: scale(1.2);
+            box-shadow: 0 0 15px #4a80c0;
+            border-color: white;
+        }
+        .banner-touch-area {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 15;
+            background: transparent;
+            touch-action: none;
+        }
+        
+        .announce-tab-bar {
+            display: flex;
+            gap: 2px;
+            background: linear-gradient(145deg, #2a2f3f, #1a1f2f);
+            border-radius: 40px;
+            padding: 3px;
+            border: 1px solid #4a80c0;
+            box-shadow: inset 0 1px 3px rgba(255,255,255,0.2), inset 0 -2px 3px rgba(0,0,0,0.3), 0 4px 0 #0f121c;
+        }
+        .announce-tab {
+            flex: 1;
+            text-align: center;
+            padding: 0.3rem 0.1rem;
+            border-radius: 32px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #9bb8e0;
+            transition: all 0.1s ease;
+            cursor: pointer;
+            background: linear-gradient(145deg, #3a4050, #2a2f40);
+            border: 1px solid #4a80c0;
+            white-space: nowrap;
+            box-shadow: inset 0 1px 3px rgba(255,255,255,0.2), inset 0 -2px 3px rgba(0,0,0,0.3), 0 3px 0 #0f121c;
+        }
+        .announce-tab.active {
+            background: linear-gradient(145deg, #4a5065, #3a4055);
+            color: white;
+            box-shadow: 0 0 10px #4a80c0, inset 0 1px 5px rgba(255,255,255,0.5), inset 0 -2px 5px rgba(0,0,0,0.3), 0 3px 0 #0f121c;
+        }
+        
+        .scrollable-main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem 1rem 0.5rem 1rem;
+            scrollbar-width: thin;
+            scrollbar-color: #4a80c0 #1a1f2f;
+        }
+        .scrollable-main::-webkit-scrollbar { width: 5px; }
+        .scrollable-main::-webkit-scrollbar-track { background: #1a1f2f; border-radius: 8px; }
+        .scrollable-main::-webkit-scrollbar-thumb { background: #4a80c0; border-radius: 8px; }
+        
+        .system-card {
+            background: linear-gradient(145deg, #2a2f3f, #1a1f2f);
+            border: 2px solid #4a80c0;
+            border-radius: 24px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            box-shadow: inset 0 2px 5px rgba(255,255,255,0.3), inset 0 -3px 8px rgba(0,0,0,0.6), 0 8px 0 #0f121c, 0 10px 20px rgba(74, 128, 192, 0.3);
+            cursor: pointer;
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+        }
+        .system-card:active {
+            transform: translateY(4px);
+            box-shadow: inset 0 2px 5px rgba(255,255,255,0.2), inset 0 -3px 8px rgba(0,0,0,0.5), 0 4px 0 #0f121c;
+        }
+        .system-badge {
+            background: linear-gradient(145deg, #3a5065, #2a4055);
+            color: white;
+            padding: 0.2rem 1rem;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            display: inline-block;
+            border: 1px solid #4a80c0;
+        }
+        
+        .qa-scroll-card {
+            background: linear-gradient(145deg, #2a2f3f, #1a1f2f);
+            border: 2px solid #4a80c0;
+            border-radius: 24px;
+            padding: 0;
+            box-shadow: inset 0 2px 5px rgba(255,255,255,0.3), inset 0 -3px 8px rgba(0,0,0,0.6), 0 8px 0 #0f121c;
+            display: flex;
+            flex-direction: column;
+            max-height: 100%;
+        }
+        .qa-header {
+            padding: 1.2rem 1.5rem 0.6rem 1.5rem;
+            border-bottom: 1px solid rgba(74, 128, 192, 0.3);
+        }
+        .qa-header h3 { color: #ffdb8e; font-size: 1.3rem; font-weight: 700; }
+        .qa-header .sub { color: #4a80c0; font-size: 0.85rem; margin-top: 0.25rem; }
+        .qa-content {
+            overflow-y: auto;
+            padding: 0.8rem 1.5rem 1.5rem 1.5rem;
+            flex: 1;
+        }
+        .qa-item { margin-bottom: 1.5rem; }
+        .qa-item .question { font-weight: 600; color: #ffdb8e; margin-bottom: 0.3rem; display: flex; gap: 0.3rem; font-size: 1rem; }
+        .qa-item .answer { padding-left: 1.5rem; border-left: 2px solid #4a80c0; color: #b3d4f0; font-size: 0.95rem; line-height: 1.5; }
+        .qa-footer { margin-top: 0.8rem; color: #4a80c0; font-style: italic; font-size: 0.85rem; text-align: right; border-top: 1px dashed #4a80c0; padding-top: 1rem; }
+        
+        .letter-container {
+            background: linear-gradient(145deg, #2a2f3f, #1a1f2f);
+            border-radius: 24px;
+            padding: 0.5rem;
+            border: 2px solid #4a80c0;
+            box-shadow: inset 0 2px 5px rgba(255,255,255,0.3), inset 0 -3px 8px rgba(0,0,0,0.6), 0 8px 0 #0f121c;
+        }
+        .letter-row {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 0.5rem;
+            border-bottom: 1px solid rgba(74, 128, 192, 0.2);
+            transition: background 0.1s;
+            cursor: pointer;
+            border-radius: 18px;
+        }
+        .letter-row:last-child { border-bottom: none; }
+        .letter-row.selected-for-delete {
+            background: linear-gradient(145deg, #3a5065, #2a4055);
+            border: 1px solid #4a80c0;
+        }
+        .letter-avatar {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(145deg, #3a4050, #2a2f40);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #4a80c0;
+            margin: 0 12px 0 8px;
+            flex-shrink: 0;
+        }
+        .letter-info { flex: 1; min-width: 0; }
+        .letter-info h4 { font-weight: 600; font-size: 0.9rem; color: #ffdb8e; }
+        .letter-info p { font-size: 0.75rem; color: #b3d4f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .checkbox {
+            width: 22px; height: 22px;
+            border: 2px solid #4a80c0;
+            border-radius: 6px;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(145deg, #3a4050, #2a2f40);
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+        .checkbox.checked { background: linear-gradient(145deg, #4a5065, #3a4055); border-color: white; }
+        .checkbox.checked i { display: block; color: white; font-size: 14px; }
+        .checkbox i { display: none; }
+        .select-all-checkbox {
+            width: 22px; height: 22px;
+            border: 2px solid #4a80c0;
+            border-radius: 6px;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(145deg, #3a4050, #2a2f40);
+            cursor: pointer;
+        }
+        .select-all-checkbox.checked { background: linear-gradient(145deg, #4a5065, #3a4055); border-color: white; }
+        .select-all-checkbox.checked i { display: block; color: white; font-size: 14px; }
+        .select-all-checkbox i { display: none; }
+        .delete-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding: 0 6px;
+        }
+        .delete-btn {
+            background: linear-gradient(145deg, #653a3a, #552a2a);
+            border: 2px solid #ff6666;
+            border-radius: 30px;
+            padding: 0.3rem 1.2rem;
+            color: white;
+            font-weight: 600;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            box-shadow: inset 0 2px 5px rgba(255,255,255,0.3), inset 0 -3px 5px rgba(0,0,0,0.4), 0 5px 0 #4a1f1f;
+            transition: all 0.1s ease;
+        }
+        .delete-btn.disabled { opacity: 0.4; pointer-events: none; }
+        
+        .modal {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(6px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: 0.2s;
+        }
+        .modal.show { visibility: visible; opacity: 1; }
+        .modal-card {
+            background: linear-gradient(145deg, #2a2f3f, #1a1f2f);
+            border: 2px solid #4a80c0;
+            border-radius: 40px;
+            width: 85%;
+            max-width: 360px;
+            padding: 1.8rem 1.5rem;
+            box-shadow: 0 20px 40px rgba(74, 128, 192, 0.3), inset 0 2px 5px rgba(255,255,255,0.3), inset 0 -3px 8px rgba(0,0,0,0.6), 0 8px 0 #0f121c;
+            color: white;
+        }
+        
+        .bottom-nav {
+            background: linear-gradient(145deg, #2a2f3f, #1a1f2f);
+            border-top: 2px solid #4a80c0;
+            border-bottom: 2px solid #4a80c0;
+            box-shadow: 0 -5px 15px rgba(74, 128, 192, 0.3), 0 8px 10px rgba(0, 0, 0, 0.6), inset 0 2px 5px rgba(255, 255, 255, 0.3), inset 0 -3px 8px rgba(0, 0, 0, 0.6);
+            width: 100%;
+            max-width: 448px;
+            padding: 0.75rem 1.5rem;
+            margin-top: 0;
+            z-index: 50;
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            gap: 0;
+            position: relative;
+            overflow: hidden;
+            border-radius: 30px;
+            flex-shrink: 0;
         }
-
-        /* 每個導覽按鈕樣式 — 立體金屬凸起效果，寬度固定 50px */
         .nav-item {
             position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             color: #b0c4de;
             transition: all 0.1s ease;
             border-radius: 20px;
-            padding: 0.5rem 0;
+            padding: 0.5rem 0.75rem;
             text-decoration: none;
-            outline: none;
-            font-family: 'Noto Sans TC', 'Noto Sans JP', 'Orbitron', sans-serif;
             background: linear-gradient(145deg, #3a4050, #2a2f40);
-            box-shadow: 
-                0 5px 0 #0f121c,
-                inset 0 2px 5px rgba(255, 255, 255, 0.3),
-                inset 0 -3px 5px rgba(0, 0, 0, 0.3);
-            text-shadow: 0 2px 3px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 5px 0 #0f121c, inset 0 2px 5px rgba(255, 255, 255, 0.3), inset 0 -3px 5px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(74, 128, 192, 0.2);
-            cursor: pointer;
-            text-align: center;
-            
-            /* 固定寬度 50px */
-            flex: none;
             width: 50px;
+            cursor: pointer;
         }
-
-        /* 懸浮效果: 向上浮起 */
-        .nav-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 
-                0 8px 0 #0f121c,
-                0 12px 20px rgba(74, 128, 192, 0.4),
-                inset 0 2px 5px rgba(255, 255, 255, 0.5),
-                inset 0 -3px 5px rgba(0, 0, 0, 0.3);
-            color: #ffffff;
-            border-color: rgba(74, 128, 192, 0.6);
-        }
-
-        /* 點擊按壓效果 */
-        .nav-item:active {
-            transform: translateY(3px);
-            box-shadow: 
-                0 2px 0 #0f121c,
-                inset 0 5px 8px rgba(0, 0, 0, 0.5),
-                inset 0 -2px 5px rgba(255, 255, 255, 0.2);
-            color: #4a80c0;
-        }
-
-        /* 當前頁面（active）高亮效果 */
         .nav-item.current-page {
             background: linear-gradient(145deg, #4a5065, #3a4055);
-            box-shadow: 
-                0 5px 0 #0f121c,
-                0 10px 15px rgba(74, 128, 192, 0.5),
-                inset 0 2px 8px rgba(255, 255, 255, 0.6),
-                inset 0 -3px 8px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 5px 0 #0f121c, 0 10px 15px rgba(74, 128, 192, 0.5), inset 0 2px 8px rgba(255, 255, 255, 0.6), inset 0 -3px 8px rgba(0, 0, 0, 0.4);
             color: white;
             border: 1px solid #4a80c0;
             transform: scale(1.05);
-            text-shadow: 0 0 8px #4a80c0;
         }
-
-        /* 圖示大小與陰影 */
-        .nav-item i {
-            font-size: 1.4rem;
-            margin-bottom: 2px;
-            filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.5));
-        }
-
-        /* 導覽文字 */
-        .nav-item span {
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            font-size: 0.7rem;
-        }
-
-        /* 小紅點 (公告未讀標記) */
+        .nav-item i { font-size: 1.4rem; margin-bottom: 2px; }
+        .nav-item span { font-weight: 700; font-size: 0.7rem; }
         .nav-badge {
             position: absolute;
-            top: 4px;
-            right: 12px;
+            top: 5px;
+            right: 8px;
             width: 10px;
             height: 10px;
-            background-color: #ff4d4d;
+            background-color: #ff3b3b;
             border-radius: 50%;
-            border: 1px solid rgba(255,215,0,0.6);
-            box-shadow: 0 0 6px #ff4d4d;
+            border: 2px solid #2a2f3f;
             display: none;
-        }
-
-        .nav-badge.show {
-            display: block;
-        }
-
-        /* 適應觸控螢幕 */
-        @media (hover: hover) {
-            .nav-item:hover {
-                transform: translateY(-5px);
-            }
-        }
-
-        /* 手機小螢幕時稍微縮減 */
-        @media (max-width: 420px) {
-            .bottom-nav {
-                padding: 0.5rem 1rem;
-            }
-            .nav-item {
-                padding: 0.4rem 0;
-                width: 45px;
-            }
-            .nav-item i {
-                font-size: 1.2rem;
-            }
-            .nav-item span {
-                font-size: 0.6rem;
-            }
         }
         
         /* ==================== Loading 動畫 - 與 index.html 一致 ==================== */
@@ -438,602 +558,535 @@
             from { width: 20%; } to { width: 80%; } 
         }
         
-        .section-title { color: #ffd966; font-size: 18px; font-weight: bold; border-bottom: 2px solid #ffaa33; padding-bottom: 8px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+        .hidden { display: none !important; }
         .flex { display: flex; }
         .items-center { align-items: center; }
         .justify-between { justify-content: space-between; }
-        .gap-2 { gap: 8px; }
-        .mt-2 { margin-top: 8px; }
-        .px-4 { padding-left: 16px; padding-right: 16px; }
-        .overflow-y-auto { overflow-y: auto; }
-        .flex-1 { flex: 1; }
+        .flex-col { flex-direction: column; }
+        .items-end { align-items: flex-end; }
+        .text-right { text-align: right; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .mt-3 { margin-top: 0.75rem; }
+        .mt-4 { margin-top: 1rem; }
+        .mb-3 { margin-bottom: 0.75rem; }
+        .space-y-3 > * + * { margin-top: 0.75rem; }
         .text-center { text-align: center; }
-        .text-gray-400 { color: #9ca3af; }
-        .hidden { display: none; }
-        .space-y-2 > * + * { margin-top: 8px; }
-        .mb-4 { margin-bottom: 16px; }
-        .cursor-pointer { cursor: pointer; }
+        .text-sm { font-size: 0.875rem; }
+        .text-xs { font-size: 0.75rem; }
+        .text-gray-300 { color: #d1d5db; }
+        .text-gray-500 { color: #6b7280; }
+        .pt-2 { padding-top: 0.5rem; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .mt-1 { margin-top: 0.25rem; }
+        .mt-2 { margin-top: 0.5rem; }
+        .mt-6 { margin-top: 1.5rem; }
+        .w-full { width: 100%; }
+        .rounded-full { border-radius: 9999px; }
+        .border { border-width: 1px; }
+        
+        /* 深色模式支援 - 與其他頁面一致 */
+        body.light-mode {
+            background: #e8ecf2;
+            color: #1a1a2e;
+        }
+        body.light-mode .app-container {
+            background: linear-gradient(145deg, #f0f2f8, #e8ecf2);
+        }
+        body.light-mode .metal-header,
+        body.light-mode .bottom-nav {
+            background: linear-gradient(145deg, #dce0e8, #d0d4e0);
+        }
+        body.light-mode .announce-tab {
+            background: linear-gradient(145deg, #e0e4ec, #d0d4e0);
+            color: #2a4055;
+        }
+        body.light-mode .announce-tab.active {
+            background: linear-gradient(145deg, #c0c8d8, #b0b8c8);
+            color: #1a1a2e;
+        }
+        body.light-mode .system-card,
+        body.light-mode .qa-scroll-card,
+        body.light-mode .letter-container {
+            background: linear-gradient(145deg, #ffffff, #f5f7fa);
+        }
+        body.light-mode .system-card .text-white {
+            color: #1a1a2e !important;
+        }
+        body.light-mode .system-card .text-gray-300 {
+            color: #4a6a8a !important;
+        }
+        body.light-mode .qa-header h3 {
+            color: #1a1a2e;
+        }
+        body.light-mode .qa-item .question {
+            color: #1a1a2e;
+        }
+        body.light-mode .qa-item .answer {
+            color: #4a6a8a;
+        }
+        body.light-mode .letter-info h4 {
+            color: #1a1a2e;
+        }
+        body.light-mode .letter-info p {
+            color: #4a6a8a;
+        }
+        body.light-mode .nav-item {
+            background: linear-gradient(145deg, #e0e4ec, #d0d4e0);
+            color: #2a4055;
+        }
+        body.light-mode .nav-item.current-page {
+            background: linear-gradient(145deg, #c0c8d8, #b0b8c8);
+            color: #1a1a2e;
+        }
+        body.light-mode .points-display {
+            background: linear-gradient(145deg, #e0d6b0, #d0c6a0);
+            color: #1a1a2e;
+            border-color: #c9a03d;
+            text-shadow: none;
+        }
+        body.light-mode .nickname-display {
+            color: #1a1a2e;
+            text-shadow: none;
+        }
+        body.light-mode .modal-card {
+            background: linear-gradient(145deg, #ffffff, #f0f2f8);
+        }
+        body.light-mode .modal-card .text-gray-200 {
+            color: #1a1a2e !important;
+        }
     </style>
 </head>
 <body>
-<div class="max-w-md flex flex-col">
-    <header class="metal-header">
+<div class="app-container">
+    <header class="metal-header flex-shrink-0">
         <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="avatar-container" id="avatarContainer">
-                    <img id="avatarImage" src="https://i.pravatar.cc/150?img=7">
-                    <div class="avatar-overlay">更換</div>
-                </div>
-                <div>
-                    <div class="flex items-center gap-1">
-                        <span id="displayNickname" class="nickname-edit">夫人會生氣</span>
-                        <i class="fa fa-pencil-square-o text-blue-400 text-sm"></i>
-                    </div>
-                    <div class="flex items-center gap-2 mt-1">
-                        <span class="vip-badge" id="vipBadge">VIP 1</span>
-                        <span class="text-blue-300 text-xs cursor-pointer">經驗值 680/1,200</span>
-                    </div>
-                </div>
-            </div>
-            <div class="flex items-center gap-2">
-                <div class="points-display" id="headerPoints">💰 <span id="userPoints">6,600</span></div>
-                <div class="bg-gray-700 w-10 h-10 rounded-full flex items-center justify-center cursor-pointer" id="homeIconBtn"><i class="fa fa-home"></i></div>
+            <a href="javascript:void(0)" class="logo" data-page="index">
+                <div class="logo-icon"><div class="logo-icon-inner">TP</div></div>
+                <div class="logo-text"><div class="logo-main">T-PACHIN</div><div class="logo-sub">CYBER PACHINKO SYSTEM</div></div>
+            </a>
+            <div class="text-right flex flex-col items-end">
+                <span class="nickname-display" id="nicknameDisplay">夫人會生氣</span>
+                <span class="points-display" id="tokenBtn">6,600</span>
             </div>
         </div>
-        <div class="progress-bar mt-2"><div class="progress-fill"></div></div>
     </header>
 
-    <div class="px-4 mt-4">
-        <div class="grid grid-cols-3 gap-2">
-            <div class="action-grid-btn" id="favMachinesBtn"><span class="count-badge" id="favCount">0</span><i class="fa fa-heart text-pink-400 text-xl"></i><div class="text-xs mt-1">收藏</div></div>
-            <div class="action-grid-btn" id="keepMachinesBtn"><span class="count-badge keep" id="keepCount">0</span><i class="fa fa-bookmark text-orange-400 text-xl"></i><div class="text-xs mt-1">保留</div></div>
-            <div class="action-grid-btn" id="supportBtn"><i class="fa fa-headphones text-blue-400 text-xl"></i><div class="text-xs mt-1">客服</div></div>
+    <div class="px-4 mt-3 flex-shrink-0">
+        <div class="banner-area">
+            <div class="banner-slider" id="bannerSlider">
+                <div class="banner-slide"><img src="https://static.wixstatic.com/media/d5e540_e351cf64c0eb4ea18ed0bf5aa982a3f4~mv2.jpg" alt="促銷1"></div>
+                <div class="banner-slide"><img src="https://static.wixstatic.com/media/d5e540_e7da9c3f1fb24a2aa9ef8d180a2cf6fa~mv2.png" alt="促銷2"></div>
+                <div class="banner-slide"><img src="https://static.wixstatic.com/media/d5e540_0926089e3da443eebe6bc2ede58f5788~mv2.png" alt="促銷3"></div>
+            </div>
+            <div class="banner-touch-area" id="bannerTouchArea"></div>
+            <div class="banner-dots" id="bannerDots"><span class="banner-dot active" data-slide="0"></span><span class="banner-dot" data-slide="1"></span><span class="banner-dot" data-slide="2"></span></div>
         </div>
     </div>
 
-    <main class="flex-1 overflow-y-auto px-4 py-3">
-        <div class="section-title"><i class="fa fa-list-alt"></i> 記錄總覽</div>
+    <div class="px-4 mt-4 flex-shrink-0">
+        <div class="announce-tab-bar">
+            <button class="announce-tab active" id="tabSystemBtn">📋 系統公告</button>
+            <button class="announce-tab" id="tabLetterBtn">✉️ 信件</button>
+            <button class="announce-tab" id="tabQaBtn">❓ 玩家Q&A</button>
+        </div>
+    </div>
+
+    <div class="scrollable-main" id="scrollableContent">
+        <div id="panelSystem" class="space-y-3">
+            <div class="system-card" data-title="📌 2/18 伺服器維護" data-time="2025/02/18 14:00 - 16:00" data-content="進行資料庫優化，期間配分功能暫停。">
+                <span class="system-badge">系統公告</span>
+                <div class="text-white text-lg font-bold mt-2" style="color: #ffdb8e;">📌 2/18 伺服器維護</div>
+                <div class="text-sm mt-1" style="color: #4a80c0;">2025/02/18 14:00 - 16:00</div>
+                <div class="text-gray-300 text-sm mt-2">進行資料庫優化，期間配分功能暫停。</div>
+            </div>
+            <div class="system-card" data-title="🎁 新機「甲賀忍法帖 参」上線" data-time="即日起 ~ 2/28" data-content="活動期間獲得雙倍點數">
+                <span class="system-badge">活動公告</span>
+                <div class="text-white text-lg font-bold mt-2" style="color: #ffdb8e;">🎁 新機「甲賀忍法帖 参」上線</div>
+                <div class="text-sm mt-1" style="color: #4a80c0;">即日起 ~ 2/28</div>
+                <div class="text-gray-300 text-sm mt-2">活動期間獲得雙倍點數</div>
+            </div>
+            <div class="system-card" data-title="🔧 維護補償發放" data-time="已發放 500 點" data-content="補償可於「信件」領取">
+                <span class="system-badge">補償說明</span>
+                <div class="text-white text-lg font-bold mt-2" style="color: #ffdb8e;">🔧 維護補償發放</div>
+                <div class="text-sm mt-1" style="color: #4a80c0;">已發放 500 點</div>
+                <div class="text-gray-300 text-sm mt-2">補償可於「信件」領取</div>
+            </div>
+            <div class="system-card" data-title="🌙 元宵節限定活動" data-time="2/24 敬請期待" data-content="特殊獎勵機台登場">
+                <span class="system-badge">活動預告</span>
+                <div class="text-white text-lg font-bold mt-2" style="color: #ffdb8e;">🌙 元宵節限定活動</div>
+                <div class="text-sm mt-1" style="color: #4a80c0;">2/24 敬請期待</div>
+                <div class="text-gray-300 text-sm mt-2">特殊獎勵機台登場</div>
+            </div>
+        </div>
         
-        <div class="search-layout">
-            <div class="search-row">
-                <div class="date-group">
-                    <input type="date" id="startDate" value="2026-03-01">
-                    <span>~</span>
-                    <input type="date" id="endDate" value="2026-03-31">
+        <div id="panelLetter" class="hidden space-y-3">
+            <div class="delete-bar">
+                <div class="flex items-center gap-3">
+                    <div class="select-all-checkbox" id="selectAllCheckbox"><i class="fa fa-check"></i></div>
+                    <span class="text-sm" style="color: #4a80c0;"><span id="selectedCount">0</span> / <span id="totalCount">4</span></span>
                 </div>
-                <button id="dateSearchBtn" class="search-btn">搜尋</button>
+                <button id="deleteSelectedBtn" class="delete-btn disabled"><i class="fa fa-trash"></i> 刪除</button>
             </div>
-            <div class="search-row">
-                <div class="search-box">
-                    <i class="fa fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="搜尋機台名稱或編號...">
+            <div class="letter-container" id="letterListContainer">
+                <div class="letter-row" data-id="1" data-sender="系統管理員" data-time="2分鐘前" data-content="您的帳號於今日下午進行安全驗證，若未操作請盡速變更密碼。">
+                    <div class="checkbox" data-letter-id="1"><i class="fa fa-check"></i></div>
+                    <div class="letter-avatar"><i class="fa fa-envelope"></i></div>
+                    <div class="letter-info">
+                        <h4>系統管理員 <span class="text-[0.55rem] ml-1" style="color: #4a80c0;">官方</span></h4>
+                        <p>安全驗證通知</p>
+                        <span class="text-gray-500 text-[0.6rem]">2分鐘前</span>
+                    </div>
+                    <i class="fa fa-circle" style="color: #4a80c0; font-size: 8px;"></i>
                 </div>
-                <select id="filterSelect" class="filter-select">
-                    <option value="all" selected>全部記錄</option>
-                    <option value="bet_detail">注單明細</option>
-                    <option value="platform_in">平台轉入</option>
-                    <option value="platform_out">平台轉出</option>
-                    <option value="platform_add">人工上分</option>
-                    <option value="platform_sub">人工下分</option>
-                    <option value="token_in">代幣帶入</option>
-                    <option value="token_out">代幣帶出</option>
-                    <option value="bonus">活動贈分</option>
-                    <option value="shop">購買道具</option>
-                </select>
+                <div class="letter-row" data-id="2" data-sender="柏青哥達人" data-time="昨天" data-content="關於甲賀忍法帖的設定，我記得是1:2比率，你可以再確認機台資訊。">
+                    <div class="checkbox" data-letter-id="2"><i class="fa fa-check"></i></div>
+                    <div class="letter-avatar"><i class="fa fa-user"></i></div>
+                    <div class="letter-info">
+                        <h4>柏青哥達人</h4>
+                        <p>回覆: 甲賀忍法帖設定</p>
+                        <span class="text-gray-500 text-[0.6rem]">昨天</span>
+                    </div>
+                    <i class="fa fa-circle" style="color: #4a80c0; font-size: 8px;"></i>
+                </div>
+                <div class="letter-row" data-id="3" data-sender="禮物中心" data-time="2/15" data-content="恭喜獲得新春紅包500點，請於一週內至機台領取。">
+                    <div class="checkbox" data-letter-id="3"><i class="fa fa-check"></i></div>
+                    <div class="letter-avatar"><i class="fa fa-gift"></i></div>
+                    <div class="letter-info">
+                        <h4>禮物中心</h4>
+                        <p>新春紅包500點</p>
+                        <span class="text-gray-500 text-[0.6rem]">2/15</span>
+                    </div>
+                    <i class="fa fa-circle" style="color: #4a80c0; font-size: 8px;"></i>
+                </div>
+                <div class="letter-row" data-id="4" data-sender="通知中心" data-time="2/14" data-content="吉宗維護已完成，現在可以正常遊玩。">
+                    <div class="checkbox" data-letter-id="4"><i class="fa fa-check"></i></div>
+                    <div class="letter-avatar"><i class="fa fa-bell"></i></div>
+                    <div class="letter-info">
+                        <h4>通知中心</h4>
+                        <p>吉宗維護完成</p>
+                        <span class="text-gray-500 text-[0.6rem]">2/14</span>
+                    </div>
+                </div>
+            </div>
+            <div class="text-xs text-center pt-2" style="color: #4a80c0;">✉️ 共 4 封信件</div>
+        </div>
+        
+        <div id="panelQa" class="hidden">
+            <div class="qa-scroll-card">
+                <div class="qa-header">
+                    <h3><i class="fa fa-question-circle mr-2"></i> 玩家常見問題</h3>
+                    <div class="sub">📌 最後更新：2025/02/18 · 共8則問答</div>
+                </div>
+                <div class="qa-content">
+                    <div class="qa-item"><div class="question"><i class="fa fa-angle-right mr-1"></i> 如何查詢機台即時比率？</div><div class="answer">點選機台卡片上的「進入」，即可在機台頁面看到目前設定值與即時模擬比率。</div></div>
+                    <div class="qa-item"><div class="question"><i class="fa fa-angle-right mr-1"></i> 維護中的機台何時恢復？</div><div class="answer">維護卡上會有預計時間，也可至公告區查看系統公告。</div></div>
+                    <div class="qa-item"><div class="question"><i class="fa fa-angle-right mr-1"></i> 「夫人會生氣」點數如何累積？</div><div class="answer">遊玩任何機台每投入10枚代幣可獲得1點，特殊活動期間點數加倍。</div></div>
+                    <div class="qa-item"><div class="question"><i class="fa fa-angle-right mr-1"></i> 新機入替的標籤代表什麼？</div><div class="answer">上架兩週內的機台會標示「新機入替」，通常有機率加成或特殊活動。</div></div>
+                    <div class="qa-item"><div class="question"><i class="fa fa-angle-right mr-1"></i> 如何變更會員密碼？</div><div class="answer">至「我的」頁面點選「帳號設定」，選擇變更密碼。</div></div>
+                    <div class="qa-item"><div class="question"><i class="fa fa-angle-right mr-1"></i> 點數可以轉移給其他帳號嗎？</div><div class="answer">目前點數與帳號綁定，不支援轉移，贈禮功能即將推出。</div></div>
+                    <div class="qa-item"><div class="question"><i class="fa fa-angle-right mr-1"></i> 忘記登入密碼怎麼辦？</div><div class="answer">在登入頁點選「忘記密碼」，輸入註冊手機號碼重設。</div></div>
+                    <div class="qa-item"><div class="question"><i class="fa fa-angle-right mr-1"></i> 機台畫面延遲如何排除？</div><div class="answer">建議檢查網路連線，或嘗試重新整理頁面。</div></div>
+                    <div class="qa-footer">更多疑問請聯繫客服 LINE @tpachin</div>
+                </div>
             </div>
         </div>
+    </div>
 
-        <div id="statsContainer" class="stats-card"></div>
-        <div id="transactionContainer" class="space-y-2 mb-4"></div>
-        <div id="sessionsContainer" class="space-y-2"></div>
-    </main>
-
-    <!-- 下方導覽列 (按鈕寬度固定 50px，間距自動平均分配) -->
-    <nav class="bottom-nav">
-        <div class="nav-items-container">
-            <div class="nav-item" data-page="index">
-                <i class="fa fa-home"></i>
-                <span>首頁</span>
-            </div>
-            <div class="nav-item" data-page="machines">
-                <i class="fa fa-gamepad"></i>
-                <span>機台</span>
-            </div>
-            <div class="nav-item" data-page="news">
-                <i class="fa fa-bell"></i>
-                <span>公告</span>
-                <span class="nav-badge show" id="newsBadge"></span>
-            </div>
-            <div class="nav-item current-page" data-page="about">
-                <i class="fa fa-user"></i>
-                <span>我的</span>
-            </div>
+    <!-- Loading 動畫 - 與 index.html 一致 -->
+    <div class="hologram-loading" id="hologramLoading">
+        <div class="hologram-content">
+            <video id="mascotVideo" class="loading-video" autoplay muted loop playsinline src="https://video.wixstatic.com/video/d5e540_d63f842135e8416f891842373bc0f582/720p/mp4/file.mp4" style="width:100%;border-radius:20px"></video>
+            <div class="loading-text" id="loadingMachineTitle">LOADING</div>
+            <div class="progress-bar"><div class="progress-fill"></div></div>
         </div>
+    </div>
+
+    <nav class="bottom-nav mx-auto flex-shrink-0">
+        <a href="javascript:void(0)" class="nav-item" data-page="index"><i class="fa fa-home"></i><span>首頁</span></a>
+        <a href="javascript:void(0)" class="nav-item" data-page="machines"><i class="fa fa-gamepad"></i><span>機台</span></a>
+        <a href="javascript:void(0)" class="nav-item current-page" data-page="news"><i class="fa fa-bell"></i><span>公告</span><span class="nav-badge" id="newsBadge"></span></a>
+        <a href="javascript:void(0)" class="nav-item" data-page="about"><i class="fa fa-user"></i><span>我的</span></a>
     </nav>
 </div>
 
-<!-- Loading 動畫 - 與 index.html 一致 -->
-<div class="hologram-loading" id="hologramLoading">
-    <div class="hologram-content">
-        <video id="mascotVideo" class="loading-video" autoplay muted loop playsinline src="https://video.wixstatic.com/video/d5e540_d63f842135e8416f891842373bc0f582/720p/mp4/file.mp4" style="width:100%;border-radius:20px"></video>
-        <div class="loading-text" id="loadingMachineTitle">LOADING</div>
-        <div class="progress-bar"><div class="progress-fill"></div></div>
+<div id="letterModal" class="modal">
+    <div class="modal-card">
+        <div id="modalContent" class="text-center">
+            <div class="w-16 h-16 mx-auto rounded-full flex items-center justify-center border-2 mb-3" style="background: linear-gradient(145deg, #3a5065, #2a4055); border-color: #4a80c0;">
+                <i class="fa fa-envelope-open text-3xl" style="color: #4a80c0;"></i>
+            </div>
+            <h3 id="modalTitle" class="text-xl font-bold" style="color: #ffdb8e;"></h3>
+            <div id="modalTime" class="text-xs my-2" style="color: #4a80c0;"></div>
+            <p id="modalBody" class="text-gray-200 text-sm leading-relaxed mt-4"></p>
+        </div>
+        <button id="closeModalBtn" class="mt-6 w-full py-2 rounded-full border" style="border-color: #4a80c0;">關閉</button>
     </div>
 </div>
-
-<!-- 注單明細彈窗 -->
-<div id="betModal" class="bet-modal">
-    <div class="bet-modal-content">
-        <div class="modal-header"><span><i class="fa fa-list-alt"></i> <span id="betModalTitle">機台明細</span></span><span class="modal-close" onclick="closeBetModal()">✕</span></div>
-        <div class="stats-row" id="betStats"></div>
-        <div class="bet-modal-table-container"><table class="bet-modal-table"><thead id="betTableHead"></thead><tbody id="betModalTableBody"></tbody></table></div>
-    </div>
-</div>
-
-<div id="videoModal" class="video-modal">
-    <div class="video-modal-content">
-        <div class="video-header"><span><i class="fa fa-video-camera"></i> 遊戲錄影回放</span><span class="modal-close" onclick="closeVideoModal()">✕</span></div>
-        <video id="videoPlayer" controls autoplay></video>
-        <div class="text-center text-gray-400 text-xs py-2">🎬 從帶入代幣到帶出代幣 · 完整遊戲過程</div>
-    </div>
-</div>
-
-<div id="txDetailModal" class="tx-detail-modal">
-    <div class="modal-content">
-        <div class="modal-header"><span>交易明細</span><span class="modal-close" onclick="closeTxModal()">✕</span></div>
-        <div id="txDetailContent"></div>
-    </div>
-</div>
-
-<div id="favoriteModal" class="favorite-modal"><div class="favorite-modal-content"><div class="modal-header"><span><i class="fa fa-heart"></i> 我的收藏</span><span class="modal-close" onclick="closeFavoriteModal()">✕</span></div><div id="favoriteModalBody"></div></div></div>
-<div id="keepModal" class="keep-modal"><div class="keep-modal-content"><div class="modal-header"><span><i class="fa fa-bookmark"></i> 我的保留</span><span class="modal-close" onclick="closeKeepModal()">✕</span></div><div id="keepModalBody"></div></div></div>
 
 <script src="shared.js"></script>
 <script>
-(function() {
-    // ==================== 點數同步 ====================
+(function(){
+    // 從 shared.js 讀取點數
     let userPoints = 6600;
-    let betSortOrder = 'desc';
-    const videoUrls = ["https://www.w3schools.com/html/mov_bbb.mp4", "https://www.w3schools.com/html/movie.mp4", "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4", "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/earth.mp4"];
     
-    const JOKER_IMAGE_URL = "https://i.pinimg.com/736x/c3/72/db/c372db1b020ebf778ef707f63c122bf7.jpg";
-    
-    // 從 shared.js 同步點數和暱稱
-    if (window.T_PACHIN_STORAGE) {
-        userPoints = T_PACHIN_STORAGE.getPoints();
-        const nickname = T_PACHIN_STORAGE.getNickname();
-        document.getElementById('displayNickname').innerText = nickname;
-    }
-    
-    // ==================== 導航欄連動 ====================
-    function initNavigation() {
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', function(e) {
-                e.preventDefault();
-                const page = this.dataset.page;
-                if (page === 'index') window.location.href = 'index.html';
-                else if (page === 'machines') window.location.href = 'machines.html';
-                else if (page === 'news') window.location.href = 'news.html';
-                else if (page === 'about') window.location.href = 'about.html';
+    // 初始化點數和深色模式
+    function initPointsAndTheme() {
+        if (window.T_PACHIN_STORAGE) {
+            userPoints = T_PACHIN_STORAGE.getPoints();
+            updatePointsDisplay();
+            
+            // 監聽點數更新事件
+            window.addEventListener('points-updated', function(e) {
+                if (e.detail && e.detail.points !== undefined) {
+                    userPoints = e.detail.points;
+                    updatePointsDisplay();
+                }
             });
-        });
-        
-        // 首頁圖標跳轉
-        document.getElementById('homeIconBtn')?.addEventListener('click', () => {
-            window.location.href = 'index.html';
-        });
-    }
-    
-    // ==================== 從 localStorage 讀取收藏和保留 ====================
-    let favoriteMachines = [];
-    let keepMachines = [];
-    
-    // 初始化收藏和保留資料（從 shared.js 讀取）
-    function initFavoriteAndReserve() {
-        if (window.T_PACHIN_STORAGE) {
-            favoriteMachines = T_PACHIN_STORAGE.getFavorites();
-            keepMachines = T_PACHIN_STORAGE.getReserves();
-        } else {
-            // 如果 shared.js 還沒載入，使用預設值
-            favoriteMachines = [
-                { id: 1, name: 'GOGO 小丑', number: 'J001', image: JOKER_IMAGE_URL, ratio: '2.5' },
-                { id: 2, name: '我是小丑-EX', number: 'J002', image: JOKER_IMAGE_URL, ratio: '2.8' }
-            ];
-            keepMachines = [
-                { id: 4, name: '新我是小丑-EX水晶版', number: 'J004', image: JOKER_IMAGE_URL, ratio: '3.0' }
-            ];
-        }
-        updateBadges();
-    }
-    
-    function updateBadges() {
-        document.getElementById('favCount').innerText = favoriteMachines.length;
-        document.getElementById('keepCount').innerText = keepMachines.length;
-    }
-    
-    // 移除收藏（使用 T_PACHIN_STORAGE）
-    window.removeFromFavorite = function(machineId) {
-        if (window.T_PACHIN_STORAGE) {
-            const favorites = T_PACHIN_STORAGE.getFavorites();
-            const newFavorites = favorites.filter(m => m.id !== machineId);
-            T_PACHIN_STORAGE.saveFavorites(newFavorites);
-            favoriteMachines = newFavorites;
-        } else {
-            favoriteMachines = favoriteMachines.filter(m => m.id !== machineId);
-        }
-        updateBadges();
-        renderFavoriteModal();
-    };
-    
-    // 移除保留（使用 T_PACHIN_STORAGE）
-    window.removeFromKeep = function(machineId) {
-        if (window.T_PACHIN_STORAGE) {
-            T_PACHIN_STORAGE.removeReserve(machineId);
-            keepMachines = T_PACHIN_STORAGE.getReserves();
-        } else {
-            keepMachines = keepMachines.filter(m => m.id !== machineId);
-        }
-        updateBadges();
-        renderKeepModal();
-    };
-    
-    window.enterMachine = function(machineName) {
-        alert(`小丑狂歡樂園 · 正在進入「${machineName}」機台，祝您幸運連連！`);
-    };
-    
-    function renderFavoriteModal() {
-        let html = '';
-        if (favoriteMachines.length === 0) {
-            html = `<div class="empty-state">
-                        <i class="fa fa-heart-o"></i>
-                        <p>暫無收藏機台</p>
-                        <p class="hint">可至機台頁面點擊收藏您喜愛的機台</p>
-                    </div>`;
-        } else {
-            favoriteMachines.forEach((m, idx) => {
-                const lastPlay = `2026/03/${10 + idx} 14:30`;
-                const hotText = idx === 0 ? '<span class="hot-badge">熱門</span>' : '';
-                const machineImage = m.image || JOKER_IMAGE_URL;
-                html += `
-                    <div class="machine-card">
-                        <img src="${machineImage}" alt="小丑機台" onerror="this.src='https://i.pravatar.cc/150?img=13'">
-                        <div class="machine-info">
-                            <div class="machine-name">
-                                ${m.name}
-                                ${hotText}
-                            </div>
-                            <div class="machine-stats">
-                                <span>${m.number || 'J' + m.id}</span>
-                                <span>每枚 ${m.ratio || '2.5'}</span>
-                                <span>上次 ${lastPlay}</span>
-                                <span>天井 1280</span>
-                            </div>
-                            <div class="action-buttons">
-                                <div class="play-btn" onclick="enterMachine('${m.name.replace(/'/g, "\\'")}')">進入遊戲</div>
-                                <div class="cancel-btn" onclick="removeFromFavorite(${m.id})">取消收藏</div>
-                            </div>
-                        </div>
-                    </div>
-                `;
+            
+            // 監聽使用者更新事件（暱稱、點數等）
+            window.addEventListener('t-pachin:user-updated', function(e) {
+                if (e.detail && e.detail.points !== undefined) {
+                    userPoints = e.detail.points;
+                    updatePointsDisplay();
+                }
+                if (e.detail && e.detail.nickname) {
+                    document.getElementById('nicknameDisplay').textContent = e.detail.nickname;
+                }
+            });
+            
+            // 讀取暱稱
+            const nickname = T_PACHIN_STORAGE.getNickname();
+            document.getElementById('nicknameDisplay').textContent = nickname;
+            
+            // 讀取並套用深色模式設定
+            const settings = T_PACHIN_STORAGE.getSettings();
+            if (!settings.darkMode) {
+                document.body.classList.add('light-mode');
+            } else {
+                document.body.classList.remove('light-mode');
+            }
+            
+            // 監聽設定更新事件
+            window.addEventListener('t-pachin:settings-updated', function(e) {
+                const newSettings = e.detail;
+                if (!newSettings.darkMode) {
+                    document.body.classList.add('light-mode');
+                } else {
+                    document.body.classList.remove('light-mode');
+                }
             });
         }
-        document.getElementById('favoriteModalBody').innerHTML = html;
-        document.getElementById('favoriteModal').classList.add('active');
-    }
-    
-    function renderKeepModal() {
-        let html = '';
-        if (keepMachines.length === 0) {
-            html = `<div class="empty-state">
-                        <i class="fa fa-bookmark-o"></i>
-                        <p>暫無保留機台</p>
-                        <p class="hint">可至機台頁面點擊保留，下次快速進入</p>
-                    </div>`;
-        } else {
-            keepMachines.forEach((m, idx) => {
-                const lastPlay = `2026/03/${15 + idx} 20:15`;
-                const saveNote = idx === 0 ? '最愛玩這台' : '試試手氣';
-                const machineImage = m.image || JOKER_IMAGE_URL;
-                html += `
-                    <div class="machine-card">
-                        <img src="${machineImage}" alt="小丑保留機台" onerror="this.src='https://i.pravatar.cc/150?img=13'">
-                        <div class="machine-info">
-                            <div class="machine-name">
-                                ${m.name}
-                            </div>
-                            <div class="machine-stats">
-                                <span>${m.number || 'J' + m.id}</span>
-                                <span>每枚 ${m.ratio || '2.5'}</span>
-                                <span>上次 ${lastPlay}</span>
-                                <span>${saveNote}</span>
-                                <span>天井 980</span>
-                            </div>
-                            <div class="action-buttons">
-                                <div class="play-btn" onclick="enterMachine('${m.name.replace(/'/g, "\\'")}')">進入遊戲</div>
-                                <div class="cancel-btn" onclick="removeFromKeep(${m.id})">取消保留</div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-        document.getElementById('keepModalBody').innerHTML = html;
-        document.getElementById('keepModal').classList.add('active');
-    }
-    
-    // ==================== 監聽事件（與 shared.js 同步）====================
-    function bindStorageEvents() {
-        if (!window.T_PACHIN_STORAGE) return;
-        
-        window.addEventListener('t-pachin:favorites-updated', function(e) {
-            favoriteMachines = e.detail;
-            updateBadges();
-            const favModal = document.getElementById('favoriteModal');
-            if (favModal && favModal.classList.contains('active')) {
-                renderFavoriteModal();
-            }
-        });
-        
-        window.addEventListener('t-pachin:reserves-updated', function(e) {
-            keepMachines = e.detail;
-            updateBadges();
-            const keepModal = document.getElementById('keepModal');
-            if (keepModal && keepModal.classList.contains('active')) {
-                renderKeepModal();
-            }
-        });
-        
-        window.addEventListener('points-updated', function(e) {
-            if (e.detail && e.detail.points !== undefined) {
-                userPoints = e.detail.points;
-                updatePointsDisplay();
-            }
-        });
-        
-        window.addEventListener('t-pachin:user-updated', function(e) {
-            if (e.detail && e.detail.points !== undefined) {
-                userPoints = e.detail.points;
-                updatePointsDisplay();
-            }
-            if (e.detail && e.detail.nickname) {
-                document.getElementById('displayNickname').innerText = e.detail.nickname;
-            }
-        });
+        updatePointsDisplay();
     }
     
     function updatePointsDisplay() {
-        const pointsSpan = document.getElementById('userPoints');
-        if (pointsSpan) pointsSpan.innerText = userPoints.toLocaleString();
-        if (window.T_PACHIN_STORAGE && userPoints !== T_PACHIN_STORAGE.getPoints()) {
-            T_PACHIN_STORAGE.setPoints(userPoints);
-        }
+        const tokenBtn = document.getElementById('tokenBtn');
+        if (tokenBtn) tokenBtn.textContent = userPoints.toLocaleString();
     }
     
-    function syncPointsWithStorage() {
-        if (window.T_PACHIN_STORAGE) {
-            const syncedPoints = T_PACHIN_STORAGE.getPoints();
-            if (userPoints !== syncedPoints) {
-                userPoints = syncedPoints;
-                updatePointsDisplay();
-            }
-        }
-    }
-    
-    // ==================== 注單明細相關函數 ====================
-    function generateSessions() {
-        const machines = [{ name: 'GOGO 小丑', number: 'J001' }, { name: '我是小丑-EX', number: 'J002' }, { name: '快樂小丑 VII', number: 'J003' }, { name: '新我是小丑-EX水晶版', number: 'J004' }];
-        const sessions = [];
-        for (let i = 0; i < machines.length; i++) {
-            const m = machines[i];
-            const day = 5 + i * 6;
-            const bringInTime = new Date(2026, 2, day, 14, 30);
-            const bringOutTime = new Date(2026, 2, day, 15, 45);
-            const bringInAmount = 500 + i * 150;
-            const details = [];
-            details.push({ date: new Date(bringInTime), type: 'BRING_IN', bet: 0, win: bringInAmount, total: bringInAmount, betId: `IN${i+1}` });
-            let currentTotal = bringInAmount;
-            let totalBet = 0, totalWin = 0;
-            const spinCount = 10 + Math.floor(Math.random() * 10);
-            for (let s = 0; s < spinCount; s++) {
-                const spinTime = new Date(bringInTime.getTime() + (s + 1) * 75000);
-                const bet = 6 + Math.floor(Math.random() * 14);
-                const win = Math.random() < 0.42 ? bet * (1 + Math.floor(Math.random() * 3)) : 0;
-                currentTotal = currentTotal - bet + win;
-                totalBet += bet;
-                totalWin += win;
-                details.push({ date: spinTime, type: 'SPIN', bet: bet, win: win, total: currentTotal, betId: `SP${i+1}-${s+1}`, isFirstSpin: (s === 0) });
-            }
-            const bringOutAmount = Math.max(100, currentTotal - Math.random() * 280);
-            details.push({ date: new Date(bringOutTime), type: 'BRING_OUT', bet: 0, win: 0, total: bringOutAmount, betId: `OUT${i+1}` });
-            sessions.push({
-                machineName: m.name, machineNumber: m.number, bringInTime, bringOutTime,
-                bringInAmount, bringOutAmount: Math.floor(bringOutAmount),
-                netProfit: Math.floor(bringOutAmount - bringInAmount),
-                details, stats: { totalSpins: spinCount, totalBet, totalWin },
-                videoUrl: videoUrls[i % videoUrls.length]
-            });
-        }
-        return sessions;
-    }
-    
-    function generateTransactions() {
-        const platforms = ['BBIN', 'TZ', '搖錢樹', 'FDY', '富大爺'];
-        const types = [
-            { type: 'platform_in', name: '平台轉入', icon: 'fa-download', isPositive: false, unit: '點' },
-            { type: 'platform_out', name: '平台轉出', icon: 'fa-upload', isPositive: true, unit: '點' },
-            { type: 'platform_add', name: '人工上分', icon: 'fa-user-plus', isPositive: true, unit: '點' },
-            { type: 'platform_sub', name: '人工下分', icon: 'fa-user-minus', isPositive: false, unit: '點' },
-            { type: 'token_in', name: '代幣帶入', icon: 'fa-arrow-down', isPositive: false, unit: '枚' },
-            { type: 'token_out', name: '代幣帶出', icon: 'fa-arrow-up', isPositive: true, unit: '枚' },
-            { type: 'bonus', name: '活動贈分', icon: 'fa-gift', isPositive: true, unit: '點' },
-            { type: 'shop', name: '購買道具', icon: 'fa-shopping-cart', isPositive: false, unit: '點' }
-        ];
-        let txs = [];
-        let idCounter = 1;
-        types.forEach(tt => {
-            for (let i = 0; i < 5; i++) {
-                let day = 5 + Math.floor(Math.random() * 25);
-                let date = new Date(2026, 2, day, Math.floor(Math.random() * 24), Math.floor(Math.random() * 60));
-                let points = Math.floor(Math.random() * 3000) + 100;
-                let platformName = tt.type === 'shop' ? '商城' : platforms[Math.floor(Math.random() * platforms.length)];
-                txs.push({ 
-                    id: `${tt.type}_${idCounter++}`, 
-                    type: tt.type, 
-                    name: tt.name, 
-                    icon: tt.icon, 
-                    platform: platformName, 
-                    points: tt.isPositive ? -points : points, 
-                    unit: tt.unit,
-                    date: date 
+    // 導航欄連動
+    function initNavigation() {
+        document.querySelectorAll('.nav-item, .logo, [data-page]').forEach(el => {
+            if (el.classList && (el.classList.contains('nav-item') || el.classList.contains('logo') || el.hasAttribute('data-page'))) {
+                el.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = this.dataset.page;
+                    if (page === 'index') window.location.href = 'index.html';
+                    else if (page === 'machines') window.location.href = 'machines.html';
+                    else if (page === 'news') window.location.href = 'news.html';
+                    else if (page === 'about') window.location.href = 'about.html';
                 });
             }
         });
-        return txs.sort((a, b) => b.date - a.date);
     }
     
-    let allSessions = generateSessions();
-    let allTransactions = generateTransactions();
-    let currentSession = null;
-    let dateStart = new Date('2026-03-01'), dateEnd = new Date('2026-03-31');
-    dateEnd.setHours(23, 59, 59, 999);
-    let searchTerm = '';
-    let currentFilter = 'all';
-    
-    function formatDateTime(d) { return `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`; }
-    function formatDate(d) { return `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`; }
-    function formatTime(d) { return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`; }
-    
-    function getFilteredSessions() {
-        let f = allSessions.filter(s => s.bringInTime >= dateStart && s.bringInTime <= dateEnd);
-        if (searchTerm) f = f.filter(s => s.machineName.toLowerCase().includes(searchTerm) || s.machineNumber.toLowerCase().includes(searchTerm));
-        return f;
-    }
-    
-    function getFilteredTransactions() {
-        let f = allTransactions.filter(t => t.date >= dateStart && t.date <= dateEnd);
-        if (currentFilter !== 'all' && currentFilter !== 'bet_detail') f = f.filter(t => t.type === currentFilter);
-        if (searchTerm && currentFilter !== 'bet_detail') f = f.filter(t => t.name.toLowerCase().includes(searchTerm));
-        return f;
-    }
-    
-    function render() {
-        if (currentFilter === 'bet_detail') {
-            document.getElementById('transactionContainer').style.display = 'none';
-            document.getElementById('sessionsContainer').style.display = 'block';
-            renderSessions();
-        } else {
-            document.getElementById('transactionContainer').style.display = 'block';
-            document.getElementById('sessionsContainer').style.display = 'none';
-            renderTransactions();
+    // 暱稱修改功能
+    function bindNicknameEvent() {
+        if (!window.T_PACHIN_STORAGE) return;
+        
+        const nicknameEl = document.getElementById('nicknameDisplay');
+        if (nicknameEl) {
+            nicknameEl.addEventListener('click', function() {
+                const currentName = T_PACHIN_STORAGE.getNickname();
+                const newName = prompt('修改暱稱', currentName);
+                if (newName && newName.trim()) {
+                    T_PACHIN_STORAGE.setNickname(newName.trim());
+                    document.getElementById('nicknameDisplay').textContent = newName.trim();
+                }
+            });
         }
     }
     
-    function renderSessions() {
-        let f = getFilteredSessions();
-        let totalBet = f.reduce((a, b) => a + b.stats.totalBet, 0);
-        let totalWin = f.reduce((a, b) => a + b.stats.totalWin, 0);
-        let net = totalWin - totalBet;
-        document.getElementById('statsContainer').innerHTML = `<div class="stats-grid"><div><div class="stats-label">總投注</div><div class="stats-value">${totalBet}</div></div><div><div class="stats-label">總獲得</div><div class="stats-value">${totalWin}</div></div><div><div class="stats-label">淨損益</div><div class="stats-value" style="color:${net >= 0 ? '#ffaa66' : '#ff6666'}">${net >= 0 ? '+' : ''}${net}</div></div></div>`;
-        if (f.length === 0) { document.getElementById('sessionsContainer').innerHTML = '<div class="text-center text-gray-400 py-8">沒有注單記錄</div>'; return; }
-        let html = '';
-        f.forEach((s, idx) => {
-            let profitClass = s.netProfit >= 0 ? 'positive' : 'negative';
-            html += `<div class="main-row" onclick="openBetModal(${idx})"><div><div class="machine-title"><span class="name">${s.machineName}</span><span class="number">${s.machineNumber}</span></div><div class="date-range">${formatDate(s.bringInTime)} ~ ${formatDate(s.bringOutTime)} ${formatTime(s.bringInTime)}~${formatTime(s.bringOutTime)}</div><div class="amount-info"><span class="bring-in">帶入 ${s.bringInAmount}</span> → <span class="bring-out">帶出 ${s.bringOutAmount}</span> | <span class="net-profit ${profitClass}">淨利 ${s.netProfit >= 0 ? '+' : ''}${s.netProfit}</span></div></div></div>`;
-        });
-        document.getElementById('sessionsContainer').innerHTML = html;
-    }
-    
-    function renderTransactions() {
-        let f = getFilteredTransactions();
-        let totalIn = f.filter(t => t.points < 0).reduce((a, b) => a + Math.abs(b.points), 0);
-        let totalOut = f.filter(t => t.points > 0).reduce((a, b) => a + b.points, 0);
-        let net = totalOut - totalIn;
-        document.getElementById('statsContainer').innerHTML = `<div class="stats-grid"><div><div class="stats-label">總存入</div><div class="stats-value">${totalIn}</div></div><div><div class="stats-label">總提出</div><div class="stats-value">${totalOut}</div></div><div><div class="stats-label">淨變化</div><div class="stats-value" style="color:${net >= 0 ? '#ffaa66' : '#ff6666'}">${net >= 0 ? '+' : ''}${net}</div></div></div>`;
-        if (f.length === 0) { document.getElementById('transactionContainer').innerHTML = '<div class="text-center text-gray-400 py-8">沒有交易記錄</div>'; return; }
-        let html = '';
-        f.forEach((tx) => {
-            let isPositive = tx.points > 0;
-            let symbol = isPositive ? '-' : '+';
-            let colorClass = isPositive ? 'negative-green' : 'positive-red';
-            html += `<div class="tx-card" onclick="showTxDetail('${tx.id}','${tx.name}','${tx.platform}',${Math.abs(tx.points)},'${formatDateTime(tx.date)}',${isPositive},'${tx.unit}')"><div class="tx-name">${tx.name}</div><div class="tx-platform">${tx.platform}</div><div class="tx-points ${colorClass}">${symbol}${Math.abs(tx.points)} ${tx.unit}</div><div class="tx-date">${formatDateTime(tx.date)}</div></div>`;
-        });
-        document.getElementById('transactionContainer').innerHTML = html;
-    }
-    
-    window.showTxDetail = function(id, name, platform, points, dateStr, isPositive, unit) {
-        let symbol = isPositive ? '-' : '+';
-        let color = isPositive ? '#ff6666' : '#88ff88';
-        let detailHtml = `<div class="space-y-3"><div class="flex justify-between py-2 border-b border-gray-700"><span class="text-gray-400">明細編號</span><span class="text-yellow-400">${id}</span></div><div class="flex justify-between py-2 border-b border-gray-700"><span class="text-gray-400">平台</span><span class="text-yellow-400">${platform}</span></div><div class="flex justify-between py-2 border-b border-gray-700"><span class="text-gray-400">點數數量</span><span class="text-xl font-bold" style="color:${color}">${symbol}${points} ${unit}</span></div><div class="flex justify-between py-2"><span class="text-gray-400">時間日期</span><span class="text-yellow-400">${dateStr}</span></div></div>`;
-        document.getElementById('txDetailContent').innerHTML = detailHtml;
-        document.getElementById('txDetailModal').classList.add('active');
-    };
-    
-    function renderBetModalTable() {
-        if (!currentSession) return;
-        let details = [...currentSession.details].sort((a, b) => betSortOrder === 'desc' ? new Date(b.date) - new Date(a.date) : new Date(a.date) - new Date(b.date));
-        let rows = '';
-        let bringInAmount = currentSession.bringInAmount;
-        details.forEach(d => {
-            let typeLabel = '', typeClass = '';
-            if (d.type === 'BRING_IN') { typeLabel = '帶入'; typeClass = 'type-bringin'; }
-            else if (d.type === 'BRING_OUT') { typeLabel = '帶出'; typeClass = 'type-bringout'; }
-            else { typeLabel = '一般轉'; typeClass = 'type-spin'; }
-            let betDisplay = d.type === 'SPIN' ? `-${d.bet}` : '-';
-            let winDisplay = d.type === 'SPIN' ? (d.win > 0 ? `+${d.win}` : '-') : '-';
-            let totalDisplay = d.type === 'BRING_IN' ? `+${d.win}` : (d.type === 'BRING_OUT' ? `${d.total - bringInAmount >= 0 ? '+' : ''}${Math.floor(d.total - bringInAmount)}` : Math.floor(d.total));
-            let totalClass = d.type === 'BRING_IN' ? 'total-positive' : (d.type === 'BRING_OUT' ? (d.total - bringInAmount >= 0 ? 'total-positive' : 'total-negative') : 'amount-total');
-            let isFirstSpinBet = (d.type === 'SPIN' && d.isFirstSpin === true);
-            rows += `<tr class="${isFirstSpinBet ? 'video-bet-row' : ''}" ${isFirstSpinBet ? `onclick="playCurrentVideo()"` : ''} style="${isFirstSpinBet ? 'cursor:pointer' : ''}"><td style="white-space:nowrap">${formatDateTime(d.date)}</td><td><span class="record-type ${typeClass}">${typeLabel}</span></td><td class="${d.bet > 0 ? 'amount-negative' : ''}">${betDisplay}</td><td class="${d.win > 0 ? 'amount-positive' : ''}">${winDisplay}</td><td class="${totalClass}">${totalDisplay}</td><td><span class="text-blue-300 text-xs">${d.betId}</span>${isFirstSpinBet ? `<span class="play-hint">點擊觀看</span>` : ''}</td></tr>`;
-        });
-        document.getElementById('betTableHead').innerHTML = `<tr><th onclick="toggleBetSort()">日期時間 <span class="sort-icon">${betSortOrder === 'desc' ? '▼' : '▲'}</span></th><th>類型</th><th>投注</th><th>獲得</th><th>小計</th><th>注單編號</th></tr>`;
-        document.getElementById('betModalTableBody').innerHTML = rows;
-    }
-    
-    window.toggleBetSort = function() { betSortOrder = betSortOrder === 'desc' ? 'asc' : 'desc'; renderBetModalTable(); };
-    window.openBetModal = function(idx) {
-        let f = getFilteredSessions();
-        currentSession = f[idx];
-        if (!currentSession) return;
-        document.getElementById('betModalTitle').innerHTML = `${currentSession.machineName} ${currentSession.machineNumber}`;
-        document.getElementById('betStats').innerHTML = `<div class="stat-card">總轉數 ${currentSession.stats.totalSpins}</div><div class="stat-card">總投注 ${currentSession.stats.totalBet}</div><div class="stat-card">總獲得 ${currentSession.stats.totalWin}</div>`;
-        renderBetModalTable();
-        document.getElementById('betModal').classList.add('active');
-    };
-    window.playCurrentVideo = function() { if (currentSession && currentSession.videoUrl) { let v = document.getElementById('videoPlayer'); v.src = currentSession.videoUrl; v.load(); v.play().catch(e=>console.log); document.getElementById('videoModal').classList.add('active'); } else { alert('影片載入中'); } };
-    window.closeBetModal = () => document.getElementById('betModal').classList.remove('active');
-    window.closeVideoModal = () => { let v = document.getElementById('videoPlayer'); v.pause(); v.src = ''; document.getElementById('videoModal').classList.remove('active'); };
-    window.closeTxModal = () => document.getElementById('txDetailModal').classList.remove('active');
-    window.closeFavoriteModal = () => document.getElementById('favoriteModal').classList.remove('active');
-    window.closeKeepModal = () => document.getElementById('keepModal').classList.remove('active');
-    
-    // ==================== DOM 元素綁定 ====================
-    document.getElementById('favMachinesBtn').onclick = renderFavoriteModal;
-    document.getElementById('keepMachinesBtn').onclick = renderKeepModal;
-    document.getElementById('supportBtn').onclick = () => alert('客服專線: 0800-666-888');
-    document.getElementById('dateSearchBtn').onclick = () => { let s = document.getElementById('startDate').value, e = document.getElementById('endDate').value; dateStart = new Date(s); dateStart.setHours(0,0,0,0); dateEnd = new Date(e); dateEnd.setHours(23,59,59,999); render(); };
-    document.getElementById('searchInput').addEventListener('input', (e) => { searchTerm = e.target.value.toLowerCase(); render(); });
-    document.getElementById('filterSelect').addEventListener('change', (e) => { currentFilter = e.target.value; render(); });
-    document.getElementById('avatarContainer').onclick = () => { let av = ['https://i.pravatar.cc/150?img=7', 'https://i.pravatar.cc/150?img=5', 'https://i.pravatar.cc/150?img=9']; document.getElementById('avatarImage').src = av[Math.floor(Math.random() * av.length)]; alert('更換頭像'); };
-    document.getElementById('displayNickname').onclick = () => { 
-        let n = prompt('新暱稱', document.getElementById('displayNickname').innerText); 
-        if (n && n.trim()) { 
-            document.getElementById('displayNickname').innerText = n; 
-            if (window.T_PACHIN_STORAGE) T_PACHIN_STORAGE.setNickname(n); 
-        } 
-    };
-    document.getElementById('headerPoints').onclick = () => alert(`點數: ${userPoints.toLocaleString()}`);
-    document.getElementById('vipBadge').onclick = () => alert('VIP1 特權: 返水0.2%');
-    
-    // ==================== 初始化 ====================
+    initPointsAndTheme();
     initNavigation();
-    initFavoriteAndReserve();
-    syncPointsWithStorage();
-    bindStorageEvents();
-    updateBadges();
-    updatePointsDisplay();
-    document.getElementById('transactionContainer').style.display = 'block';
-    document.getElementById('sessionsContainer').style.display = 'none';
-    render();
+    bindNicknameEvent();
+    
+    // 標籤切換
+    const tabSystem = document.getElementById('tabSystemBtn');
+    const tabLetter = document.getElementById('tabLetterBtn');
+    const tabQa = document.getElementById('tabQaBtn');
+    const panelSystem = document.getElementById('panelSystem');
+    const panelLetter = document.getElementById('panelLetter');
+    const panelQa = document.getElementById('panelQa');
+    
+    function setActiveTab(active){
+        [tabSystem, tabLetter, tabQa].forEach(t=>t.classList.remove('active'));
+        [panelSystem, panelLetter, panelQa].forEach(p=>p.classList.add('hidden'));
+        if(active==='system'){ tabSystem.classList.add('active'); panelSystem.classList.remove('hidden'); }
+        else if(active==='letter'){ tabLetter.classList.add('active'); panelLetter.classList.remove('hidden'); }
+        else{ tabQa.classList.add('active'); panelQa.classList.remove('hidden'); }
+    }
+    tabSystem.addEventListener('click',()=>setActiveTab('system'));
+    tabLetter.addEventListener('click',()=>setActiveTab('letter'));
+    tabQa.addEventListener('click',()=>setActiveTab('qa'));
+    setActiveTab('system');
+    
+    // 彈窗邏輯
+    const modal = document.getElementById('letterModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalTime = document.getElementById('modalTime');
+    const modalBody = document.getElementById('modalBody');
+    const closeModal = document.getElementById('closeModalBtn');
+    
+    function showModal(title,time,body){ 
+        modalTitle.innerText=title; 
+        modalTime.innerText=time; 
+        modalBody.innerText=body; 
+        modal.classList.add('show'); 
+    }
+    closeModal.addEventListener('click',()=>modal.classList.remove('show'));
+    modal.addEventListener('click',(e)=>{ if(e.target===modal) modal.classList.remove('show'); });
+    
+    // 系統公告點擊
+    document.querySelectorAll('#panelSystem .system-card').forEach(card=>{
+        card.addEventListener('click',()=>{
+            const title=card.querySelector('.text-lg.font-bold')?.innerText||card.dataset.title||'公告';
+            const time=card.querySelector('.text-sm.mt-1')?.innerText||card.dataset.time||'';
+            const content=card.querySelector('.text-gray-300.text-sm.mt-2')?.innerText||card.dataset.content||'';
+            showModal(title,time,content);
+        });
+    });
+    
+    // 信件功能
+    const letterRows=document.querySelectorAll('.letter-row');
+    const checkboxes=document.querySelectorAll('.checkbox');
+    const selectAllBox=document.getElementById('selectAllCheckbox');
+    const deleteBtn=document.getElementById('deleteSelectedBtn');
+    const selectedSpan=document.getElementById('selectedCount');
+    const totalSpan=document.getElementById('totalCount');
+    const newsBadge=document.getElementById('newsBadge');
+    
+    function hasUnread(){ return document.querySelectorAll('.letter-row i.fa-circle').length>0; }
+    function updateBadge(){ if(newsBadge) newsBadge.style.display=hasUnread()?'block':'none'; }
+    updateBadge();
+    
+    let selectedSet=new Set();
+    const totalLetters=letterRows.length;
+    if(totalSpan) totalSpan.innerText=totalLetters;
+    
+    function updateSelectAllUI(){
+        if(selectAllBox) selectAllBox.classList.toggle('checked',selectedSet.size===totalLetters);
+        if(selectedSpan) selectedSpan.innerText=selectedSet.size;
+        if(deleteBtn) deleteBtn.classList.toggle('disabled',selectedSet.size===0);
+    }
+    
+    checkboxes.forEach(cb=>{
+        cb.addEventListener('click',(e)=>{
+            e.stopPropagation();
+            const id=cb.getAttribute('data-letter-id');
+            if(!id) return;
+            cb.classList.toggle('checked');
+            const row=cb.closest('.letter-row');
+            if(cb.classList.contains('checked')){ selectedSet.add(id); row?.classList.add('selected-for-delete');}
+            else{ selectedSet.delete(id); row?.classList.remove('selected-for-delete');}
+            updateSelectAllUI();
+        });
+    });
+    
+    if(selectAllBox){
+        selectAllBox.addEventListener('click',(e)=>{
+            e.stopPropagation();
+            const isChecking=!selectAllBox.classList.contains('checked');
+            checkboxes.forEach(cb=>{
+                const id=cb.getAttribute('data-letter-id');
+                if(id){ if(isChecking) selectedSet.add(id); else selectedSet.delete(id); }
+                cb.classList.toggle('checked',isChecking);
+                cb.closest('.letter-row')?.classList.toggle('selected-for-delete',isChecking);
+            });
+            updateSelectAllUI();
+        });
+    }
+    
+    letterRows.forEach(row=>{
+        row.addEventListener('click',(e)=>{
+            if(e.target.closest('.checkbox')) return;
+            const blueDot=row.querySelector('i.fa-circle');
+            if(blueDot){ blueDot.remove(); updateBadge(); }
+            const sender=row.getAttribute('data-sender')||'未知';
+            const time=row.getAttribute('data-time')||'';
+            const content=row.getAttribute('data-content')||'無內容';
+            showModal(sender,time,content);
+        });
+    });
+    
+    deleteBtn?.addEventListener('click',()=>{
+        if(selectedSet.size===0) return;
+        letterRows.forEach(row=>{ if(selectedSet.has(row.getAttribute('data-id'))) row.remove(); });
+        selectedSet.clear();
+        const remain=document.querySelectorAll('.letter-row');
+        if(totalSpan) totalSpan.innerText=remain.length;
+        const statsDiv=document.querySelector('#panelLetter .text-xs.pt-2');
+        if(statsDiv) statsDiv.innerText=`✉️ 共 ${remain.length} 封信件`;
+        if(selectAllBox) selectAllBox.classList.remove('checked');
+        updateSelectAllUI();
+        updateBadge();
+    });
+    
+    // Banner 輪播
+    (function banner(){
+        let current=0;
+        const slider=document.getElementById('bannerSlider');
+        const dots=document.querySelectorAll('.banner-dot');
+        const touchArea=document.getElementById('bannerTouchArea');
+        const total=3;
+        let interval;
+        
+        function updateSlide(idx){ 
+            current=(idx+total)%total; 
+            if(slider) slider.style.transform=`translateX(-${current*100}%)`; 
+            dots.forEach((d,i)=>d.classList.toggle('active',i===current)); 
+        }
+        
+        dots.forEach(d=>d.addEventListener('click',()=>{ 
+            const idx=parseInt(d.getAttribute('data-slide')); 
+            if(!isNaN(idx)){ updateSlide(idx); resetAuto(); } 
+        }));
+        
+        let startX=0, dragging=false;
+        if(touchArea){
+            touchArea.addEventListener('touchstart',(e)=>{ 
+                startX=e.touches[0].clientX; 
+                dragging=true; 
+                clearInterval(interval); 
+                e.preventDefault();
+            },{passive:false});
+            touchArea.addEventListener('touchmove',(e)=>{ if(dragging) e.preventDefault();},{passive:false});
+            touchArea.addEventListener('touchend',(e)=>{ 
+                if(dragging){ 
+                    const diff=e.changedTouches[0].clientX-startX; 
+                    if(Math.abs(diff)>30) diff>0?updateSlide(current-1):updateSlide(current+1); 
+                    dragging=false; 
+                    startAuto(); 
+                } 
+                e.preventDefault();
+            },{passive:false});
+            touchArea.addEventListener('touchcancel',()=>{ dragging=false; startAuto();});
+        }
+        
+        function startAuto(){ clearInterval(interval); interval=setInterval(()=>updateSlide(current+1),5000); }
+        function resetAuto(){ clearInterval(interval); startAuto(); }
+        startAuto();
+    })();
 })();
 </script>
 </body>

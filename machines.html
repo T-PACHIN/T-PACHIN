@@ -168,19 +168,36 @@
         .sub-confirm-btn.primary { background: linear-gradient(145deg, #ffaa33, #ff8c00); border: 1px solid #ffd700; color: #2a1f0a; text-shadow: 0 1px 2px rgba(255,255,255,0.3); box-shadow: inset 0 2px 5px rgba(255,255,255,0.5), inset 0 -3px 5px rgba(0,0,0,0.2), 0 5px 0 #b85e00; }
         .sub-confirm-btn.primary:active { box-shadow: inset 0 5px 8px rgba(0,0,0,0.4), inset 0 -2px 5px rgba(255,255,255,0.3), 0 2px 0 #b85e00; transform: translateY(3px); }
         
-        .hologram-loading { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.95); z-index: 999999; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.3s; }
+        /* ==================== Loading 動畫 - 與 index.html 完全一致 ==================== */
+        .hologram-loading { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(8px); 
+            z-index: 20000; display: flex; align-items: center; justify-content: center; 
+            opacity: 0; visibility: hidden; transition: 0.2s; 
+        }
         .hologram-loading.show { opacity: 1; visibility: visible; }
-        .video-loading { position: relative; min-width: 100%; min-height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; }
-        .loading-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; z-index: 1; }
-        .loading-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); z-index: 2; }
-        .loading-top-group { position: relative; z-index: 3; text-align: center; padding-top: 40px; }
-        .loading-machine-name { font-size: 24px; font-weight: 900; background: linear-gradient(135deg, #ff7eb3, #ffd700); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 15px; }
-        .loading-bottom-group { position: relative; z-index: 3; text-align: center; padding-bottom: 40px; }
-        .loading-text { font-size: 24px; font-weight: 900; color: transparent; -webkit-text-stroke: 2px #4a80c0; animation: textPulse 2s infinite; }
-        @keyframes textPulse { 0%,100% { opacity:0.8; } 50% { opacity:1; } }
-        .progress-bar { width: 300px; height: 8px; background: rgba(255,255,255,0.1); border-radius: 8px; overflow: hidden; margin: 10px auto; }
-        .progress-fill { height: 100%; width: 30%; background: linear-gradient(90deg, #4a80c0, #ffd700); animation: move 2s infinite; }
-        @keyframes move { 0% { transform: translateX(-100%); } 100% { transform: translateX(400%); } }
+        .hologram-content { 
+            position: relative; width: 90%; max-width: 400px; min-height: 450px; text-align: center; 
+        }
+        .loading-video { 
+            width: 100%; height: auto; border-radius: 20px; 
+            box-shadow: 0 0 30px rgba(74,128,192,0.5); 
+        }
+        .loading-text { 
+            font-size: 24px; font-weight: 900; color: #ffd700; 
+            text-shadow: 0 0 10px #ffd700; margin-top: 10px; 
+        }
+        .progress-bar { 
+            width: 80%; height: 6px; background: rgba(255,255,255,0.2); 
+            border-radius: 10px; margin: 10px auto; overflow: hidden; 
+        }
+        .progress-fill { 
+            height: 100%; width: 60%; background: linear-gradient(90deg, #ffd700, #4a80c0); 
+            animation: loadingMove 1s ease-in-out infinite alternate; 
+        }
+        @keyframes loadingMove { 
+            from { width: 20%; } to { width: 80%; } 
+        }
         
         .hidden { display: none !important; }
         
@@ -287,13 +304,12 @@
         </div>
     </div>
 
-    <!-- Loading 動畫 -->
+    <!-- Loading 動畫 - 與 index.html 完全一致 -->
     <div class="hologram-loading" id="hologramLoading">
-        <div class="video-loading">
-            <video id="mascotVideo" class="loading-video" autoplay muted loop playsinline src="https://video.wixstatic.com/video/d5e540_d63f842135e8416f891842373bc0f582/720p/mp4/file.mp4"></video>
-            <div class="loading-overlay"></div>
-            <div class="loading-top-group"><div class="loading-machine-name" id="loadingMachineTitle">超級奇蹟小丑</div></div>
-            <div class="loading-bottom-group"><div class="loading-text">LOADING</div><div class="progress-bar"><div class="progress-fill"></div></div></div>
+        <div class="hologram-content">
+            <video id="mascotVideo" class="loading-video" autoplay muted loop playsinline src="https://video.wixstatic.com/video/d5e540_d63f842135e8416f891842373bc0f582/720p/mp4/file.mp4" style="width:100%;border-radius:20px"></video>
+            <div class="loading-text" id="loadingMachineTitle">LOADING</div>
+            <div class="progress-bar"><div class="progress-fill"></div></div>
         </div>
     </div>
 
@@ -312,6 +328,11 @@
     let currentSubData = null;
     let countdownIntervals = {};
     let currentToast = null;
+    
+    // 從 shared.js 同步點數
+    if (window.T_PACHIN_STORAGE) {
+        userPoints = T_PACHIN_STORAGE.getPoints();
+    }
     
     const machineDatabase = [
         { id: 1, name: 'GOGO 小丑', sub: '歡樂版', ratio: '2.5', bb: 1250, rb: 620, curr: 280, total: 4200, image: 'https://i.pinimg.com/736x/b1/f1/ec/b1f1ec3a191e62e3d0e300ce79c9b593.jpg' },
@@ -811,6 +832,10 @@
         if (confirmPoints) confirmPoints.textContent = userPoints.toLocaleString();
         if (document.getElementById('confirmTokenRemain') && currentSubData) {
             updateRemainAndCoins();
+        }
+        // 同步到 shared.js
+        if (window.T_PACHIN_STORAGE && userPoints !== T_PACHIN_STORAGE.getPoints()) {
+            T_PACHIN_STORAGE.setPoints(userPoints);
         }
     }
     

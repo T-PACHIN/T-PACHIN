@@ -48,7 +48,7 @@
         .video-section { position: relative; margin: 15px 8px; }
         .video-area { background: #000; border-radius: 16px; overflow: hidden; border: 2px solid #4a80c0; position: relative; height: 600px; cursor: pointer; }
         video { width: 100%; height: 100%; object-fit: cover; pointer-events: auto; cursor: pointer; }
-        .pip-btn { position: absolute; top: 12px; right: 12px; background: rgba(0,0,0,0.6); border-radius: 30px; padding: 6px 12px; cursor: pointer; color: white; z-index: 45; font-size: 16px; border: 1px solid #ffaa66; }
+        .pip-btn { position: absolute; top: 12px; right: 12px; background: transparent; border-radius: 0; padding: 0; cursor: pointer; color: white; z-index: 45; font-size: 20px; border: none; text-shadow: 0 0 3px rgba(0,0,0,0.5); }
         .manual-control-panel { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(180deg, rgba(20,30,45,0.96), rgba(10,20,30,0.98)); backdrop-filter: blur(10px); border-top: 1px solid #ffaa66; border-radius: 16px 16px 0 0; padding: 10px 16px; transition: transform 0.3s; z-index: 35; }
         .manual-control-panel.show { transform: translateY(0); }
         .manual-control-panel.hide { transform: translateY(100%); }
@@ -122,6 +122,38 @@
         .points-alert-message { color: #ffd966; font-size: 0.85rem; margin-bottom: 12px; line-height: 1.4; }
         .points-alert-btn { background: linear-gradient(145deg, #ffaa33, #ff8c00); border: none; border-radius: 30px; padding: 6px 16px; font-weight: bold; cursor: pointer; color: #2a1f0a; display: inline-block; font-size: 0.85rem; }
         .points-alert-btn:active { transform: scale(0.96); }
+        
+        /* ==================== Loading 動畫 ==================== */
+        .hologram-loading { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(8px); 
+            z-index: 20000; display: flex; align-items: center; justify-content: center; 
+            opacity: 0; visibility: hidden; transition: 0.2s; 
+        }
+        .hologram-loading.show { opacity: 1; visibility: visible; }
+        .hologram-content { 
+            position: relative; width: 90%; max-width: 400px; min-height: 450px; text-align: center; 
+        }
+        .loading-video { 
+            width: 100%; height: auto; border-radius: 20px; 
+            box-shadow: 0 0 30px rgba(74,128,192,0.5); 
+        }
+        .loading-text { 
+            font-size: 24px; font-weight: 900; color: #ffd700; 
+            text-shadow: 0 0 10px #ffd700; margin-top: 10px; 
+        }
+        .progress-bar { 
+            width: 80%; height: 6px; background: rgba(255,255,255,0.2); 
+            border-radius: 10px; margin: 10px auto; overflow: hidden; 
+        }
+        .progress-fill { 
+            height: 100%; width: 60%; background: linear-gradient(90deg, #ffd700, #4a80c0); 
+            animation: loadingMove 1s ease-in-out infinite alternate; 
+        }
+        @keyframes loadingMove { 
+            from { width: 20%; } to { width: 80%; } 
+        }
+        
         @media (max-width: 430px) { .video-area { height: 500px; } .machine-name { font-size: 22px; } .pip-btn { font-size: 24px; top: 8px; right: 8px; } }
     </style>
 </head>
@@ -135,7 +167,7 @@
             <video id="gameVideo" autoplay muted loop playsinline webkit-playsinline>
                 <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
             </video>
-            <div class="pip-btn" id="pipButton">◲ PiP</div>
+            <div class="pip-btn" id="pipButton">◲</div>
             <div class="manual-control-panel show" id="manualPanel">
                 <div class="control-group">
                     <button class="max-btn" id="maxSpinBtn">MAX</button>
@@ -154,6 +186,15 @@
     <div class="drawer-trigger" id="drawerTrigger">◀</div><div class="drawer" id="drawer"><div class="drawer-header"><div class="drawer-header-left"><span>⚙️ 快捷工具</span></div><div class="drawer-header-right"><div class="vip-in-drawer" id="vipBtnInDrawer">⭐ VIP1</div><button class="drawer-close" id="drawerClose">✕</button></div></div><div class="drawer-content" id="drawerContent"></div></div>
 </div>
 
+<!-- Loading 動畫 -->
+<div class="hologram-loading" id="hologramLoading">
+    <div class="hologram-content">
+        <video id="mascotVideo" class="loading-video" autoplay muted loop playsinline src="https://video.wixstatic.com/video/d5e540_d63f842135e8416f891842373bc0f582/720p/mp4/file.mp4" style="width:100%;border-radius:20px"></video>
+        <div class="loading-text" id="loadingMachineTitle">LOADING</div>
+        <div class="progress-bar"><div class="progress-fill"></div></div>
+    </div>
+</div>
+
 <div class="modal" id="returnLobbyModal"><div class="confirm-modal"><h3>🏠 返回大廳確認</h3><div class="info-row"><div class="info-label">🎰 機台剩餘代幣</div><div class="info-value" id="returnCoinsAmount">0</div></div><div class="info-row"><div class="info-label">📌 代幣將保留於機台</div></div><div class="divider-line"></div><div class="modal-buttons"><button class="modal-btn modal-cancel" id="returnCancel">取消</button><button class="modal-btn modal-confirm" id="returnConfirm">確認離開</button></div></div></div>
 <div class="modal" id="leaveSeatModal"><div class="confirm-modal"><h3>🚪 離開座位確認</h3><div class="info-row"><div class="info-label">🎰 機台代幣</div><div class="info-value" id="leaveSeatCoins">0</div></div><div class="info-row"><div class="info-label">✨ 代幣可兌換點數</div><div class="info-value" id="leaveSeatPoints">0</div></div><div class="divider-line"></div><div class="info-row"><div class="info-label">💰 兌換後總點數</div><div class="info-value" id="leaveSeatAfterPoints">0</div></div><div class="modal-buttons"><button class="modal-btn modal-cancel" id="leaveSeatCancel">取消</button><button class="modal-btn modal-confirm" id="leaveSeatConfirm">確認離開</button></div></div></div>
 
@@ -166,6 +207,7 @@
     </div>
 </div>
 
+<script src="shared.js"></script>
 <script>
 (function(){
     console.log('🚀 模擬器啟動');
@@ -189,20 +231,24 @@
     const manualPanel = document.getElementById('manualPanel');
     const drawer = document.getElementById('drawer');
     
-    // ==================== 點數同步（與 T-PACHIN 共用 localStorage）====================
+    // ==================== 點數同步（與 shared.js 連動）====================
     function loadPoints() {
-        let stored = localStorage.getItem('t_pachin_user_points');
-        if (stored) {
-            playerPoints = parseInt(stored);
+        if (window.T_PACHIN_STORAGE) {
+            playerPoints = T_PACHIN_STORAGE.getPoints();
         } else {
-            playerPoints = 6600;
+            let stored = localStorage.getItem('t_pachin_user_points');
+            playerPoints = stored ? parseInt(stored) : 6600;
         }
         console.log('點數載入:', playerPoints);
         return playerPoints;
     }
     
     function savePoints() {
-        localStorage.setItem('t_pachin_user_points', playerPoints);
+        if (window.T_PACHIN_STORAGE) {
+            T_PACHIN_STORAGE.setPoints(playerPoints);
+        } else {
+            localStorage.setItem('t_pachin_user_points', playerPoints);
+        }
         window.dispatchEvent(new CustomEvent('points-updated', { detail: { points: playerPoints } }));
     }
     

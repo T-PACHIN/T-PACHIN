@@ -12,9 +12,41 @@
         body { background: #0a0c1a; color: #fff; font-family: 'Noto Sans JP', 'Orbitron', sans-serif; min-height: 100vh; display: flex; flex-direction: column; position: relative; }
         body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-image: linear-gradient(rgba(74, 128, 192, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(153, 0, 255, 0.03) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; z-index: 0; }
         .max-w-md { max-width: 448px; margin: 0 auto; height: 100vh; position: relative; z-index: 1; background: linear-gradient(145deg, #0f1425, #0a0e1f); box-shadow: 0 0 50px rgba(74, 128, 192, 0.2); border-left: 1px solid rgba(74, 128, 192, 0.2); border-right: 1px solid rgba(153, 0, 255, 0.2); display: flex; flex-direction: column; overflow: hidden; }
+        
+        /* ==================== 全域滾動條樣式 ==================== */
         ::-webkit-scrollbar { width: 4px; height: 0px; background: transparent; }
         ::-webkit-scrollbar-track { background: rgba(74, 128, 192, 0.1); border-radius: 10px; }
         ::-webkit-scrollbar-thumb { background: rgba(74, 128, 192, 0.5); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(74, 128, 192, 0.8); }
+        
+        /* Firefox 全域滾動條 */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #4a80c0 rgba(74, 128, 192, 0.2);
+        }
+        
+        /* 子機台列表滾動條 - 與主頁面一致 */
+        .submachine-container::-webkit-scrollbar {
+            width: 4px;
+            height: 0px;
+            background: transparent;
+        }
+        .submachine-container::-webkit-scrollbar-track {
+            background: rgba(74, 128, 192, 0.1);
+            border-radius: 10px;
+        }
+        .submachine-container::-webkit-scrollbar-thumb {
+            background: rgba(74, 128, 192, 0.5);
+            border-radius: 10px;
+        }
+        .submachine-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(74, 128, 192, 0.8);
+        }
+        .submachine-container {
+            scrollbar-width: thin;
+            scrollbar-color: #4a80c0 rgba(74, 128, 192, 0.2);
+        }
+        
         .metal-header { background: linear-gradient(145deg, #2a2f3f, #1a1f2f); border-bottom: 2px solid #4a80c0; border-top: 2px solid #4a80c0; box-shadow: 0 5px 0 #0f121c, 0 10px 15px rgba(74, 128, 192, 0.3), inset 0 2px 5px rgba(255,255,255,0.3), inset 0 -3px 8px rgba(0,0,0,0.6); position: relative; overflow: hidden; border-radius: 0 0 30px 30px; padding: 0.75rem 1rem; flex-shrink: 0; }
         .metal-header::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transform: skewX(-20deg); animation: shine 4s infinite; pointer-events: none; }
         @keyframes shine { 0% { left: -100%; } 20% { left: 120%; } 100% { left: 120%; } }
@@ -120,7 +152,7 @@
         .data-mini-tab { background: linear-gradient(145deg, #3a4050, #2a2f40); border-radius: 20px; padding: 4px 12px; font-size: 0.7rem; cursor: pointer; box-shadow: inset 0 1px 1px rgba(255,255,255,0.1), 0 2px 2px rgba(0,0,0,0.2); }
         .data-mini-tab.active { background: linear-gradient(145deg, #ffd700, #ffaa00); color: #000; box-shadow: 0 0 10px #ffd700; }
         .ratio-select-mini { background: linear-gradient(145deg, #2a2f3f, #1a1f2f); border: 1px solid #ffd700; border-radius: 30px; padding: 4px 10px; color: #ffd966; font-weight: bold; font-size: 0.7rem; font-family: 'Orbitron', monospace; cursor: pointer; outline: none; box-shadow: inset 0 1px 2px rgba(0,0,0,0.3), 0 1px 3px rgba(0,0,0,0.2); background-color: #1a1f2f; }
-        .submachine-container { display: flex; flex-direction: column; gap: 0.8rem; max-height: 55vh; overflow-y: auto; scrollbar-width: thin; }
+        .submachine-container { display: flex; flex-direction: column; gap: 0.8rem; max-height: 55vh; overflow-y: auto; }
         .sub-card { background: linear-gradient(145deg, #1a2a3a, #0a1a2a); border: 2px solid #4a80c0; border-radius: 20px; padding: 10px; cursor: pointer; position: relative; transition: all 0.2s ease; box-shadow: 0 4px 0 #0a1a2a; }
         .sub-card:active { transform: translateY(2px); box-shadow: 0 2px 0 #0a1a2a; }
         .sub-card.occupied-card { background: linear-gradient(145deg, #2a4a3a, #1a3a2a); border: 3px solid #ffaa44; box-shadow: 0 0 15px rgba(255, 170, 68, 0.6); }
@@ -658,14 +690,17 @@
         setInterval(() => updateBanner((bannerIndex + 1) % imgs.length), 5000);
     }
     
-    // 篩選器
-    let currentFilters = { vendor: 'all', model: 'all', status: 'all' };
+    // 篩選器 - 完整廠商列表
     function initFilters() {
-        const vendors = [...new Set(machines.map(m => m.vendor))];
+        // 完整廠商列表
+        const allVendors = ['ELECO', 'ENTER RISE', 'Olympia', 'Kita Denshi', 'Sammy', 'Daito', 'HEIWA', 'Bellco', 'Mizuho', 'Universal Bros', 'Rodeo'];
         const models = [...new Set(machines.map(m => m.model))];
-        document.getElementById('vendorFilters').innerHTML = `<span class="filter-chip selected" data-vendor="all">全部</span>` + vendors.map(v => `<span class="filter-chip" data-vendor="${v}">${v}</span>`).join('');
+        
+        document.getElementById('vendorFilters').innerHTML = `<span class="filter-chip selected" data-vendor="all">全部</span>` + allVendors.map(v => `<span class="filter-chip" data-vendor="${v}">${v}</span>`).join('');
         document.getElementById('modelFilters').innerHTML = `<span class="filter-chip selected" data-model="all">全部</span>` + models.map(m => `<span class="filter-chip" data-model="${m}">${m}</span>`).join('');
         document.getElementById('statusFilters').innerHTML = `<span class="filter-chip selected" data-status="all">全部</span><span class="filter-chip" data-status="empty">空檯</span><span class="filter-chip" data-status="using">使用中</span>`;
+        
+        let currentFilters = { vendor: 'all', model: 'all', status: 'all' };
         
         function attachListener(container, type) {
             container.querySelectorAll('.filter-chip').forEach(chip => {

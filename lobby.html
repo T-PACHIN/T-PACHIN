@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>T-PACHIN 賽博大廳 | 極致寬敞·順暢操作</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: radial-gradient(circle at 10% 20%, #0a0c18, #03050b);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', 'Segoe UI', system-ui, sans-serif;
+            padding: 8px;
+            position: relative;
+        }
+
+        .game-lobby {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            background: rgba(15, 20, 32, 0.85);
+            backdrop-filter: blur(2px);
+            border-radius: 48px;
+            border: 1px solid rgba(74, 128, 192, 0.5);
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.6), 0 0 0 0.5px rgba(74, 128, 192, 0.3), 0 0 20px rgba(74, 128, 192, 0.2);
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 98vh;
+            max-height: 950px;
+            min-height: 700px;
+        }
+
+        .tp-header {
+            padding: 10px 18px;
+            background: rgba(10, 14, 22, 0.7);
+            border-bottom: 1px solid rgba(74, 128, 192, 0.6);
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            backdrop-filter: blur(12px);
+            flex-shrink: 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        .logo:active { transform: scale(0.97); }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: #0a0e16;
+            border-radius: 14px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 12px rgba(74, 128, 192, 0.7);
+            border: 1.5px solid #ffd700;
+        }
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: conic-gradient(from 0deg, #ffd700, #ff3b6f, #4a80c0, #ffd700);
+            border-radius: 14px;
+            animation: rotateBorder 4s linear infinite;
+        }
+        .logo-icon::after {
+            content: '';
+            position: absolute;
+            width: 34px;
+            height: 34px;
+            background: #0a0e16;
+            border-radius: 8px;
+        }
+        @keyframes rotateBorder {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .logo-icon-inner {
+            position: relative;
+            z-index: 2;
+            font-size: 18px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffd700, #ff8c42, #4a80c0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .logo-main {
+            font-size: 16px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffd700, #ffaa55, #4a80c0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+        .logo-sub { font-size: 7px; color: #6a9fdf; letter-spacing: 0.5px; }
+
+        .scrollable-area {
+            flex: 1;
+            overflow-y: auto;
+            min-height: 0;
+            scrollbar-width: thin;
+            scrollbar-color: #5a6e8a #1e2438;
+        }
+        .scrollable-area::-webkit-scrollbar { width: 4px; }
+        .scrollable-area::-webkit-scrollbar-track { background: #1e2438; border-radius: 10px; }
+        .scrollable-area::-webkit-scrollbar-thumb { background: #5a6e8a; border-radius: 10px; }
+
+        .banner-area {
+            padding: 8px 14px 6px 14px;
+            background: rgba(10, 14, 22, 0.3);
+        }
+
+        .banner-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 24px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(74, 128, 192, 0.5);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .banner-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 6px;
+        }
+        .banner-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255, 215, 0, 0.4);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .banner-dot.active {
+            background: #ffd700;
+            width: 18px;
+            border-radius: 4px;
+        }
+
+        .games-container {
+            padding: 16px 14px 28px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .game-card, .game-card-special {
+            display: block;
+            background: transparent;
+            border-radius: 26px;
+            cursor: pointer;
+            transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.2);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
+        }
+        .game-card-special {
+            border: 2px solid rgba(255, 215, 0, 0.7);
+            border-radius: 30px;
+        }
+        .game-card:hover, .game-card-special:hover {
+            transform: translateY(-5px) scale(1.01);
+            border-color: #ffd700;
+        }
+        .card-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: inherit;
+        }
+
+        /* ========= 底部導覽列 ========= */
+        .bottom-nav {
+            background: linear-gradient(145deg, #2a2f3f, #1a1f2f);
+            border-top: 2px solid #4a80c0;
+            border-bottom: 2px solid #4a80c0;
+            box-shadow: 0 -5px 15px rgba(74, 128, 192, 0.3), 0 8px 10px rgba(0, 0, 0, 0.6), inset 0 2px 5px rgba(255, 255, 255, 0.3), inset 0 -3px 8px rgba(0, 0, 0, 0.6);
+            width: 100%;
+            padding: 0.6rem 1rem;
+            position: relative;
+            border-radius: 30px 30px 30px 30px;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 28px;
+        }
+        .bottom-nav::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: skewX(-20deg);
+            animation: shine 4s infinite;
+            pointer-events: none;
+        }
+        @keyframes shine {
+            0% { left: -100%; }
+            20% { left: 120%; }
+            100% { left: 120%; }
+        }
+
+        .nav-item {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #b0c4de;
+            transition: all 0.1s ease;
+            border-radius: 20px;
+            padding: 0.5rem 0.6rem;
+            background: linear-gradient(145deg, #3a4050, #2a2f40);
+            box-shadow: 0 5px 0 #0f121c, inset 0 2px 5px rgba(255, 255, 255, 0.3), inset 0 -3px 5px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 2px 3px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(74, 128, 192, 0.2);
+            cursor: pointer;
+            text-align: center;
+            min-width: 60px;
+            font-family: 'Orbitron', sans-serif;
+        }
+        .nav-item i { font-size: 1.4rem; margin-bottom: 2px; filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.5)); }
+        .nav-item span { font-weight: 700; letter-spacing: 0.5px; font-size: 0.7rem; }
+        .nav-item:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #0f121c, inset 0 5px 8px rgba(0, 0, 0, 0.5);
+            color: #4a80c0;
+        }
+
+        /* 超立體大廳按鈕 */
+        .nav-item.lobby-special {
+            background: linear-gradient(145deg, #9b4dff, #6a1b9a, #4a0080);
+            transform: translateY(-26px) scale(1.1);
+            box-shadow: 0 10px 0 #2a004d, 
+                        0 18px 25px rgba(0, 0, 0, 0.5),
+                        inset 0 2px 12px rgba(255, 255, 255, 0.4), 
+                        inset 0 -4px 8px rgba(0, 0, 0, 0.3),
+                        0 0 20px #bf5eff,
+                        0 0 8px #7c3aed;
+            color: #ffffff;
+            border: 1px solid #d8b4ff;
+            text-shadow: 0 0 8px #bf5eff;
+            z-index: 60;
+            padding: 0.5rem 1rem;
+            min-width: 80px;
+            cursor: pointer;
+        }
+        .nav-item.lobby-special i {
+            font-size: 1.7rem;
+            margin-bottom: 3px;
+            text-shadow: 0 2px 0 #2a004d, 0 0 12px #d8b4ff;
+        }
+        .nav-item.lobby-special span {
+            font-size: 0.75rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-shadow: 0 1px 0 #2a004d, 0 0 10px #bf5eff;
+        }
+        @keyframes neonPulse {
+            0% { 
+                box-shadow: 0 10px 0 #2a004d, 0 18px 25px rgba(0, 0, 0, 0.5), inset 0 2px 12px rgba(255, 255, 255, 0.4), inset 0 -4px 8px rgba(0, 0, 0, 0.3), 0 0 15px #9b4dff;
+                background: linear-gradient(145deg, #9b4dff, #6a1b9a, #4a0080);
+            }
+            100% { 
+                box-shadow: 0 10px 0 #2a004d, 0 20px 28px rgba(0, 0, 0, 0.55), inset 0 2px 14px rgba(255, 255, 255, 0.55), inset 0 -4px 8px rgba(0, 0, 0, 0.3), 0 0 35px #d8b4ff;
+                background: linear-gradient(145deg, #b77dff, #8b3dff, #6a1b9a);
+            }
+        }
+        .nav-item.lobby-special {
+            animation: neonPulse 1.3s ease-in-out infinite alternate;
+        }
+
+        @media (max-width: 450px) {
+            .games-container { gap: 14px; padding: 12px; }
+            .bottom-nav { gap: 22px; }
+            .nav-item { min-width: 52px; padding: 0.4rem; }
+            .nav-item.lobby-special { min-width: 68px; transform: translateY(-22px) scale(1.08); }
+            .nav-item.lobby-special i { font-size: 1.5rem; }
+        }
+
+        /* ========= 弧形轉盤 - 支援拖曳關閉 ========= */
+        .wheel-container {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%) translateY(100%);
+            width: 100%;
+            max-width: 500px;
+            height: 260px;
+            z-index: 99999999 !important;
+            background: transparent !important;
+            visibility: hidden;
+            opacity: 0;
+            transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1), opacity 0.2s ease, visibility 0.2s;
+            pointer-events: none;
+        }
+        .wheel-container.open {
+            visibility: visible;
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+            pointer-events: auto;
+        }
+        /* 關閉動畫 */
+        .wheel-container.closing {
+            transition: transform 0.25s ease-out;
+            transform: translateX(-50%) translateY(100%);
+            opacity: 0;
+        }
+        .wheel-touch-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 99999999 !important;
+            pointer-events: auto;
+            background: transparent;
+            cursor: grab;
+        }
+        .wheel-touch-wrapper:active {
+            cursor: grabbing;
+        }
+        .wheel-items-container {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            z-index: 99999999 !important;
+            pointer-events: none;
+        }
+        .wheel-item {
+            position: absolute;
+            width: 76px;
+            height: 76px;
+            left: 50%;
+            top: 50%;
+            cursor: pointer;
+            transition: transform 0.05s linear;
+            z-index: 999999999 !important;
+            pointer-events: auto;
+        }
+        .wheel-item .item-btn {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(145deg, #2a3042, #181e30);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 0 #0c1020, 0 10px 18px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(74, 128, 192, 0.8);
+            transition: all 0.1s ease;
+        }
+        .wheel-item .item-btn::before {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 15px;
+            width: 30px;
+            height: 20px;
+            background: radial-gradient(ellipse at center, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 80%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .wheel-item.dev .item-btn {
+            background: linear-gradient(145deg, #3a1a3e, #250f28);
+            border-color: #ff3b6f;
+            box-shadow: 0 8px 0 #1a0a1e, 0 10px 18px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.15);
+        }
+        .wheel-item .item-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 3px 0 #0c1020, 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+        .wheel-item:hover .item-btn {
+            border-color: #ffd700 !important;
+            transform: scale(1.08);
+            box-shadow: 0 6px 0 #0c1020, 0 12px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 215, 0, 0.5);
+        }
+        .item-name {
+            font-size: 10px;
+            font-weight: bold;
+            color: #fff;
+            background: rgba(0,0,0,0.75);
+            padding: 3px 6px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+        .dev-badge {
+            font-size: 7px;
+            background: #ff3b6f;
+            padding: 2px 5px;
+            border-radius: 12px;
+            margin-top: 2px;
+            color: #fff;
+        }
+        .wheel-hint {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #bbd4ff;
+            font-size: 10px;
+            background: rgba(10, 14, 22, 0.9);
+            padding: 5px 14px;
+            border-radius: 40px;
+            white-space: nowrap;
+            border: 1px solid #4a80c0;
+            pointer-events: none;
+        }
+
+        @media (max-width: 450px) {
+            .wheel-container { max-width: 440px; }
+            .wheel-items-container { width: 360px; height: 360px; }
+            .wheel-item { width: 70px; height: 70px; }
+        }
+
+        .game-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.96);
+            backdrop-filter: blur(8px);
+            z-index: 20000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: 0.2s;
+        }
+        .game-modal.active { visibility: visible; opacity: 1; }
+        .modal-content {
+            width: 86%;
+            max-width: 340px;
+            background: linear-gradient(145deg, #151c2c, #0e1322);
+            border-radius: 48px;
+            border: 1.5px solid #ffd700;
+            overflow: hidden;
+        }
+        .modal-header {
+            padding: 20px;
+            text-align: center;
+            background: rgba(10, 14, 22, 0.8);
+            border-bottom: 1.5px solid #ffd700;
+            position: relative;
+        }
+        .modal-header h3 {
+            font-family: 'Orbitron';
+            font-size: 26px;
+            background: linear-gradient(135deg, #ffd700, #ffaa55);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .modal-close {
+            position: absolute;
+            top: 14px;
+            right: 22px;
+            font-size: 32px;
+            color: #ffd700;
+            cursor: pointer;
+        }
+        .modal-body { padding: 24px 20px; }
+        .modal-game-icon img { width: 80px; height: 80px; border-radius: 50%; margin-bottom: 15px; }
+        .modal-desc { color: #ccc; font-size: 14px; text-align: center; margin-bottom: 15px; }
+        .modal-features p { color: #ffdd99; font-size: 12px; margin: 5px 0; }
+        .modal-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #ffb347, #ff6b35);
+            border-radius: 60px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 20, 32, 0.95);
+            color: #ffdd99;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 12px;
+            border: 1px solid #ffd700;
+            white-space: nowrap;
+            z-index: 10000;
+        }
+        /* 拖曳指示條 */
+        .drag-handle {
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 4px;
+            background: rgba(255, 215, 0, 0.5);
+            border-radius: 4px;
+            z-index: 999999999;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 弧形轉盤 -->
+<div class="wheel-container" id="wheelContainer">
+    <div class="drag-handle"></div>
+    <div class="wheel-touch-wrapper" id="wheelTouchWrapper"></div>
+    <div class="wheel-items-container" id="wheelItemsContainer"></div>
+    <div class="wheel-hint"><i class="fas fa-arrows-alt-h"></i> 左右滑動選遊戲 · ↓ 向下滑關閉</div>
+</div>
+
+<div class="game-lobby">
+    <div class="tp-header">
+        <div class="logo">
+            <div class="logo-icon"><div class="logo-icon-inner">TP</div></div>
+            <div><div class="logo-main">T-PACHIN</div><div class="logo-sub">極致寬敞 · 順暢操作</div></div>
+        </div>
+    </div>
+
+    <div class="scrollable-area">
+        <div class="banner-area">
+            <img class="banner-img" id="bannerImage" src="https://static.wixstatic.com/media/d5e540_db0d1fd5688a425986b0b4d04479bdfc~mv2.png" alt="活動Banner">
+            <div class="banner-dots" id="bannerDots">
+                <div class="banner-dot active" data-index="0"></div>
+                <div class="banner-dot" data-index="1"></div>
+                <div class="banner-dot" data-index="2"></div>
+            </div>
+        </div>
+
+        <div class="games-container">
+            <div class="game-card-special" data-game-id="pachinko">
+                <img class="card-img" src="https://static.wixstatic.com/media/d5e540_6cb2a1183c6e41e1a6da032fa719ce9b~mv2.png" alt="柏青SLOT">
+            </div>
+            <div class="game-card" data-game-id="baccarat">
+                <img class="card-img" src="https://static.wixstatic.com/media/d5e540_89b4d210637e4e57bcc4c82670e33d6a~mv2.png" alt="真人百家">
+            </div>
+            <div class="game-card" data-game-id="slot">
+                <img class="card-img" src="https://static.wixstatic.com/media/d5e540_35f14e972e88404dbc71f5c9c8bf7a85~mv2.png" alt="老虎機">
+            </div>
+            <div class="game-card" data-game-id="sicbo">
+                <img class="card-img" src="https://static.wixstatic.com/media/d5e540_2c57799a462544689603b398054eaff6~mv2.png" alt="骰寶">
+            </div>
+            <div class="game-card" data-game-id="roulette">
+                <img class="card-img" src="https://static.wixstatic.com/media/d5e540_58b0ac865506454e86df939ffb7ed84a~mv2.png" alt="輪盤">
+            </div>
+            <div class="game-card" data-game-id="poker">
+                <img class="card-img" src="https://placehold.co/468x120/1a2235/ffd700?text=德州撲克+468x120" alt="德州撲克">
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item" id="newsBtn">
+            <i class="fa fa-bell"></i>
+            <span>公告</span>
+        </div>
+        <div class="nav-item lobby-special" id="wheelTriggerBtn">
+            <i class="fa fa-home"></i>
+            <span>大廳</span>
+        </div>
+        <div class="nav-item" id="settingsBtn">
+            <i class="fa fa-cog"></i>
+            <span>設定</span>
+        </div>
+    </div>
+</div>
+
+<div class="game-modal" id="gameModal">
+    <div class="modal-content">
+        <div class="modal-header"><h3 id="modalTitle">真人百家</h3><div class="modal-close" id="modalCloseBtn">&times;</div></div>
+        <div class="modal-body">
+            <div class="modal-game-icon" style="text-align:center"><img id="modalIconImg" src=""></div>
+            <div class="modal-desc" id="modalDesc"></div>
+            <div class="modal-features" id="modalFeatures"></div>
+            <div class="modal-btn" id="modalEnterBtn">進入遊戲大廳</div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function(){
+    // ========== Banner 輪播 ==========
+    const bannerImages = [
+        "https://static.wixstatic.com/media/d5e540_db0d1fd5688a425986b0b4d04479bdfc~mv2.png",
+        "https://static.wixstatic.com/media/d5e540_1bfb6d303ce34c4394eca6174051cf06~mv2.png",
+        "https://static.wixstatic.com/media/d5e540_d6e33437908a49dc82146dd9e34c928d~mv2.png"
+    ];
+    let currentBannerIndex = 0;
+    const bannerImageEl = document.getElementById('bannerImage');
+    let bannerInterval;
+    function updateBanner(index) { 
+        currentBannerIndex = index; 
+        bannerImageEl.src = bannerImages[currentBannerIndex]; 
+        document.querySelectorAll('.banner-dot').forEach((dot, i) => { 
+            if(i === currentBannerIndex) dot.classList.add('active'); 
+            else dot.classList.remove('active'); 
+        }); 
+    }
+    function nextBanner() { updateBanner((currentBannerIndex + 1) % bannerImages.length); }
+    function startBannerAutoPlay() { if(bannerInterval) clearInterval(bannerInterval); bannerInterval = setInterval(nextBanner, 5000); }
+    document.querySelectorAll('.banner-dot').forEach(dot => { 
+        dot.addEventListener('click', (e) => { e.stopPropagation(); updateBanner(parseInt(dot.dataset.index, 10)); startBannerAutoPlay(); }); 
+    });
+    bannerImageEl.addEventListener('click', () => { nextBanner(); startBannerAutoPlay(); });
+    startBannerAutoPlay();
+
+    // ========== 遊戲資料 ==========
+    const games = {
+        baccarat: { name: '真人百家', img: 'https://placehold.co/200x200/1a2235/ffd700?text=🎮', desc: '✨ 旗艦真人百家樂 ✨\n即時連線專業荷官，4K高畫質直播體驗。', features: ['🎯 真人荷官互動', '📊 完整路紙系統', '💎 每日高額獎金池'], isDev: false },
+        pachinko: { name: '柏青SLOT', img: 'https://placehold.co/200x200/1a2235/ffd700?text=🎮', desc: '🎰 柏青哥彈珠台 🎰\n物理引擎+SLOT連爆模式，爽快連擊。', features: ['🎲 真實物理彈珠', '⚡ 狂熱爆獎模式', '🎰 多重拉霸獎勵線'], isDev: false },
+        slot: { name: '老虎機', img: 'https://placehold.co/200x200/1a2235/ffd700?text=🎮', desc: '💎 經典老虎機 💎\n上百款SLOT機台，累積頭獎等你拿。', features: ['🎰 超過100款老虎機', '💎 累積獎金 Progressive', '🆓 每日免費旋轉'], isDev: false },
+        sicbo: { name: '骰寶', img: '', desc: '🎲 骰寶 開發中 🎲', features: ['🎲 多種押注選項', '🎯 高賠率玩法'], isDev: true },
+        roulette: { name: '輪盤', img: '', desc: '🎡 輪盤 開發中 🎡', features: ['🎡 多種下注策略', '💎 累積獎金池'], isDev: true },
+        poker: { name: '德州撲克', img: '', desc: '♠️ 德州撲克 開發中 ♠️', features: ['♠️ 多人線上對戰', '💰 定期獎金賽事'], isDev: true },
+        dragon: { name: '龍虎鬥', img: '', desc: '🐉 龍虎鬥 開發中', features: ['🐉 龍虎對決'], isDev: true },
+        zajinhua: { name: '炸金花', img: '', desc: '🃏 炸金花 開發中', features: ['🃏 撲克對戰'], isDev: true },
+        blackjack: { name: '21點', img: '', desc: '🃏 21點 開發中', features: ['🃏 莊家對戰'], isDev: true },
+        lottery: { name: '彩票', img: '', desc: '🎫 彩票 開發中', features: ['🎫 即時開獎'], isDev: true }
+    };
+
+    const options = [
+        { name: '骰寶', id: 'sicbo', isDev: true },
+        { name: '輪盤', id: 'roulette', isDev: true },
+        { name: '龍虎鬥', id: 'dragon', isDev: true },
+        { name: '炸金花', id: 'zajinhua', isDev: true },
+        { name: '真人百家', id: 'baccarat', isDev: false },
+        { name: '柏青SLOT', id: 'pachinko', isDev: false },
+        { name: '老虎機', id: 'slot', isDev: false },
+        { name: '德州撲克', id: 'poker', isDev: true },
+        { name: '21點', id: 'blackjack', isDev: true },
+        { name: '彩票', id: 'lottery', isDev: true }
+    ];
+
+    const radius = 165;
+    const angleStep = 360 / options.length;
+    let currentRotation = 0;
+    let wheelItems = [];
+    
+    function buildWheel() {
+        const container = document.getElementById('wheelItemsContainer');
+        if (!container) return;
+        container.innerHTML = '';
+        wheelItems = [];
+        options.forEach((opt, idx) => {
+            const div = document.createElement('div');
+            div.className = `wheel-item ${opt.isDev ? 'dev' : ''}`;
+            div.dataset.id = opt.id;
+            div.innerHTML = `<div class="item-btn"><div class="item-name">${opt.name}</div>${opt.isDev ? '<div class="dev-badge">開發中</div>' : ''}</div>`;
+            div.addEventListener('click', (e) => { 
+                e.stopPropagation(); 
+                const game = games[div.dataset.id]; 
+                if(game) { showModal(game); closeWheel(); } 
+            });
+            container.appendChild(div);
+            wheelItems.push(div);
+        });
+        currentRotation = -(5 * angleStep + 90);
+        updatePositions(currentRotation);
+    }
+    
+    function updatePositions(rot) { 
+        if(!wheelItems.length) return; 
+        wheelItems.forEach((item, idx) => { 
+            const ang = (idx * angleStep + rot + 360) % 360; 
+            const rad = ang * Math.PI / 180; 
+            const x = Math.sin(rad) * radius; 
+            const y = -Math.cos(rad) * radius; 
+            item.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px)`; 
+        }); 
+    }
+
+    // ========== 轉盤滑動 + 拖曳關閉功能 ==========
+    const wheelContainer = document.getElementById('wheelContainer');
+    const touchWrap = document.getElementById('wheelTouchWrapper');
+    
+    let isDragging = false;
+    let startX = 0, startY = 0;
+    let startRot = 0;
+    let dragStartY = 0;
+    let isClosingDrag = false;
+    
+    function onStart(e) { 
+        if (!wheelContainer || !wheelContainer.classList.contains('open')) return; 
+        e.preventDefault(); 
+        isDragging = true; 
+        const x = e.touches ? e.touches[0].clientX : e.clientX;
+        const y = e.touches ? e.touches[0].clientY : e.clientY;
+        startX = x; 
+        startY = y;
+        startRot = currentRotation;
+        dragStartY = y;
+        isClosingDrag = false;
+    }
+    
+    function onMove(e) { 
+        if (!isDragging) return; 
+        e.preventDefault(); 
+        const x = e.touches ? e.touches[0].clientX : e.clientX;
+        const y = e.touches ? e.touches[0].clientY : e.clientY;
+        
+        const dx = x - startX;
+        const dy = y - dragStartY;
+        
+        // 判斷是否為向下拖曳關閉（向下移動超過 30px）
+        if (dy > 30 && !isClosingDrag) {
+            isClosingDrag = true;
+            closeWheel();
+            isDragging = false;
+            return;
+        }
+        
+        // 水平移動：旋轉轉盤
+        currentRotation = startRot + dx * 1.2;
+        updatePositions(currentRotation);
+    }
+    
+    function onEnd() { 
+        isDragging = false; 
+        isClosingDrag = false;
+    }
+    
+    if (wheelContainer) {
+        wheelContainer.addEventListener('mousedown', onStart); 
+        window.addEventListener('mousemove', onMove); 
+        window.addEventListener('mouseup', onEnd);
+        wheelContainer.addEventListener('touchstart', onStart, { passive: false }); 
+        window.addEventListener('touchmove', onMove, { passive: false }); 
+        window.addEventListener('touchend', onEnd);
+        if(touchWrap) {
+            touchWrap.addEventListener('mousedown', onStart);
+            touchWrap.addEventListener('touchstart', onStart, { passive: false });
+        }
+    }
+
+    // ========== 轉盤開關 ==========
+    function openWheel() { 
+        if(wheelContainer && !wheelContainer.classList.contains('open')) {
+            wheelContainer.classList.remove('closing');
+            wheelContainer.classList.add('open');
+            console.log('✅ 轉盤已開啟');
+        }
+    }
+    
+    function closeWheel() { 
+        if(wheelContainer && wheelContainer.classList.contains('open')) {
+            wheelContainer.classList.add('closing');
+            setTimeout(() => {
+                wheelContainer.classList.remove('open');
+                wheelContainer.classList.remove('closing');
+            }, 250);
+            console.log('✅ 轉盤已關閉');
+        }
+    }
+    
+    // 大廳按鈕：開啟轉盤
+    const triggerBtn = document.getElementById('wheelTriggerBtn');
+    if(triggerBtn) {
+        triggerBtn.onclick = function(e) {
+            e.stopPropagation();
+            console.log('🏠 大廳按鈕被點擊 - 開啟轉盤');
+            openWheel();
+            return false;
+        };
+    }
+    
+    // 點擊外部區域關閉轉盤（輔助功能）
+    document.addEventListener('click', function(e) {
+        if (!wheelContainer || !wheelContainer.classList.contains('open')) return;
+        const isClickInsideWheel = wheelContainer.contains(e.target);
+        const isClickOnTrigger = triggerBtn && triggerBtn.contains(e.target);
+        if (!isClickInsideWheel && !isClickOnTrigger) {
+            closeWheel();
+        }
+    });
+
+    // 轉盤內部點擊不要冒泡
+    if(wheelContainer) {
+        wheelContainer.addEventListener('click', e => e.stopPropagation());
+    }
+
+    // ========== 遊戲彈窗 ==========
+    const modal = document.getElementById('gameModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalIcon = document.getElementById('modalIconImg');
+    const modalDesc = document.getElementById('modalDesc');
+    const modalFeatures = document.getElementById('modalFeatures');
+    const modalEnter = document.getElementById('modalEnterBtn');
+    
+    function showModal(game) {
+        modalTitle.innerText = game.name;
+        modalIcon.src = game.img || 'https://placehold.co/200x200/1a2235/ffd700?text=🎮';
+        modalDesc.innerText = game.desc;
+        modalFeatures.innerHTML = game.features.map(f => `<p>✨ ${f}</p>`).join('');
+        modalEnter.innerText = game.isDev ? '⏳ 敬請期待 ⏳' : '🎮 進入遊戲大廳 🎮';
+        modalEnter.style.opacity = game.isDev ? 0.8 : 1;
+        modal.classList.add('active');
+        closeWheel();
+    }
+    
+    function closeModal() { modal.classList.remove('active'); }
+    document.getElementById('modalCloseBtn').onclick = closeModal;
+    modal.onclick = e => e.target === modal && closeModal();
+    modalEnter.onclick = () => {
+        const g = Object.values(games).find(x => x.name === modalTitle.innerText);
+        showToast(g?.isDev ? `🔨 ${g.name} 開發中` : `✨ 前往 ${modalTitle.innerText} 大廳`);
+        closeModal();
+    };
+    
+    function showToast(msg) {
+        const t = document.createElement('div');
+        t.className = 'toast';
+        t.innerText = msg;
+        document.body.appendChild(t);
+        setTimeout(() => t.remove(), 2000);
+    }
+
+    document.querySelectorAll('.game-card, .game-card-special').forEach(card => {
+        card.onclick = () => showModal(games[card.dataset.gameId]);
+    });
+
+    document.getElementById('newsBtn').onclick = () => { window.location.href = 'news.html'; };
+    document.getElementById('settingsBtn').onclick = () => { window.location.href = 'about.html'; };
+
+    buildWheel();
+    setTimeout(() => showToast('✨ 點擊「大廳」開啟轉盤，向下滑動即可關閉 ✨'), 600);
+})();
+</script>
+</body>
+</html>

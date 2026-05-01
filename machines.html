@@ -270,7 +270,6 @@
         .text-warning { color: #ffaa66; font-size: 0.7rem; margin-top: 0.5rem; text-align: center; }
         .text-error { color: #ff6666; }
         
-        /* 修復後的 Loading 動畫樣式 */
         .hologram-loading { 
             position: fixed; 
             top: 0; 
@@ -449,10 +448,8 @@
         </div>
     </main>
 
-    <!-- 確認兌換視窗 -->
     <div class="sub-confirm-modal" id="subConfirmModal"><div class="sub-confirm-content"><div class="modal-close-x" id="closeXBtn"><i class="fa fa-times"></i></div><div class="sub-confirm-header"><h3 id="confirmMachineName">GOGO 小丑</h3><p id="confirmSubName">1號機</p></div><div class="info-grid"><div class="info-row"><span class="info-label">每枚</span><span class="info-value" id="confirmRatio">2.5</span><span class="info-label" style="margin-left:auto;">點差</span><span class="info-value highlight-value" id="pointDiffDisplay">0.15</span></div><div class="info-row"><span class="info-label">目前點數</span><span class="info-value" id="confirmPoints">6,600.0000</span></div><div class="info-row"><span class="info-label">兌換代幣</span><span class="info-value" id="exchangeTokens">0 枚</span></div><div class="info-row"><span class="info-label">消耗點數</span><span class="info-value cost-value" id="costPoints">0</span></div><div class="info-row"><span class="info-label">損耗點數</span><span class="info-value cost-value" id="wastePoints">0</span></div><div class="info-row"><span class="info-label">剩餘點數</span><span class="info-value" id="remainPoints">6,600.0000</span></div></div><div class="sub-confirm-input-group"><label><i class="fa fa-ticket"></i> 兌換代幣 (最低 50 枚)</label><input type="number" id="confirmTokenInput" min="0" step="1" placeholder="請輸入代幣枚數" value="100"><div class="text-warning" id="warningMsg"></div></div><div class="sub-confirm-actions"><button class="sub-confirm-btn secondary" id="confirmCancelBtn">取消</button><button class="sub-confirm-btn primary" id="confirmOk">確認兌換</button></div></div></div>
     
-    <!-- 已修復 Loading 動畫：影片正確載入、強制播放並確保跳轉 -->
     <div class="hologram-loading" id="hologramLoading">
         <div class="loading-container">
             <video id="mascotVideo" class="loading-video" autoplay muted loop playsinline poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%234a80c0' width='100' height='100'/%3E%3Ctext x='25' y='65' fill='%23ffd700' font-size='40'%3E🎰%3C/text%3E%3C/svg%3E">
@@ -478,7 +475,20 @@
 <script src="shared.js"></script>
 <script>
 (function() {
-    // ==================== 全域變數 (使用 T_PACHIN_STORAGE 統一管理) ====================
+    // ==================== 機台資料庫 ====================
+    const machineDatabase = [
+        { id: 1, name: 'GOGO 小丑', sub: '歡樂版', ratio: '2.5', bb: 1250, rb: 620, curr: 280, total: 4200 },
+        { id: 2, name: '我是小丑-EX', sub: '進化版', ratio: '2.8', bb: 1180, rb: 550, curr: 215, total: 3850 },
+        { id: 3, name: '快樂小丑 VII', sub: '慶典版', ratio: '2.0', bb: 1080, rb: 510, curr: 175, total: 3550 },
+        { id: 4, name: '新我是小丑-EX水晶版', sub: '限定版', ratio: '3.0', bb: 1300, rb: 650, curr: 310, total: 4500 },
+        { id: 5, name: '小丑狂歡夜', sub: '派對版', ratio: '2.2', bb: 980, rb: 480, curr: 155, total: 3350 },
+        { id: 6, name: '超級奇蹟小丑', sub: 'JOKER MAX', ratio: '3.5', bb: 1580, rb: 820, curr: 420, total: 5600 }
+    ];
+    
+    const miniCardsData = [{fillCount:3,value:300},{fillCount:5,value:891},{fillCount:2,value:245},{fillCount:4,value:672},{fillCount:1,value:128},{fillCount:5,value:999},{fillCount:3,value:456},{fillCount:2,value:334}];
+    const miniCardsData2 = [{fillCount:4,value:512},{fillCount:2,value:203},{fillCount:5,value:876},{fillCount:3,value:445},{fillCount:1,value:98},{fillCount:4,value:678},{fillCount:2,value:267},{fillCount:5,value:1024}];
+    
+    // ==================== 全域變數 ====================
     let currentSubData = null;
     let countdownIntervals = {};
     const POINT_DIFF = 0.15;
@@ -486,6 +496,7 @@
     let currentFilterDays = 31;
     let playedFiltered = [];
     
+    // ==================== 輔助函數 ====================
     function formatPointsDecimal(v) { 
         return v.toLocaleString(undefined, { minimumFractionDigits: 4, maximumFractionDigits: 4 }); 
     }
@@ -511,55 +522,15 @@
         if (currentSubData) updateCalc();
     }
     
-    if (window.T_PACHIN_STORAGE) {
-        window.addEventListener('points-updated', function(e) {
-            if (e.detail && e.detail.points !== undefined) updatePointsDisplay();
-        });
-        window.addEventListener('t-pachin:user-updated', function(e) {
-            if (e.detail && e.detail.points !== undefined) updatePointsDisplay();
-            if (e.detail && e.detail.nickname) document.getElementById('nicknameDisplay').textContent = e.detail.nickname;
-        });
-        window.addEventListener('t-pachin:favorites-updated', function(e) {
-            favorites = e.detail;
-            updateFavoriteUI();
-        });
-        window.addEventListener('t-pachin:reserves-updated', function(e) {
-            reserves = e.detail;
-            updateReserveUI();
-            startAllReserveCountdowns();
-        });
-        window.addEventListener('t-pachin:played-updated', function(e) {
-            currentRawPlayed = e.detail || [];
-            applyPlayedFilter();
-        });
+    // 從 ID 取得完整機台資料
+    function getFullMachineData(item) {
+        if (!item) return null;
+        const fullData = machineDatabase.find(db => db.id === item.id);
+        if (fullData) return fullData;
+        return item;
     }
     
-    function filterPlayedByDays(days, raw) { 
-        if(!raw) return [];
-        const start = new Date(); start.setDate(start.getDate() - days); start.setHours(0,0,0,0);
-        return raw.filter(r => { 
-            if(!r.playedDate) return false; 
-            const parts = r.playedDate.split('/');
-            if (parts.length === 3) {
-                const [y,m,d] = parts;
-                return new Date(parseInt(y), parseInt(m)-1, parseInt(d)) >= start;
-            }
-            return false;
-        }).sort((a,b)=> new Date(b.playedDate) - new Date(a.playedDate));
-    }
-    
-    const machineDatabase = [
-        { id: 1, name: 'GOGO 小丑', sub: '歡樂版', ratio: '2.5', bb: 1250, rb: 620, curr: 280, total: 4200 },
-        { id: 2, name: '我是小丑-EX', sub: '進化版', ratio: '2.8', bb: 1180, rb: 550, curr: 215, total: 3850 },
-        { id: 3, name: '快樂小丑 VII', sub: '慶典版', ratio: '2.0', bb: 1080, rb: 510, curr: 175, total: 3550 },
-        { id: 4, name: '新我是小丑-EX水晶版', sub: '限定版', ratio: '3.0', bb: 1300, rb: 650, curr: 310, total: 4500 },
-        { id: 5, name: '小丑狂歡夜', sub: '派對版', ratio: '2.2', bb: 980, rb: 480, curr: 155, total: 3350 },
-        { id: 6, name: '超級奇蹟小丑', sub: 'JOKER MAX', ratio: '3.5', bb: 1580, rb: 820, curr: 420, total: 5600 }
-    ];
-    
-    const miniCardsData = [{fillCount:3,value:300},{fillCount:5,value:891},{fillCount:2,value:245},{fillCount:4,value:672},{fillCount:1,value:128},{fillCount:5,value:999},{fillCount:3,value:456},{fillCount:2,value:334}];
-    const miniCardsData2 = [{fillCount:4,value:512},{fillCount:2,value:203},{fillCount:5,value:876},{fillCount:3,value:445},{fillCount:1,value:98},{fillCount:4,value:678},{fillCount:2,value:267},{fillCount:5,value:1024}];
-    
+    // 產生小卡 HTML
     function generateMiniCards(data) { 
         let html=''; 
         for(let i=0;i<data.length;i++){ 
@@ -574,6 +545,7 @@
         return `<div class="mini-cards-row">${html}</div>`; 
     }
     
+    // 顯示提示訊息
     function showToastAlert(machineName, minutesLeft) {
         let existing = document.querySelector('.alert-toast'); if(existing) existing.remove();
         let toast = document.createElement('div'); toast.className = 'alert-toast'; toast.innerHTML = `⚠️ 「${machineName}」保留剩 ${minutesLeft} 分鐘到期 ⚠️`;
@@ -581,15 +553,26 @@
         setTimeout(() => { if(toast && toast.parentNode) toast.remove(); }, 4000);
     }
     
+    function showMessage(t,m){ 
+        let d=document.createElement('div'); 
+        d.className='alert-popup'; 
+        d.innerHTML=`<strong style="color:#ffd700;">${t}</strong> ${m}`; 
+        d.style.cssText='position:fixed; bottom:100px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.85); color:white; padding:10px 20px; border-radius:30px; z-index:10001; border:1px solid #ffd700;'; 
+        document.body.appendChild(d); 
+        setTimeout(()=>d.remove(),2500); 
+    }
+    
+    // ==================== 卡片渲染 ====================
     function createCardHTML(item, type) {
+        if (!item) return '';
         let topRow = '';
         if(type==='reserve') topRow = `<div class="page1-reserve-row"><span class="reserve-text">⏰ 保留倒數</span><span class="time-big" id="countdown-${item.id}">${item.reserveTime || '10:00'}</span></div>`;
         else if(type==='played') topRow = `<div class="page1-played-row"><span class="played-text">玩過 ${item.playCount||1}次</span><span class="played-date">${item.playedDate||''}</span></div>`;
-        const isFav = favorites.some(f=>f.id===item.id);
+        const isFav = favorites.some(f=>f && f.id===item.id);
         return `<div class="flip-card ${type}-card" data-machine-id="${item.id}">
             <div class="page page-1">
                 <div class="page1-row1">
-                    <div class="model-name"><strong>NO.${item.id}</strong> ${item.name} <span style="color:#aac9ff;">${item.sub||''}</span></div>
+                    <div class="model-name"><strong>NO.${item.id}</strong> ${item.name} <span style="color:#aac9ff;">${item.sub || ''}</span></div>
                     <span class="ratio-mini"><i class="fa fa-ticket"></i> 每枚 ${item.ratio}<span class="point-diff-badge-mini">點差 0.15</span></span>
                 </div>
                 ${topRow}
@@ -613,26 +596,91 @@
         </div>`;
     }
     
-    function initAllData() {
-        if(window.T_PACHIN_STORAGE){
-            favorites = T_PACHIN_STORAGE.getFavorites();
-            reserves = T_PACHIN_STORAGE.getReserves();
-            currentRawPlayed = T_PACHIN_STORAGE.getPlayed() || [];
-            updatePointsDisplay();
-        } else {
-            if(favorites.length===0) favorites = [machineDatabase[0], machineDatabase[2], machineDatabase[4]];
-            if(reserves.length===0) reserves = [{ ...machineDatabase[1], reserveTime:'10:00', expiresAt: Date.now() + 10*60*1000 }];
-            if(currentRawPlayed.length===0){
-                let dates=[1,3,7,12,20].map(day=>{ let dd=new Date(); dd.setDate(dd.getDate()-day); return `${dd.getFullYear()}/${String(dd.getMonth()+1).padStart(2,'0')}/${String(dd.getDate()).padStart(2,'0')}`; });
-                currentRawPlayed = machineDatabase.slice(0,4).map((m,i)=>({...m, playCount:i+1, playedDate:dates[i]}));
-            }
-        }
-        updateFavoriteUI(); 
-        updateReserveUI(); 
-        applyPlayedFilter(); 
-        startAllReserveCountdowns();
+    // ==================== UI 更新函數（修正：補齊完整資料）====================
+    function updateFavoriteUI(){ 
+        let c = document.getElementById('favoriteContainer'), 
+            cnt = document.getElementById('favoriteCount'), 
+            no = document.getElementById('noFavoriteMsg'); 
+        cnt.textContent = favorites.length + ' 台'; 
+        if(favorites.length === 0){ 
+            c.innerHTML = ''; 
+            no.classList.remove('hidden'); 
+        } else { 
+            no.classList.add('hidden'); 
+            c.innerHTML = favorites.map(m => {
+                const fullData = getFullMachineData(m);
+                return fullData ? createCardHTML(fullData, 'favorite') : '';
+            }).join(''); 
+        } 
+        bindEvents(); 
     }
     
+    function updateReserveUI(){ 
+        let c = document.getElementById('reserveContainer'), 
+            cnt = document.getElementById('reserveCount'), 
+            no = document.getElementById('noReserveMsg'); 
+        cnt.textContent = reserves.length + ' 台'; 
+        if(reserves.length === 0){ 
+            c.innerHTML = ''; 
+            no.classList.remove('hidden'); 
+        } else { 
+            no.classList.add('hidden'); 
+            c.innerHTML = reserves.map(m => {
+                const fullData = getFullMachineData(m);
+                if (fullData) {
+                    // 保留保留時間和到期時間
+                    const merged = { ...fullData, reserveTime: m.reserveTime, expiresAt: m.expiresAt };
+                    return createCardHTML(merged, 'reserve');
+                }
+                return '';
+            }).join(''); 
+        } 
+        bindEvents(); 
+        startAllReserveCountdowns(); 
+    }
+    
+    function updatePlayedUI(){ 
+        let c = document.getElementById('playedContainer'), 
+            cnt = document.getElementById('playedCount'), 
+            no = document.getElementById('noPlayedMsg'); 
+        cnt.textContent = playedFiltered.length + ' 台'; 
+        if(playedFiltered.length === 0){ 
+            c.innerHTML = ''; 
+            no.classList.remove('hidden'); 
+        } else { 
+            no.classList.add('hidden'); 
+            c.innerHTML = playedFiltered.map(m => {
+                const fullData = getFullMachineData(m);
+                if (fullData) {
+                    const merged = { ...fullData, playCount: m.playCount, playedDate: m.playedDate };
+                    return createCardHTML(merged, 'played');
+                }
+                return '';
+            }).join(''); 
+        } 
+        bindEvents(); 
+    }
+    
+    function filterPlayedByDays(days, raw) { 
+        if(!raw) return [];
+        const start = new Date(); start.setDate(start.getDate() - days); start.setHours(0,0,0,0);
+        return raw.filter(r => { 
+            if(!r.playedDate) return false; 
+            const parts = r.playedDate.split('/');
+            if (parts.length === 3) {
+                const [y,m,d] = parts;
+                return new Date(parseInt(y), parseInt(m)-1, parseInt(d)) >= start;
+            }
+            return false;
+        }).sort((a,b)=> new Date(b.playedDate) - new Date(a.playedDate));
+    }
+    
+    function applyPlayedFilter(){ 
+        playedFiltered = filterPlayedByDays(currentFilterDays, currentRawPlayed); 
+        updatePlayedUI(); 
+    }
+    
+    // ==================== 倒數計時 ====================
     function startReserveCountdown(item, card, timeSpan) {
         if(!item.expiresAt) return;
         if(countdownIntervals[item.id]) clearInterval(countdownIntervals[item.id]);
@@ -670,8 +718,8 @@
         setTimeout(()=>{ 
             document.querySelectorAll('.reserve-card').forEach(card=>{ 
                 let id=parseInt(card.dataset.machineId); 
-                let r=reserves.find(r=>r.id===id); 
-                if(r&&r.expiresAt){ 
+                let r=reserves.find(r=>r && r.id===id); 
+                if(r && r.expiresAt){ 
                     let t=card.querySelector('.time-big'); 
                     startReserveCountdown(r,card,t); 
                 } 
@@ -679,51 +727,7 @@
         },100); 
     }
     
-    function updateFavoriteUI(){ 
-        let c=document.getElementById('favoriteContainer'), cnt=document.getElementById('favoriteCount'), no=document.getElementById('noFavoriteMsg'); 
-        cnt.textContent=favorites.length+' 台'; 
-        if(favorites.length===0){ 
-            c.innerHTML=''; 
-            no.classList.remove('hidden'); 
-        }else{ 
-            no.classList.add('hidden'); 
-            c.innerHTML=favorites.map(m=>createCardHTML(m,'favorite')).join(''); 
-        } 
-        bindEvents(); 
-    }
-    
-    function updateReserveUI(){ 
-        let c=document.getElementById('reserveContainer'), cnt=document.getElementById('reserveCount'), no=document.getElementById('noReserveMsg'); 
-        cnt.textContent=reserves.length+' 台'; 
-        if(reserves.length===0){ 
-            c.innerHTML=''; 
-            no.classList.remove('hidden'); 
-        }else{ 
-            no.classList.add('hidden'); 
-            c.innerHTML=reserves.map(m=>createCardHTML(m,'reserve')).join(''); 
-        } 
-        bindEvents(); 
-        startAllReserveCountdowns(); 
-    }
-    
-    function applyPlayedFilter(){ 
-        playedFiltered=filterPlayedByDays(currentFilterDays, currentRawPlayed); 
-        updatePlayedUI(); 
-    }
-    
-    function updatePlayedUI(){ 
-        let c=document.getElementById('playedContainer'), cnt=document.getElementById('playedCount'), no=document.getElementById('noPlayedMsg'); 
-        cnt.textContent=playedFiltered.length+' 台'; 
-        if(playedFiltered.length===0){ 
-            c.innerHTML=''; 
-            no.classList.remove('hidden'); 
-        }else{ 
-            no.classList.add('hidden'); 
-            c.innerHTML=playedFiltered.map(m=>createCardHTML(m,'played')).join(''); 
-        } 
-        bindEvents(); 
-    }
-    
+    // ==================== 事件綁定 ====================
     function bindEvents(){ 
         document.querySelectorAll('.flip-card').forEach(card=>{ 
             card.removeEventListener('click', handleFlip); 
@@ -756,6 +760,7 @@
         } 
     }
     
+    // ==================== 收藏/離開功能 ====================
     window.toggleFavorite=function(id){ 
         let m=machineDatabase.find(x=>x.id===id); 
         if(!m) return; 
@@ -763,7 +768,7 @@
             T_PACHIN_STORAGE.toggleFavorite(m); 
             favorites=T_PACHIN_STORAGE.getFavorites(); 
         }else{ 
-            let idx=favorites.findIndex(f=>f.id===id); 
+            let idx=favorites.findIndex(f=>f && f.id===id); 
             if(idx>-1) favorites.splice(idx,1); 
             else favorites.push(m); 
         } 
@@ -773,36 +778,13 @@
     window.removeFromReserve=function(id,name){ 
         if(confirm(`確定離開「${name}」嗎？`)){ 
             if(window.T_PACHIN_STORAGE) T_PACHIN_STORAGE.removeReserve(id); 
-            else reserves=reserves.filter(r=>r.id!==id); 
+            else reserves=reserves.filter(r=>r && r.id!==id); 
             if(countdownIntervals[id]) clearInterval(countdownIntervals[id]); 
             updateReserveUI(); 
         } 
     };
     
-    // 核心修復：強制播放影片 & 保證跳轉
-    function showEnhancedLoading(machineName, machineId, targetUrl = 'simulator.html') {
-        const loadingDiv = document.getElementById('hologramLoading');
-        const loadingTitle = document.getElementById('loadingMachineTitle');
-        if (loadingTitle) loadingTitle.textContent = `${machineName} NO.${machineId}`;
-        
-        if (loadingDiv) {
-            // 確保影片重新載入並強制播放
-            const videoElem = document.getElementById('mascotVideo');
-            if (videoElem) {
-                videoElem.load(); 
-                videoElem.muted = true;
-                videoElem.play().catch(e => console.warn("影片自動播放被阻止, 但仍顯示動畫", e));
-            }
-            loadingDiv.classList.add('show');
-            // 穩定等待動畫至少 1.8 秒後跳轉
-            setTimeout(() => {
-                window.location.href = targetUrl;
-            }, 1900);
-        } else {
-            window.location.href = targetUrl;
-        }
-    }
-    
+    // ==================== 兌換/進入遊戲 ====================
     function updateCalc(){ 
         if(!currentSubData) return; 
         let tokens=parseInt(document.getElementById('confirmTokenInput').value)||0; 
@@ -833,6 +815,27 @@
         } 
     }
     
+    function showEnhancedLoading(machineName, machineId, targetUrl = 'simulator.html') {
+        const loadingDiv = document.getElementById('hologramLoading');
+        const loadingTitle = document.getElementById('loadingMachineTitle');
+        if (loadingTitle) loadingTitle.textContent = `${machineName} NO.${machineId}`;
+        
+        if (loadingDiv) {
+            const videoElem = document.getElementById('mascotVideo');
+            if (videoElem) {
+                videoElem.load(); 
+                videoElem.muted = true;
+                videoElem.play().catch(e => console.warn("影片自動播放被阻止, 但仍顯示動畫", e));
+            }
+            loadingDiv.classList.add('show');
+            setTimeout(() => {
+                window.location.href = targetUrl;
+            }, 1900);
+        } else {
+            window.location.href = targetUrl;
+        }
+    }
+    
     function doEnterGame(){ 
         if(!currentSubData) return; 
         let tokens=parseInt(document.getElementById('confirmTokenInput').value)||0; 
@@ -848,23 +851,20 @@
         } 
         if(window.T_PACHIN_STORAGE) {
             T_PACHIN_STORAGE.updatePoints(-total);
+            // 記錄玩過
+            T_PACHIN_STORAGE.addPlayed({
+                id: currentSubData.machineId,
+                name: currentSubData.machineName,
+                ratio: currentSubData.ratio,
+                playedDate: new Date().toISOString().slice(0,10).replace(/-/g, '/')
+            });
         }
         updatePointsDisplay(); 
         document.getElementById('subConfirmModal').classList.remove('show'); 
         let info={name:currentSubData.machineName,ratio:currentSubData.ratio,machineId:currentSubData.machineId,coins:tokens,pointDiff:POINT_DIFF}; 
         localStorage.setItem('t_pachin_machine_info',JSON.stringify(info)); 
         
-        // ✨ 使用修復後的強化Loading（確保影片正常＋跳轉）
         showEnhancedLoading(currentSubData.machineName, currentSubData.machineId);
-    }
-    
-    function showMessage(t,m){ 
-        let d=document.createElement('div'); 
-        d.className='alert-popup'; 
-        d.innerHTML=`<strong style="color:#ffd700;">${t}</strong> ${m}`; 
-        d.style.cssText='position:fixed; bottom:100px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.85); color:white; padding:10px 20px; border-radius:30px; z-index:10001; border:1px solid #ffd700;'; 
-        document.body.appendChild(d); 
-        setTimeout(()=>d.remove(),2500); 
     }
     
     window.openSubConfirm=function(name,id,ratio){ 
@@ -881,6 +881,29 @@
         document.getElementById('subConfirmModal').classList.add('show'); 
     };
     
+    // ==================== 初始化資料 ====================
+    function initAllData() {
+        if(window.T_PACHIN_STORAGE){
+            favorites = T_PACHIN_STORAGE.getFavorites() || [];
+            reserves = T_PACHIN_STORAGE.getReserves() || [];
+            currentRawPlayed = T_PACHIN_STORAGE.getPlayed() || [];
+            updatePointsDisplay();
+        } else {
+            // 預設資料
+            if(favorites.length===0) favorites = [machineDatabase[0], machineDatabase[2], machineDatabase[4]];
+            if(reserves.length===0) reserves = [{ ...machineDatabase[1], reserveTime:'10:00', expiresAt: Date.now() + 10*60*1000 }];
+            if(currentRawPlayed.length===0){
+                let dates=[1,3,7,12,20].map(day=>{ let dd=new Date(); dd.setDate(dd.getDate()-day); return `${dd.getFullYear()}/${String(dd.getMonth()+1).padStart(2,'0')}/${String(dd.getDate()).padStart(2,'0')}`; });
+                currentRawPlayed = machineDatabase.slice(0,4).map((m,i)=>({...m, playCount:i+1, playedDate:dates[i]}));
+            }
+        }
+        updateFavoriteUI(); 
+        updateReserveUI(); 
+        applyPlayedFilter(); 
+        startAllReserveCountdowns();
+    }
+    
+    // ==================== 導航 ====================
     function initNavigation(){ 
         document.querySelectorAll('.nav-item, .logo, .combo-announce-btn').forEach(el=>{ 
             el.addEventListener('click',e=>{ 
@@ -895,6 +918,31 @@
         }); 
     }
     
+    // ==================== 監聽全域事件 ====================
+    if (window.T_PACHIN_STORAGE) {
+        window.addEventListener('points-updated', function(e) {
+            if (e.detail && e.detail.points !== undefined) updatePointsDisplay();
+        });
+        window.addEventListener('t-pachin:user-updated', function(e) {
+            if (e.detail && e.detail.points !== undefined) updatePointsDisplay();
+            if (e.detail && e.detail.nickname) document.getElementById('nicknameDisplay').textContent = e.detail.nickname;
+        });
+        window.addEventListener('t-pachin:favorites-updated', function(e) {
+            favorites = e.detail || [];
+            updateFavoriteUI();
+        });
+        window.addEventListener('t-pachin:reserves-updated', function(e) {
+            reserves = e.detail || [];
+            updateReserveUI();
+            startAllReserveCountdowns();
+        });
+        window.addEventListener('t-pachin:played-updated', function(e) {
+            currentRawPlayed = e.detail || [];
+            applyPlayedFilter();
+        });
+    }
+    
+    // ==================== 分類頁籤 ====================
     document.querySelectorAll('.category-tab').forEach(tab=>{ 
         tab.addEventListener('click',function(){ 
             document.querySelectorAll('.category-tab').forEach(t=>t.classList.remove('active')); 
@@ -915,6 +963,7 @@
     document.getElementById('closeXBtn')?.addEventListener('click',()=>document.getElementById('subConfirmModal').classList.remove('show'));
     document.getElementById('confirmTokenInput')?.addEventListener('input',updateCalc);
     
+    // ==================== 啟動 ====================
     initNavigation(); 
     initAllData();
     

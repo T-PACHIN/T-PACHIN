@@ -43,6 +43,76 @@
             position: relative;
         }
         
+        body.light-mode {
+            background: #e8ecf2;
+            color: #1a1a2e;
+        }
+        body.light-mode .app-container {
+            background: linear-gradient(145deg, #f0f2f8, #e8ecf2);
+        }
+        body.light-mode .metal-header,
+        body.light-mode .bottom-nav {
+            background: linear-gradient(145deg, #dce0e8, #d0d4e0);
+        }
+        body.light-mode .announce-tab {
+            background: linear-gradient(145deg, #e0e4ec, #d0d4e0);
+            color: #2a4055;
+        }
+        body.light-mode .announce-tab.active {
+            background: linear-gradient(145deg, #c0c8d8, #b0b8c8);
+            color: #1a1a2e;
+        }
+        body.light-mode .system-card,
+        body.light-mode .qa-scroll-card,
+        body.light-mode .letter-container {
+            background: linear-gradient(145deg, #ffffff, #f5f7fa);
+        }
+        body.light-mode .system-card .text-white {
+            color: #1a1a2e !important;
+        }
+        body.light-mode .system-card .text-gray-300 {
+            color: #4a6a8a !important;
+        }
+        body.light-mode .qa-header h3 {
+            color: #1a1a2e;
+        }
+        body.light-mode .qa-item .question {
+            color: #1a1a2e;
+        }
+        body.light-mode .qa-item .answer {
+            color: #4a6a8a;
+        }
+        body.light-mode .letter-info h4 {
+            color: #1a1a2e;
+        }
+        body.light-mode .letter-info p {
+            color: #4a6a8a;
+        }
+        body.light-mode .nav-item {
+            background: linear-gradient(145deg, #e0e4ec, #d0d4e0);
+            color: #2a4055;
+        }
+        body.light-mode .nav-item.current-page {
+            background: linear-gradient(145deg, #c0c8d8, #b0b8c8);
+            color: #1a1a2e;
+        }
+        body.light-mode .points-display {
+            background: linear-gradient(145deg, #e0d6b0, #d0c6a0);
+            color: #1a1a2e;
+            border-color: #c9a03d;
+            text-shadow: none;
+        }
+        body.light-mode .nickname-display {
+            color: #1a1a2e;
+            text-shadow: none;
+        }
+        body.light-mode .modal-card {
+            background: linear-gradient(145deg, #ffffff, #f0f2f8);
+        }
+        body.light-mode .modal-card .text-gray-200 {
+            color: #1a1a2e !important;
+        }
+        
         body::before {
             content: '';
             position: fixed;
@@ -102,8 +172,8 @@
         .main-scroll-area {
             flex: 1;
             overflow-y: auto;
-            padding-top: 80px;      /* 上方固定頭的高度 */
-            padding-bottom: 80px;   /* 下方固定導覽列的高度 */
+            padding-top: 80px;
+            padding-bottom: 80px;
         }
         
         /* 內容容器 */
@@ -234,14 +304,6 @@
             text-align: center;
             letter-spacing: 0.5px;
             display: inline-block;
-        }
-        .points-display:hover {
-            transform: translateY(-2px);
-            box-shadow: inset 0 2px 5px rgba(255, 215, 0, 0.6), inset 0 -3px 5px rgba(0, 0, 0, 0.5), 0 6px 0 #2a1f0a, 0 0 20px #ffd700;
-        }
-        .points-display:active {
-            transform: translateY(2px);
-            box-shadow: inset 0 5px 8px rgba(0, 0, 0, 0.6), inset 0 -2px 5px rgba(255, 215, 0, 0.3), 0 2px 0 #2a1f0a;
         }
         
         .banner-area {
@@ -566,6 +628,7 @@
             z-index: 60;
             padding: 0.5rem 0.6rem;
             min-width: 54px;
+            animation: neonPulse 1.3s ease-in-out infinite alternate;
         }
         .nav-item.lobby-special i {
             font-size: 1.7rem;
@@ -589,10 +652,7 @@
                 background: linear-gradient(145deg, #b77dff, #8b3dff, #6a1b9a);
             }
         }
-        .nav-item.lobby-special { animation: neonPulse 1.3s ease-in-out infinite alternate; }
         .nav-item.lobby-special:active { transform: translateY(-20px) scale(1.07); box-shadow: 0 6px 0 #2a004d, 0 14px 20px rgba(0, 0, 0, 0.45), inset 0 2px 10px rgba(255,255,255,0.5), 0 0 28px #bf5eff; animation: none; }
-        .nav-item.lobby-special:active i { text-shadow: 0 1px 0 #2a004d; }
-        .nav-item.lobby-special:active span { text-shadow: 0 0 6px #bf5eff; }
         
         @media (max-width: 420px) { 
             .bottom-nav { padding: 0.5rem 0.8rem; } 
@@ -615,35 +675,71 @@
             display: none;
         }
         
-        /* ==================== Loading 動畫 ==================== */
+        /* ========== Loading 動畫樣式 ========== */
         .hologram-loading { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(8px); 
-            z-index: 20000; display: flex; align-items: center; justify-content: center; 
-            opacity: 0; visibility: hidden; transition: 0.2s; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0, 0, 0, 0.95); 
+            backdrop-filter: blur(12px);
+            z-index: 20000; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            opacity: 0; 
+            visibility: hidden; 
+            transition: opacity 0.3s ease, visibility 0.3s ease; 
         }
-        .hologram-loading.show { opacity: 1; visibility: visible; }
-        .hologram-content { 
-            position: relative; width: 90%; max-width: 400px; min-height: 450px; text-align: center; 
+        .hologram-loading.show { 
+            opacity: 1; 
+            visibility: visible; 
         }
-        .loading-video { 
-            width: 100%; height: auto; border-radius: 20px; 
-            box-shadow: 0 0 30px rgba(74,128,192,0.5); 
+        
+        .loading-container {
+            text-align: center;
+            width: 90%;
+            max-width: 380px;
         }
-        .loading-text { 
-            font-size: 24px; font-weight: 900; color: #ffd700; 
-            text-shadow: 0 0 10px #ffd700; margin-top: 10px; 
+        
+        .loading-video {
+            width: 100%;
+            max-height: 280px;
+            border-radius: 24px;
+            box-shadow: 0 0 30px rgba(74, 128, 192, 0.6);
+            border: 2px solid #ffd700;
         }
-        .progress-bar { 
-            width: 80%; height: 6px; background: rgba(255,255,255,0.2); 
-            border-radius: 10px; margin: 10px auto; overflow: hidden; 
+        
+        .loading-text-main {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #ffd700;
+            text-shadow: 0 0 15px #ffd700;
+            margin-top: 15px;
+            letter-spacing: 4px;
         }
-        .progress-fill { 
-            height: 100%; width: 60%; background: linear-gradient(90deg, #ffd700, #4a80c0); 
-            animation: loadingMove 1s ease-in-out infinite alternate; 
+        
+        .progress-bar-loading {
+            width: 80%;
+            height: 6px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            margin: 15px auto 0 auto;
+            overflow: hidden;
         }
-        @keyframes loadingMove { 
-            from { width: 20%; } to { width: 80%; } 
+        
+        .progress-fill-loading {
+            height: 100%;
+            width: 30%;
+            background: linear-gradient(90deg, #ffd700, #ffaa33, #ffd700);
+            border-radius: 10px;
+            animation: loadingMove 1s ease-in-out infinite alternate;
+        }
+        
+        @keyframes loadingMove {
+            from { width: 20%; margin-left: 0; }
+            to { width: 80%; margin-left: 20%; }
         }
         
         .hidden { display: none !important; }
@@ -671,77 +767,6 @@
         .w-full { width: 100%; }
         .rounded-full { border-radius: 9999px; }
         .border { border-width: 1px; }
-        
-        /* 深色模式支援 */
-        body.light-mode {
-            background: #e8ecf2;
-            color: #1a1a2e;
-        }
-        body.light-mode .app-container {
-            background: linear-gradient(145deg, #f0f2f8, #e8ecf2);
-        }
-        body.light-mode .metal-header,
-        body.light-mode .bottom-nav {
-            background: linear-gradient(145deg, #dce0e8, #d0d4e0);
-        }
-        body.light-mode .announce-tab {
-            background: linear-gradient(145deg, #e0e4ec, #d0d4e0);
-            color: #2a4055;
-        }
-        body.light-mode .announce-tab.active {
-            background: linear-gradient(145deg, #c0c8d8, #b0b8c8);
-            color: #1a1a2e;
-        }
-        body.light-mode .system-card,
-        body.light-mode .qa-scroll-card,
-        body.light-mode .letter-container {
-            background: linear-gradient(145deg, #ffffff, #f5f7fa);
-        }
-        body.light-mode .system-card .text-white {
-            color: #1a1a2e !important;
-        }
-        body.light-mode .system-card .text-gray-300 {
-            color: #4a6a8a !important;
-        }
-        body.light-mode .qa-header h3 {
-            color: #1a1a2e;
-        }
-        body.light-mode .qa-item .question {
-            color: #1a1a2e;
-        }
-        body.light-mode .qa-item .answer {
-            color: #4a6a8a;
-        }
-        body.light-mode .letter-info h4 {
-            color: #1a1a2e;
-        }
-        body.light-mode .letter-info p {
-            color: #4a6a8a;
-        }
-        body.light-mode .nav-item {
-            background: linear-gradient(145deg, #e0e4ec, #d0d4e0);
-            color: #2a4055;
-        }
-        body.light-mode .nav-item.current-page {
-            background: linear-gradient(145deg, #c0c8d8, #b0b8c8);
-            color: #1a1a2e;
-        }
-        body.light-mode .points-display {
-            background: linear-gradient(145deg, #e0d6b0, #d0c6a0);
-            color: #1a1a2e;
-            border-color: #c9a03d;
-            text-shadow: none;
-        }
-        body.light-mode .nickname-display {
-            color: #1a1a2e;
-            text-shadow: none;
-        }
-        body.light-mode .modal-card {
-            background: linear-gradient(145deg, #ffffff, #f0f2f8);
-        }
-        body.light-mode .modal-card .text-gray-200 {
-            color: #1a1a2e !important;
-        }
     </style>
 </head>
 <body>
@@ -755,7 +780,7 @@
             </a>
             <div class="text-right flex flex-col items-end">
                 <span class="nickname-display" id="nicknameDisplay">夫人會生氣</span>
-                <span class="points-display" id="tokenBtn">6,600</span>
+                <span class="points-display" id="tokenBtn">6,600.0000</span>
             </div>
         </div>
     </header>
@@ -882,10 +907,12 @@
 
     <!-- Loading 動畫 -->
     <div class="hologram-loading" id="hologramLoading">
-        <div class="hologram-content">
-            <video id="mascotVideo" class="loading-video" autoplay muted loop playsinline src="https://video.wixstatic.com/video/d5e540_d63f842135e8416f891842373bc0f582/720p/mp4/file.mp4" style="width:100%;border-radius:20px"></video>
-            <div class="loading-text" id="loadingMachineTitle">LOADING</div>
-            <div class="progress-bar"><div class="progress-fill"></div></div>
+        <div class="loading-container">
+            <video id="mascotVideo" class="loading-video" autoplay muted loop playsinline src="https://video.wixstatic.com/video/d5e540_d63f842135e8416f891842373bc0f582/720p/mp4/file.mp4"></video>
+            <div class="loading-text-main">LOADING</div>
+            <div class="progress-bar-loading">
+                <div class="progress-fill-loading"></div>
+            </div>
         </div>
     </div>
 
@@ -893,7 +920,7 @@
     <nav class="bottom-nav">
         <a href="javascript:void(0)" class="nav-item" data-page="index"><i class="fa fa-gamepad"></i><span>遊戲</span></a>
         <a href="javascript:void(0)" class="nav-item" data-page="machines"><i class="fa fa-heart"></i><span>收藏</span></a>
-        <a href="javascript:void(0)" class="nav-item lobby-special" data-page="lobby"><i class="fa fa-home"></i><span>首頁</span></a>
+        <a href="javascript:void(0)" class="nav-item lobby-special" data-page="index"><i class="fa fa-home"></i><span>首頁</span></a>
         <a href="javascript:void(0)" class="nav-item current-page" data-page="news"><i class="fa fa-bell"></i><span>公告</span><span class="nav-badge" id="newsBadge"></span></a>
         <a href="javascript:void(0)" class="nav-item" data-page="about"><i class="fa fa-user"></i><span>我的</span></a>
     </nav>
@@ -916,10 +943,19 @@
 <script src="shared.js"></script>
 <script>
 (function(){
-    // 從 shared.js 讀取點數
+    // 格式化點數 - 支援小數後4位
+    function formatPointsDecimal(value) {
+        return value.toLocaleString(undefined, { minimumFractionDigits: 4, maximumFractionDigits: 4 });
+    }
+    
+    // 從 shared.js 讀取點數 (與全站連動)
     let userPoints = 6600;
     
-    // 初始化點數和深色模式
+    function updatePointsDisplay() {
+        const tokenBtn = document.getElementById('tokenBtn');
+        if (tokenBtn) tokenBtn.textContent = formatPointsDecimal(userPoints);
+    }
+    
     function initPointsAndTheme() {
         if (window.T_PACHIN_STORAGE) {
             userPoints = T_PACHIN_STORAGE.getPoints();
@@ -964,11 +1000,6 @@
         updatePointsDisplay();
     }
     
-    function updatePointsDisplay() {
-        const tokenBtn = document.getElementById('tokenBtn');
-        if (tokenBtn) tokenBtn.textContent = userPoints.toLocaleString();
-    }
-    
     function initNavigation() {
         document.querySelectorAll('.nav-item, .logo, [data-page]').forEach(el => {
             if (el.classList && (el.classList.contains('nav-item') || el.classList.contains('logo') || el.hasAttribute('data-page'))) {
@@ -1000,9 +1031,19 @@
         }
     }
     
+    function bindPointsClickEvent() {
+        const pointsEl = document.getElementById('tokenBtn');
+        if (pointsEl) {
+            pointsEl.addEventListener('click', function() {
+                alert(`💰 目前點數：${formatPointsDecimal(userPoints)}\n\n遊玩機台即可累積點數！`);
+            });
+        }
+    }
+    
     initPointsAndTheme();
     initNavigation();
     bindNicknameEvent();
+    bindPointsClickEvent();
     
     // 標籤切換
     const tabSystem = document.getElementById('tabSystemBtn');

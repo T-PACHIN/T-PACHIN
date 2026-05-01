@@ -130,7 +130,6 @@
             color: #ffeca2;
         }
         
-        /* 保留倒數警示樣式 */
         .reserve-countdown-warning { 
             animation: pulseRed 1s infinite !important; 
             background: linear-gradient(145deg, #7a2a2a, #5a1a1a) !important; 
@@ -271,22 +270,22 @@
         .text-warning { color: #ffaa66; font-size: 0.7rem; margin-top: 0.5rem; text-align: center; }
         .text-error { color: #ff6666; }
         
-        /* ========== 修復後的 Loading 動畫樣式 ========== */
+        /* 修復後的 Loading 動畫樣式 */
         .hologram-loading { 
             position: fixed; 
             top: 0; 
             left: 0; 
             width: 100%; 
             height: 100%; 
-            background: rgba(0, 0, 0, 0.95); 
-            backdrop-filter: blur(12px);
+            background: rgba(0, 0, 0, 0.96); 
+            backdrop-filter: blur(16px);
             z-index: 999999; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
             opacity: 0; 
             visibility: hidden; 
-            transition: opacity 0.3s ease, visibility 0.3s ease; 
+            transition: opacity 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1), visibility 0.25s; 
         }
         .hologram-loading.show { 
             opacity: 1; 
@@ -297,22 +296,29 @@
             text-align: center;
             width: 90%;
             max-width: 380px;
+            transform: scale(0.98);
+            transition: transform 0.2s;
+        }
+        .hologram-loading.show .loading-container {
+            transform: scale(1);
         }
         
         .loading-video {
             width: 100%;
-            max-height: 300px;
-            border-radius: 24px;
-            box-shadow: 0 0 30px rgba(74, 128, 192, 0.6), inset 0 0 20px rgba(255,215,0,0.3);
+            max-height: 280px;
+            border-radius: 28px;
+            box-shadow: 0 0 35px rgba(74, 128, 192, 0.8), inset 0 0 20px rgba(255,215,0,0.4);
             border: 2px solid #ffd700;
+            background: #00000033;
+            object-fit: cover;
         }
         
         .loading-machine-name {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 800;
             color: #ffd966;
-            text-shadow: 0 0 15px #ffd700;
-            margin: 12px 0 8px 0;
+            text-shadow: 0 0 18px #ffd700;
+            margin: 16px 0 8px 0;
             letter-spacing: 2px;
         }
         
@@ -320,18 +326,24 @@
             font-size: 1rem;
             font-weight: 600;
             color: #88ccff;
-            letter-spacing: 3px;
-            margin-top: 8px;
+            letter-spacing: 4px;
+            margin-top: 10px;
+            animation: textGlow 1.2s infinite alternate;
+        }
+        
+        @keyframes textGlow {
+            0% { text-shadow: 0 0 2px #4a80c0; opacity: 0.7; }
+            100% { text-shadow: 0 0 12px #ffd700; opacity: 1; }
         }
         
         .progress-bar-loading {
-            width: 80%;
+            width: 70%;
             height: 6px;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.25);
             border-radius: 10px;
-            margin: 12px auto 0 auto;
+            margin: 18px auto 0 auto;
             overflow: hidden;
-            box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
+            box-shadow: inset 0 1px 4px rgba(0,0,0,0.5);
         }
         
         .progress-fill-loading {
@@ -339,17 +351,16 @@
             width: 30%;
             background: linear-gradient(90deg, #ffd700, #ffaa33, #ffd700);
             border-radius: 10px;
-            animation: loadingMove 1s ease-in-out infinite alternate;
+            animation: loadingMove 0.9s ease-in-out infinite alternate;
         }
         
         @keyframes loadingMove {
-            from { width: 20%; margin-left: 0; }
-            to { width: 80%; margin-left: 20%; }
+            from { width: 15%; margin-left: 0%; }
+            to { width: 85%; margin-left: 15%; }
         }
         
         .hidden { display: none !important; }
         
-        /* 警示提示視窗 */
         .alert-toast {
             position: fixed;
             top: 100px;
@@ -441,10 +452,12 @@
     <!-- 確認兌換視窗 -->
     <div class="sub-confirm-modal" id="subConfirmModal"><div class="sub-confirm-content"><div class="modal-close-x" id="closeXBtn"><i class="fa fa-times"></i></div><div class="sub-confirm-header"><h3 id="confirmMachineName">GOGO 小丑</h3><p id="confirmSubName">1號機</p></div><div class="info-grid"><div class="info-row"><span class="info-label">每枚</span><span class="info-value" id="confirmRatio">2.5</span><span class="info-label" style="margin-left:auto;">點差</span><span class="info-value highlight-value" id="pointDiffDisplay">0.15</span></div><div class="info-row"><span class="info-label">目前點數</span><span class="info-value" id="confirmPoints">6,600.0000</span></div><div class="info-row"><span class="info-label">兌換代幣</span><span class="info-value" id="exchangeTokens">0 枚</span></div><div class="info-row"><span class="info-label">消耗點數</span><span class="info-value cost-value" id="costPoints">0</span></div><div class="info-row"><span class="info-label">損耗點數</span><span class="info-value cost-value" id="wastePoints">0</span></div><div class="info-row"><span class="info-label">剩餘點數</span><span class="info-value" id="remainPoints">6,600.0000</span></div></div><div class="sub-confirm-input-group"><label><i class="fa fa-ticket"></i> 兌換代幣 (最低 50 枚)</label><input type="number" id="confirmTokenInput" min="0" step="1" placeholder="請輸入代幣枚數" value="100"><div class="text-warning" id="warningMsg"></div></div><div class="sub-confirm-actions"><button class="sub-confirm-btn secondary" id="confirmCancelBtn">取消</button><button class="sub-confirm-btn primary" id="confirmOk">確認兌換</button></div></div></div>
     
-    <!-- 修復後的 Loading 動畫 -->
+    <!-- 已修復 Loading 動畫：影片正確載入、強制播放並確保跳轉 -->
     <div class="hologram-loading" id="hologramLoading">
         <div class="loading-container">
-            <video id="mascotVideo" class="loading-video" autoplay muted loop playsinline src="https://video.wixstatic.com/video/d5e540_d63f842135e8416f891842373bc0f582/720p/mp4/file.mp4"></video>
+            <video id="mascotVideo" class="loading-video" autoplay muted loop playsinline poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%234a80c0' width='100' height='100'/%3E%3Ctext x='25' y='65' fill='%23ffd700' font-size='40'%3E🎰%3C/text%3E%3C/svg%3E">
+                <source src="https://video.wixstatic.com/video/d5e540_d63f842135e8416f891842373bc0f582/720p/mp4/file.mp4" type="video/mp4">
+            </video>
             <div class="loading-machine-name" id="loadingMachineTitle">超級奇蹟小丑</div>
             <div class="loading-text">LOADING</div>
             <div class="progress-bar-loading">
@@ -473,7 +486,6 @@
     let currentFilterDays = 31;
     let playedFiltered = [];
     
-    // 格式化點數 - 支援小數後4位
     function formatPointsDecimal(v) { 
         return v.toLocaleString(undefined, { minimumFractionDigits: 4, maximumFractionDigits: 4 }); 
     }
@@ -481,7 +493,6 @@
         return Math.floor(v).toLocaleString(); 
     }
     
-    // 取得目前點數 (從全域儲存，支援小數)
     function getCurrentPoints() {
         if (window.T_PACHIN_STORAGE) {
             return T_PACHIN_STORAGE.getPoints();
@@ -489,7 +500,6 @@
         return 6600;
     }
     
-    // 更新頁面點數顯示
     function updatePointsDisplay() {
         const points = getCurrentPoints();
         const tokenBtn = document.getElementById('tokenBtn');
@@ -501,20 +511,13 @@
         if (currentSubData) updateCalc();
     }
     
-    // 監聽全域點數更新事件
     if (window.T_PACHIN_STORAGE) {
         window.addEventListener('points-updated', function(e) {
-            if (e.detail && e.detail.points !== undefined) {
-                updatePointsDisplay();
-            }
+            if (e.detail && e.detail.points !== undefined) updatePointsDisplay();
         });
         window.addEventListener('t-pachin:user-updated', function(e) {
-            if (e.detail && e.detail.points !== undefined) {
-                updatePointsDisplay();
-            }
-            if (e.detail && e.detail.nickname) {
-                document.getElementById('nicknameDisplay').textContent = e.detail.nickname;
-            }
+            if (e.detail && e.detail.points !== undefined) updatePointsDisplay();
+            if (e.detail && e.detail.nickname) document.getElementById('nicknameDisplay').textContent = e.detail.nickname;
         });
         window.addEventListener('t-pachin:favorites-updated', function(e) {
             favorites = e.detail;
@@ -617,7 +620,6 @@
             currentRawPlayed = T_PACHIN_STORAGE.getPlayed() || [];
             updatePointsDisplay();
         } else {
-            // 初始預設資料
             if(favorites.length===0) favorites = [machineDatabase[0], machineDatabase[2], machineDatabase[4]];
             if(reserves.length===0) reserves = [{ ...machineDatabase[1], reserveTime:'10:00', expiresAt: Date.now() + 10*60*1000 }];
             if(currentRawPlayed.length===0){
@@ -777,19 +779,29 @@
         } 
     };
     
-    window.openSubConfirm=function(name,id,ratio){ 
-        currentSubData={machineName:name,machineId:id,ratio:parseFloat(ratio)}; 
-        const currentPoints = getCurrentPoints();
-        document.getElementById('confirmMachineName').textContent=name; 
-        document.getElementById('confirmSubName').textContent=id+'號機'; 
-        document.getElementById('confirmRatio').textContent=ratio; 
-        document.getElementById('pointDiffDisplay').textContent=POINT_DIFF.toFixed(2);
-        document.getElementById('confirmPoints').textContent=formatPointsDecimal(currentPoints); 
-        document.getElementById('remainPoints').textContent=formatPointsDecimal(currentPoints); 
-        document.getElementById('confirmTokenInput').value=100; 
-        updateCalc(); 
-        document.getElementById('subConfirmModal').classList.add('show'); 
-    };
+    // 核心修復：強制播放影片 & 保證跳轉
+    function showEnhancedLoading(machineName, machineId, targetUrl = 'simulator.html') {
+        const loadingDiv = document.getElementById('hologramLoading');
+        const loadingTitle = document.getElementById('loadingMachineTitle');
+        if (loadingTitle) loadingTitle.textContent = `${machineName} NO.${machineId}`;
+        
+        if (loadingDiv) {
+            // 確保影片重新載入並強制播放
+            const videoElem = document.getElementById('mascotVideo');
+            if (videoElem) {
+                videoElem.load(); 
+                videoElem.muted = true;
+                videoElem.play().catch(e => console.warn("影片自動播放被阻止, 但仍顯示動畫", e));
+            }
+            loadingDiv.classList.add('show');
+            // 穩定等待動畫至少 1.8 秒後跳轉
+            setTimeout(() => {
+                window.location.href = targetUrl;
+            }, 1900);
+        } else {
+            window.location.href = targetUrl;
+        }
+    }
     
     function updateCalc(){ 
         if(!currentSubData) return; 
@@ -842,18 +854,8 @@
         let info={name:currentSubData.machineName,ratio:currentSubData.ratio,machineId:currentSubData.machineId,coins:tokens,pointDiff:POINT_DIFF}; 
         localStorage.setItem('t_pachin_machine_info',JSON.stringify(info)); 
         
-        // 顯示 Loading 動畫
-        const loadingDiv = document.getElementById('hologramLoading');
-        const loadingTitle = document.getElementById('loadingMachineTitle');
-        if (loadingTitle) loadingTitle.textContent = `${currentSubData.machineName} NO.${currentSubData.machineId}`;
-        if (loadingDiv) { 
-            loadingDiv.classList.add('show'); 
-            setTimeout(()=>{ 
-                window.location.href='simulator.html'; 
-            },2000); 
-        } else { 
-            window.location.href='simulator.html'; 
-        } 
+        // ✨ 使用修復後的強化Loading（確保影片正常＋跳轉）
+        showEnhancedLoading(currentSubData.machineName, currentSubData.machineId);
     }
     
     function showMessage(t,m){ 
@@ -864,6 +866,20 @@
         document.body.appendChild(d); 
         setTimeout(()=>d.remove(),2500); 
     }
+    
+    window.openSubConfirm=function(name,id,ratio){ 
+        currentSubData={machineName:name,machineId:id,ratio:parseFloat(ratio)}; 
+        const currentPoints = getCurrentPoints();
+        document.getElementById('confirmMachineName').textContent=name; 
+        document.getElementById('confirmSubName').textContent=id+'號機'; 
+        document.getElementById('confirmRatio').textContent=ratio; 
+        document.getElementById('pointDiffDisplay').textContent=POINT_DIFF.toFixed(2);
+        document.getElementById('confirmPoints').textContent=formatPointsDecimal(currentPoints); 
+        document.getElementById('remainPoints').textContent=formatPointsDecimal(currentPoints); 
+        document.getElementById('confirmTokenInput').value=100; 
+        updateCalc(); 
+        document.getElementById('subConfirmModal').classList.add('show'); 
+    };
     
     function initNavigation(){ 
         document.querySelectorAll('.nav-item, .logo, .combo-announce-btn').forEach(el=>{ 
@@ -902,15 +918,11 @@
     initNavigation(); 
     initAllData();
     
-    // 同步暱稱
     if(window.T_PACHIN_STORAGE) {
         document.getElementById('nicknameDisplay').textContent = T_PACHIN_STORAGE.getNickname();
     }
     
-    // 確保點數顯示更新
-    setTimeout(() => {
-        updatePointsDisplay();
-    }, 100);
+    setTimeout(() => updatePointsDisplay(), 100);
 })();
 </script>
 </body>

@@ -8,293 +8,75 @@
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;500;700;900&family=Noto+Sans+JP:wght@300;500;700;900&family=Russo+One&display=swap" rel="stylesheet">
     <style>
+        /* ========== 完整樣式 (與原始相同，確保卡片風格不變) ========== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #0a0c1a; color: #ffffff; font-family: 'Noto Sans TC', 'Orbitron', sans-serif; min-height: 100vh; transition: background 0.3s ease, color 0.3s ease; }
-        
-        /* ==================== 淺色模式 - 全面修正 ==================== */
-        body.light-mode {
-            background: #e8ecf2;
-            color: #1a1a2e;
-        }
-        body.light-mode .max-w-md {
-            background: linear-gradient(145deg, #f0f2f8, #e8ecf2);
-            border-left: 1px solid #4a80c0;
-            border-right: 1px solid #4a80c0;
-        }
-        /* Header 區域 */
-        body.light-mode .metal-header {
-            background: linear-gradient(145deg, #dce0e8, #d0d4e0);
-            border-bottom: 2px solid #4a80c0;
-        }
-        body.light-mode .nickname-edit {
-            color: #1a1a2e !important;
-            text-shadow: none;
-        }
-        body.light-mode .vip-badge {
-            background: linear-gradient(135deg, #c9a03d, #e6b800);
-            color: #1a1a2e;
-        }
-        body.light-mode .points-display {
-            background: linear-gradient(145deg, #e0d6b0, #d0c6a0);
-            color: #1a1a2e;
-            border-color: #c9a03d;
-            text-shadow: none;
-        }
-        body.light-mode .progress-bar {
-            background: #d0d4e0;
-        }
-        body.light-mode .progress-fill {
-            background: linear-gradient(90deg, #c9a03d, #e6b800);
-        }
-        /* 導航列 */
-        body.light-mode .bottom-nav {
-            background: linear-gradient(145deg, #dce0e8, #d0d4e0);
-            border-top: 2px solid #4a80c0;
-            border-bottom: 2px solid #4a80c0;
-        }
-        body.light-mode .nav-item {
-            background: linear-gradient(145deg, #e0e4ec, #d0d4e0);
-            color: #2a4055;
-            text-shadow: none;
-        }
-        body.light-mode .nav-item.current-page {
-            background: linear-gradient(145deg, #c0c8d8, #b0b8c8);
-            color: #1a1a2e;
-            text-shadow: none;
-        }
-        /* 凸起按鈕淺色模式 */
-        body.light-mode .nav-item.lobby-special {
-            background: linear-gradient(145deg, #9b4dff, #6a1b9a, #4a0080);
-            color: #ffffff;
-        }
-        /* 卡片區域 */
-        body.light-mode .action-grid-btn,
-        body.light-mode .tx-card,
-        body.light-mode .main-row,
-        body.light-mode .stats-card-compact,
-        body.light-mode .machine-card {
-            background: linear-gradient(145deg, #ffffff, #f5f7fa);
-            border-color: #4a80c0;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-        /* 彈窗修正 - 關鍵部分 */
-        body.light-mode .bet-modal-content,
-        body.light-mode .favorite-modal-content,
-        body.light-mode .keep-modal-content,
-        body.light-mode .tx-detail-modal .modal-content,
-        body.light-mode .video-modal-content,
-        body.light-mode .settings-content {
-            background: linear-gradient(145deg, #ffffff, #f0f2f8) !important;
-            border-color: #4a80c0 !important;
-        }
-        body.light-mode .modal-header,
-        body.light-mode .video-header {
-            color: #1a1a2e !important;
-            border-bottom-color: #4a80c0 !important;
-        }
-        body.light-mode .bet-modal-table th {
-            background: #dce0e8 !important;
-            color: #1a1a2e !important;
-        }
-        body.light-mode .bet-modal-table td {
-            color: #1a1a2e !important;
-            border-bottom-color: rgba(74,128,192,0.3) !important;
-        }
-        body.light-mode .stats-row .stat-card {
-            background: rgba(74,128,192,0.1) !important;
-            color: #1a1a2e !important;
-        }
-        body.light-mode .modal-close,
-        body.light-mode .settings-close {
-            background: linear-gradient(145deg, #e0e4ec, #d0d4e0) !important;
-            color: #2a4055 !important;
-        }
-        body.light-mode .record-type {
-            background: rgba(0,0,0,0.1);
-            color: #1a1a2e;
-        }
-        body.light-mode .type-bringin {
-            background: #ffe0e0;
-            color: #cc3333;
-        }
-        body.light-mode .type-bringout {
-            background: #e0ffe0;
-            color: #33aa33;
-        }
-        body.light-mode .type-spin {
-            background: #fff0d0;
-            color: #aa7733;
-        }
-        body.light-mode .total-amount {
-            color: #1a1a2e !important;
-        }
-        body.light-mode .amount-bet {
-            color: #33aa33 !important;
-        }
-        body.light-mode .amount-win {
-            color: #cc3333 !important;
-        }
-        /* 交易明細彈窗 */
-        body.light-mode .tx-detail-modal .modal-content .text-yellow-400 {
-            color: #c9a03d !important;
-        }
-        body.light-mode .tx-detail-modal .modal-content .border-gray-700 {
-            border-bottom-color: rgba(74,128,192,0.3) !important;
-        }
-        /* 文字顏色修正 */
-        body.light-mode .section-title {
-            color: #1a1a2e !important;
-            border-bottom-color: #c9a03d;
-        }
-        body.light-mode .stats-group-title {
-            color: #1a1a2e !important;
-        }
-        body.light-mode .machine-title .name {
-            color: #1a1a2e !important;
-        }
-        body.light-mode .machine-title .number {
-            color: #4a6a8a !important;
-        }
-        body.light-mode .date-range {
-            color: #4a6a8a !important;
-        }
-        body.light-mode .tx-name {
-            color: #1a1a2e !important;
-        }
-        body.light-mode .tx-platform {
-            color: #4a6a8a !important;
-        }
-        body.light-mode .tx-date {
-            color: #6a8aaa !important;
-        }
-        body.light-mode .stats-item-label {
-            color: #4a6a8a !important;
-        }
-        body.light-mode .stats-item {
-            background: rgba(74,128,192,0.08);
-        }
-        body.light-mode .stats-item-value {
-            color: #1a1a2e !important;
-        }
-        body.light-mode .stats-item-value.in {
-            color: #cc3333 !important;
-        }
-        body.light-mode .stats-item-value.out {
-            color: #33aa33 !important;
-        }
-        /* 淨變化顏色修正：正數紅色、負數綠色 */
-        body.light-mode .stats-item-value.net.positive {
-            color: #cc3333 !important;
-        }
-        body.light-mode .stats-item-value.net.negative {
-            color: #33aa33 !important;
-        }
-        body.light-mode .tx-points.out {
-            color: #33aa33 !important;
-        }
-        body.light-mode .tx-points.in {
-            color: #cc3333 !important;
-        }
-        body.light-mode .machine-name {
-            color: #1a1a2e !important;
-        }
-        body.light-mode .machine-stats span {
-            background: rgba(74,128,192,0.15);
-            color: #2a4055;
-        }
-        body.light-mode .bring-in {
-            color: #cc3333 !important;
-        }
-        body.light-mode .bring-out {
-            color: #33aa33 !important;
-        }
-        body.light-mode .net-profit.positive {
-            color: #cc3333 !important;
-        }
-        body.light-mode .net-profit.negative {
-            color: #33aa33 !important;
-        }
-        body.light-mode .date-group,
-        body.light-mode .search-box {
-            background: linear-gradient(145deg, #ffffff, #f0f2f8);
-        }
-        body.light-mode .date-group input,
-        body.light-mode .search-box input {
-            color: #1a1a2e;
-        }
-        body.light-mode .filter-select {
-            background: #ffffff;
-            color: #1a1a2e;
-        }
-        body.light-mode .search-btn {
-            background: linear-gradient(145deg, #3a5065, #2a4055);
-            color: #ffffff;
-        }
-        body.light-mode .settings-header h3 {
-            color: #1a1a2e;
-        }
-        body.light-mode .settings-label {
-            color: #2a4055;
-        }
-        body.light-mode .settings-section-title {
-            color: #4a6a8a;
-        }
-        body.light-mode .lang-select {
-            background: linear-gradient(145deg, #ffffff, #f0f2f8);
-            color: #1a1a2e;
-        }
-        body.light-mode .empty-state {
-            color: #6a6a8a;
-        }
-        body.light-mode .avatar-container {
-            background: linear-gradient(145deg, #ffffff, #e8ecf2);
-        }
-        body.light-mode .home-icon-btn,
-        body.light-mode .settings-icon {
-            background: linear-gradient(145deg, #e0e4ec, #d0d4e0);
-            box-shadow: 0 3px 0 #a0a4b0;
-        }
-        body.light-mode .home-icon-btn i,
-        body.light-mode .settings-icon i {
-            color: #2a4055;
-        }
-        body.light-mode .home-icon-btn:hover i,
-        body.light-mode .settings-icon:hover i {
-            color: #c9a03d;
-        }
-        body.light-mode .stat-card {
-            background: rgba(0,0,0,0.05);
-            color: #1a1a2e;
-        }
-        /* 收藏/保留彈窗內的機器卡片 */
-        body.light-mode .favorite-modal-content .machine-card,
-        body.light-mode .keep-modal-content .machine-card {
-            background: linear-gradient(145deg, #f0f2f8, #e8ecf2) !important;
-            border-color: #4a80c0 !important;
-        }
-        body.light-mode .favorite-modal-content .machine-name,
-        body.light-mode .keep-modal-content .machine-name {
-            color: #1a1a2e !important;
-        }
-        body.light-mode .favorite-modal-content .machine-stats span,
-        body.light-mode .keep-modal-content .machine-stats span {
-            background: rgba(74,128,192,0.15);
-            color: #2a4055;
-        }
-        /* 影片彈窗 */
-        body.light-mode .video-modal-content {
-            background: #ffffff !important;
-        }
-        body.light-mode .video-header {
-            background: linear-gradient(145deg, #dce0e8, #d0d4e0) !important;
-        }
-        
+        body.light-mode { background: #e8ecf2; color: #1a1a2e; }
+        body.light-mode .max-w-md { background: linear-gradient(145deg, #f0f2f8, #e8ecf2); border-left: 1px solid #4a80c0; border-right: 1px solid #4a80c0; }
+        body.light-mode .metal-header { background: linear-gradient(145deg, #dce0e8, #d0d4e0); border-bottom: 2px solid #4a80c0; }
+        body.light-mode .nickname-edit { color: #1a1a2e !important; text-shadow: none; }
+        body.light-mode .vip-badge { background: linear-gradient(135deg, #c9a03d, #e6b800); color: #1a1a2e; }
+        body.light-mode .points-display { background: linear-gradient(145deg, #e0d6b0, #d0c6a0); color: #1a1a2e; border-color: #c9a03d; text-shadow: none; }
+        body.light-mode .progress-bar { background: #d0d4e0; }
+        body.light-mode .progress-fill { background: linear-gradient(90deg, #c9a03d, #e6b800); }
+        body.light-mode .bottom-nav { background: linear-gradient(145deg, #dce0e8, #d0d4e0); border-top: 2px solid #4a80c0; border-bottom: 2px solid #4a80c0; }
+        body.light-mode .nav-item { background: linear-gradient(145deg, #e0e4ec, #d0d4e0); color: #2a4055; text-shadow: none; }
+        body.light-mode .nav-item.current-page { background: linear-gradient(145deg, #c0c8d8, #b0b8c8); color: #1a1a2e; text-shadow: none; }
+        body.light-mode .nav-item.lobby-special { background: linear-gradient(145deg, #9b4dff, #6a1b9a, #4a0080); color: #ffffff; }
+        body.light-mode .action-grid-btn, body.light-mode .tx-card, body.light-mode .main-row, body.light-mode .stats-card-compact, body.light-mode .machine-card { background: linear-gradient(145deg, #ffffff, #f5f7fa); border-color: #4a80c0; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        body.light-mode .bet-modal-content, body.light-mode .favorite-modal-content, body.light-mode .keep-modal-content, body.light-mode .tx-detail-modal .modal-content, body.light-mode .video-modal-content, body.light-mode .settings-content, body.light-mode .sub-confirm-content { background: linear-gradient(145deg, #ffffff, #f0f2f8) !important; border-color: #4a80c0 !important; }
+        body.light-mode .modal-header, body.light-mode .video-header { color: #1a1a2e !important; border-bottom-color: #4a80c0 !important; }
+        body.light-mode .sub-confirm-content input { background: #e8ecf2; color: #1a1a2e; border-color: #4a80c0; }
+        body.light-mode .bet-modal-table th { background: #dce0e8 !important; color: #1a1a2e !important; }
+        body.light-mode .bet-modal-table td { color: #1a1a2e !important; border-bottom-color: rgba(74,128,192,0.3) !important; }
+        body.light-mode .stats-row .stat-card { background: rgba(74,128,192,0.1) !important; color: #1a1a2e !important; }
+        body.light-mode .modal-close, body.light-mode .settings-close { background: linear-gradient(145deg, #e0e4ec, #d0d4e0) !important; color: #2a4055 !important; }
+        body.light-mode .record-type { background: rgba(0,0,0,0.1); color: #1a1a2e; }
+        body.light-mode .type-bringin { background: #ffe0e0; color: #cc3333; }
+        body.light-mode .type-bringout { background: #e0ffe0; color: #33aa33; }
+        body.light-mode .type-spin { background: #fff0d0; color: #aa7733; }
+        body.light-mode .total-amount { color: #1a1a2e !important; }
+        body.light-mode .amount-bet { color: #33aa33 !important; }
+        body.light-mode .amount-win { color: #cc3333 !important; }
+        body.light-mode .section-title { color: #1a1a2e !important; border-bottom-color: #c9a03d; }
+        body.light-mode .stats-group-title { color: #1a1a2e !important; }
+        body.light-mode .machine-title .name { color: #1a1a2e !important; }
+        body.light-mode .tx-name { color: #1a1a2e !important; }
+        body.light-mode .stats-item-label { color: #4a6a8a !important; }
+        body.light-mode .stats-item { background: rgba(74,128,192,0.08); }
+        body.light-mode .stats-item-value { color: #1a1a2e !important; }
+        body.light-mode .stats-item-value.in { color: #cc3333 !important; }
+        body.light-mode .stats-item-value.out { color: #33aa33 !important; }
+        body.light-mode .stats-item-value.net.positive { color: #cc3333 !important; }
+        body.light-mode .stats-item-value.net.negative { color: #33aa33 !important; }
+        body.light-mode .tx-points.out { color: #33aa33 !important; }
+        body.light-mode .tx-points.in { color: #cc3333 !important; }
+        body.light-mode .machine-name { color: #1a1a2e !important; }
+        body.light-mode .machine-stats span { background: rgba(74,128,192,0.15); color: #2a4055; }
+        body.light-mode .bring-in { color: #cc3333 !important; }
+        body.light-mode .bring-out { color: #33aa33 !important; }
+        body.light-mode .net-profit.positive { color: #cc3333 !important; }
+        body.light-mode .net-profit.negative { color: #33aa33 !important; }
+        body.light-mode .date-group, body.light-mode .search-box { background: linear-gradient(145deg, #ffffff, #f0f2f8); }
+        body.light-mode .date-group input, body.light-mode .search-box input { color: #1a1a2e; }
+        body.light-mode .filter-select { background: #ffffff; color: #1a1a2e; }
+        body.light-mode .search-btn { background: linear-gradient(145deg, #3a5065, #2a4055); color: #ffffff; }
+        body.light-mode .settings-header h3 { color: #1a1a2e; }
+        body.light-mode .settings-label { color: #2a4055; }
+        body.light-mode .settings-section-title { color: #4a6a8a; }
+        body.light-mode .lang-select { background: linear-gradient(145deg, #ffffff, #f0f2f8); color: #1a1a2e; }
+        body.light-mode .empty-state { color: #6a6a8a; }
+        body.light-mode .avatar-container { background: linear-gradient(145deg, #ffffff, #e8ecf2); }
+        body.light-mode .home-icon-btn, body.light-mode .settings-icon { background: linear-gradient(145deg, #e0e4ec, #d0d4e0); box-shadow: 0 3px 0 #a0a4b0; }
+        body.light-mode .home-icon-btn i, body.light-mode .settings-icon i { color: #2a4055; }
+        body.light-mode .home-icon-btn:hover i, body.light-mode .settings-icon:hover i { color: #c9a03d; }
+        body.light-mode .stat-card { background: rgba(0,0,0,0.05); color: #1a1a2e; }
+
         .max-w-md { max-width: 448px; margin: 0 auto; height: 100vh; background: linear-gradient(145deg, #0f1425, #0a0e1f); display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 0 50px rgba(74,128,192,0.2); border-left: 1px solid rgba(74,128,192,0.2); border-right: 1px solid rgba(153,0,255,0.2); transition: background 0.3s ease; }
-        
         ::-webkit-scrollbar { width: 4px; background: transparent; }
         ::-webkit-scrollbar-track { background: rgba(74, 128, 192, 0.1); border-radius: 10px; }
         ::-webkit-scrollbar-thumb { background: rgba(74, 128, 192, 0.5); border-radius: 10px; }
-        
+
         .metal-header { background: linear-gradient(145deg, #2a2f3f, #1a1f2f); border-bottom: 2px solid #4a80c0; padding: 16px; flex-shrink: 0; border-radius: 0 0 24px 24px; transition: background 0.3s ease; }
         .avatar-container { width: 65px; height: 65px; border-radius: 50%; background: linear-gradient(145deg, #2a2f3f, #1a1f2f); border: 2px solid #4a80c0; overflow: hidden; cursor: pointer; position: relative; transition: background 0.3s ease; }
         .avatar-container img { width: 100%; height: 100%; object-fit: cover; }
@@ -304,188 +86,45 @@
         .points-display { background: linear-gradient(145deg, #4a3a1a, #3a2a0a); padding: 5px 14px; border-radius: 30px; color: #ffd966; font-weight: bold; border: 1px solid #ffd700; cursor: pointer; transition: all 0.3s ease; }
         .progress-bar { height: 5px; background: #2a2f3f; border-radius: 10px; overflow: hidden; margin-top: 12px; transition: background 0.3s ease; }
         .progress-fill { height: 100%; width: 56%; background: linear-gradient(90deg, #ffd966, #ffaa33); border-radius: 10px; transition: background 0.3s ease; }
-        
-        .settings-icon {
-            width: 28px;
-            height: 28px;
-            background: linear-gradient(145deg, #3a4050, #2a2f40);
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 0 #0f121c, inset 0 1px 2px rgba(255,255,255,0.2);
-            border: 1px solid #4a80c0;
-            margin-left: 6px;
-            vertical-align: middle;
-        }
+
+        .settings-icon { width: 28px; height: 28px; background: linear-gradient(145deg, #3a4050, #2a2f40); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 0 #0f121c, inset 0 1px 2px rgba(255,255,255,0.2); border: 1px solid #4a80c0; margin-left: 6px; vertical-align: middle; }
         .settings-icon i { font-size: 12px; color: #b0c4de; transition: color 0.2s ease; }
         .settings-icon:hover { transform: translateY(-1px); box-shadow: 0 3px 0 #0f121c; }
         .settings-icon:hover i { color: #ffd966; }
         .settings-icon:active { transform: translateY(1px); box-shadow: 0 1px 0 #0f121c; }
-        
-        .settings-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(8px);
-            z-index: 20000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: 0.2s;
-        }
+
+        .settings-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 20000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: 0.2s; }
         .settings-modal.show { opacity: 1; visibility: visible; }
-        .settings-content {
-            background: linear-gradient(145deg, #2a2f3f, #1a1f2f);
-            border: 2px solid #ffd700;
-            border-radius: 32px;
-            width: 90%;
-            max-width: 360px;
-            padding: 20px;
-            box-shadow: 0 20px 40px rgba(74,128,192,0.5), inset 0 2px 5px rgba(255,255,255,0.3);
-            transform: scale(0.95);
-            transition: transform 0.2s, background 0.3s ease;
-        }
+        .settings-content { background: linear-gradient(145deg, #2a2f3f, #1a1f2f); border: 2px solid #ffd700; border-radius: 32px; width: 90%; max-width: 360px; padding: 20px; box-shadow: 0 20px 40px rgba(74,128,192,0.5), inset 0 2px 5px rgba(255,255,255,0.3); transform: scale(0.95); transition: transform 0.2s, background 0.3s ease; }
         .settings-modal.show .settings-content { transform: scale(1); }
-        .settings-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #4a80c0;
-            margin-bottom: 20px;
-        }
+        .settings-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 15px; border-bottom: 2px solid #4a80c0; margin-bottom: 20px; }
         .settings-header h3 { color: #ffd966; font-size: 1.3rem; font-weight: bold; transition: color 0.3s ease; }
-        .settings-close {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: linear-gradient(145deg, #3a4050, #2a2f40);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            border: 1px solid #4a80c0;
-        }
+        .settings-close { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(145deg, #3a4050, #2a2f40); display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid #4a80c0; }
         .settings-close:hover { background: #ff4444; color: white; }
         .settings-section { margin-bottom: 20px; }
-        .settings-section-title {
-            color: #80e4ff;
-            font-size: 12px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: color 0.3s ease;
-        }
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 24px;
-        }
+        .settings-section-title { color: #80e4ff; font-size: 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; transition: color 0.3s ease; }
+        .toggle-switch { position: relative; display: inline-block; width: 50px; height: 24px; }
         .toggle-switch input { opacity: 0; width: 0; height: 0; }
-        .toggle-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #3a4050;
-            transition: 0.3s;
-            border-radius: 34px;
-            border: 1px solid #4a80c0;
-        }
-        .toggle-slider:before {
-            position: absolute;
-            content: "";
-            height: 18px;
-            width: 18px;
-            left: 3px;
-            bottom: 2px;
-            background-color: #ffd966;
-            transition: 0.3s;
-            border-radius: 50%;
-        }
+        .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #3a4050; transition: 0.3s; border-radius: 34px; border: 1px solid #4a80c0; }
+        .toggle-slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 2px; background-color: #ffd966; transition: 0.3s; border-radius: 50%; }
         input:checked + .toggle-slider { background-color: #2a6a4a; }
         input:checked + .toggle-slider:before { transform: translateX(25px); }
-        .lang-select {
-            width: 100%;
-            padding: 10px 12px;
-            background: linear-gradient(145deg, #1a2a3a, #0a1a2a);
-            border: 1px solid #4a80c0;
-            border-radius: 30px;
-            color: #ffd966;
-            font-size: 13px;
-            cursor: pointer;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-        .settings-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(74,128,192,0.3);
-        }
+        .lang-select { width: 100%; padding: 10px 12px; background: linear-gradient(145deg, #1a2a3a, #0a1a2a); border: 1px solid #4a80c0; border-radius: 30px; color: #ffd966; font-size: 13px; cursor: pointer; outline: none; transition: all 0.3s ease; }
+        .settings-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(74,128,192,0.3); }
         .settings-row:last-child { border-bottom: none; }
         .settings-label { color: #b3e4ff; font-size: 13px; transition: color 0.3s ease; }
-        
-        .home-icon-btn {
-            position: relative;
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(145deg, #3a5065, #2a4055);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 3px 0 #0f121c, inset 0 2px 5px rgba(255,255,255,0.3);
-            border: 1px solid rgba(74,128,192,0.5);
-            text-decoration: none;
-        }
+
+        .home-icon-btn { position: relative; width: 36px; height: 36px; background: linear-gradient(145deg, #3a5065, #2a4055); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 3px 0 #0f121c, inset 0 2px 5px rgba(255,255,255,0.3); border: 1px solid rgba(74,128,192,0.5); text-decoration: none; }
         .home-icon-btn i { font-size: 1.1rem; color: #ffd966; transition: color 0.2s ease; }
         .home-icon-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 0 #0f121c; }
         .home-icon-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #0f121c; }
-        .home-tooltip, .settings-tooltip {
-            position: absolute;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(8px);
-            color: #ffd966;
-            font-size: 10px;
-            padding: 4px 8px;
-            border-radius: 20px;
-            white-space: nowrap;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.2s ease;
-            border: 1px solid #4a80c0;
-            pointer-events: none;
-        }
-        .home-icon-btn:hover .home-tooltip,
-        .settings-icon:hover .settings-tooltip {
-            opacity: 1;
-            visibility: visible;
-            top: -35px;
-        }
+        .home-tooltip, .settings-tooltip { position: absolute; top: -30px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); color: #ffd966; font-size: 10px; padding: 4px 8px; border-radius: 20px; white-space: nowrap; opacity: 0; visibility: hidden; transition: all 0.2s ease; border: 1px solid #4a80c0; pointer-events: none; }
+        .home-icon-btn:hover .home-tooltip, .settings-icon:hover .settings-tooltip { opacity: 1; visibility: visible; top: -35px; }
         .settings-icon { position: relative; }
-        
+
         .action-grid-btn { background: linear-gradient(145deg, #3a4050, #2a2f40); border: 1px solid #4a80c0; border-radius: 16px; padding: 12px; text-align: center; cursor: pointer; position: relative; box-shadow: 0 4px 0 #0f121c; transition: all 0.3s ease; }
         .count-badge { position: absolute; top: -8px; right: -8px; background: #ff4444; color: white; font-size: 11px; min-width: 22px; height: 22px; border-radius: 30px; display: flex; align-items: center; justify-content: center; border: 1px solid #ffd966; }
-        
+
         .search-layout { display: grid; gap: 10px; margin-bottom: 16px; }
         .search-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .date-group { background: linear-gradient(145deg, #2a2f3f, #1a1f2f); border: 1px solid #4a80c0; border-radius: 30px; padding: 8px 12px; display: flex; gap: 6px; transition: all 0.3s ease; }
@@ -495,17 +134,8 @@
         .search-box { background: linear-gradient(145deg, #2a2f3f, #1a1f2f); border: 1px solid #4a80c0; border-radius: 30px; padding: 8px 14px; display: flex; gap: 8px; flex: 1; transition: all 0.3s ease; }
         .search-box input { background: transparent; border: none; color: white; width: 100%; outline: none; transition: color 0.3s ease; }
         .filter-select { width: 100%; background: #ffffff; border: 2px solid #4a80c0; border-radius: 30px; padding: 6px 28px 6px 14px; color: #1a1f2f; font-weight: 600; font-size: 0.75rem; appearance: none; cursor: pointer; height: 40px; transition: all 0.3s ease; }
-        
-        .stats-card-compact {
-            background: linear-gradient(145deg, #1a2a3a, #0a1a2a);
-            border-radius: 20px;
-            border: 1px solid #4a80c0;
-            box-shadow: inset 0 1px 1px rgba(255,255,255,0.05), 0 2px 5px rgba(0,0,0,0.2);
-            margin-bottom: 16px;
-            overflow: hidden;
-            padding: 10px 12px;
-            transition: all 0.3s ease;
-        }
+
+        .stats-card-compact { background: linear-gradient(145deg, #1a2a3a, #0a1a2a); border-radius: 20px; border: 1px solid #4a80c0; box-shadow: inset 0 1px 1px rgba(255,255,255,0.05), 0 2px 5px rgba(0,0,0,0.2); margin-bottom: 16px; overflow: hidden; padding: 10px 12px; transition: all 0.3s ease; }
         .stats-group { margin-bottom: 8px; }
         .stats-group:last-child { margin-bottom: 0; }
         .stats-group-title { font-size: 11px; color: #ffd966; font-weight: bold; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; transition: color 0.3s ease; }
@@ -515,10 +145,9 @@
         .stats-item-value { font-size: 11px; font-weight: bold; }
         .stats-item-value.in { color: #ff8888; }
         .stats-item-value.out { color: #88ff88; }
-        /* 淨變化顏色修正：正數紅色、負數綠色 */
         .stats-item-value.net.positive { color: #ff6666; }
         .stats-item-value.net.negative { color: #88ff88; }
-        
+
         .main-row { background: linear-gradient(145deg, #1a1f2f, #0f1425); border: 2px solid #4a80c0; border-radius: 16px; margin-bottom: 12px; cursor: pointer; padding: 14px 16px; transition: all 0.2s ease; }
         .main-row:hover { border-color: #ffd700; transform: translateY(-2px); }
         .machine-title .name { font-size: 16px; font-weight: bold; color: #ffd966; transition: color 0.3s ease; }
@@ -526,25 +155,35 @@
         .date-range { font-size: 11px; color: #b0c4de; margin: 8px 0; transition: color 0.3s ease; }
         .bring-in { color: #ff6666; }
         .bring-out { color: #88ff88; }
-        /* 淨利顏色修正：正數紅色、負數綠色 */
         .net-profit.positive { color: #ffaa66; background: rgba(255,100,100,0.2); }
         .net-profit.negative { color: #88ff88; background: rgba(100,255,100,0.1); }
-        
+
         .tx-card { background: linear-gradient(145deg, #1a2a3a, #0f1f2f); border: 2px solid #4a80c0; border-radius: 20px; padding: 12px 16px; margin-bottom: 10px; cursor: pointer; transition: all 0.2s ease; }
         .tx-card:hover { border-color: #ffd966; transform: translateY(-1px); }
         .tx-name { font-size: 1rem; font-weight: bold; color: #ffd966; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; transition: color 0.3s ease; }
         .tx-platform { font-size: 0.8rem; color: #80e4ff; margin-bottom: 6px; transition: color 0.3s ease; }
-        .tx-points { font-size: 1rem; font-weight: bold; margin-bottom: 6px; }
+        .tx-machine-name { font-size: 0.8rem; color: #ffaa66; margin-bottom: 6px; transition: color 0.3s ease; }
+        .tx-points { font-size: 1.1rem; font-weight: bold; margin-bottom: 4px; }
         .tx-points.out { color: #88ff88; }
         .tx-points.in { color: #ff6666; }
         .tx-date { font-size: 0.65rem; color: #aaccff; display: flex; align-items: center; gap: 4px; transition: color 0.3s ease; }
-        
+
         .tx-detail-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.96); backdrop-filter: blur(12px); display: none; justify-content: center; align-items: center; z-index: 1000; }
         .tx-detail-modal.active { display: flex; }
         .tx-detail-modal .modal-content { width: 90%; max-width: 380px; background: linear-gradient(145deg, #1a1f2f, #0f1425); border: 3px solid #4a80c0; border-radius: 28px; padding: 20px; transition: all 0.3s ease; }
-        
+        .detail-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(74,128,192,0.2); }
+        .detail-row:last-child { border-bottom: none; }
+        .detail-label { color: #9ac2f0; font-size: 0.85rem; }
+        .detail-value { color: #ffd966; font-weight: bold; font-family: monospace; }
+        .detail-value.positive { color: #ff8888; }
+        .detail-value.negative { color: #88ff88; }
+
         .bet-modal, .favorite-modal, .keep-modal, .video-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.96); backdrop-filter: blur(12px); display: none; justify-content: center; align-items: center; z-index: 1000; }
         .bet-modal.active, .favorite-modal.active, .keep-modal.active, .video-modal.active { display: flex; }
+
+        .sub-confirm-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.95); backdrop-filter: blur(12px); z-index: 30000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: 0.2s; }
+        .sub-confirm-modal.show { opacity: 1; visibility: visible; }
+
         .bet-modal-content { width: 92%; max-width: 550px; height: 85vh; background: linear-gradient(145deg, #1a1f2f, #0f1425); border: 3px solid #4a80c0; border-radius: 28px; padding: 20px; display: flex; flex-direction: column; overflow: hidden; transition: all 0.3s ease; }
         .favorite-modal-content, .keep-modal-content { width: 90%; max-width: 420px; max-height: 80vh; background: linear-gradient(145deg, #1a1f2f, #0f1425); border: 3px solid #ff6680; border-radius: 28px; padding: 20px; overflow-y: auto; transition: all 0.3s ease; }
         .video-modal-content { width: 90%; max-width: 500px; background: #000; border-radius: 28px; border: 3px solid #ff66aa; overflow: hidden; transition: all 0.3s ease; }
@@ -552,6 +191,34 @@
         .video-header { background: linear-gradient(145deg, #2a2f3f, #1a1f2f); padding: 12px 16px; display: flex; justify-content: space-between; color: #ffd966; border-bottom: 1px solid #ff66aa; transition: all 0.3s ease; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; color: #ffd966; font-size: 18px; font-weight: bold; margin-bottom: 16px; transition: color 0.3s ease; }
         .modal-close { cursor: pointer; font-size: 24px; width: 32px; text-align: center; transition: all 0.3s ease; }
+
+        .sub-confirm-content { background: linear-gradient(145deg, #2a2f3f, #1a1f2f); border: 2px solid #ffd700; border-radius: 40px; max-width: 360px; width: 90%; padding: 1.5rem; box-shadow: 0 20px 40px rgba(74,128,192,0.5), inset 0 2px 5px rgba(255,255,255,0.3), inset 0 -3px 8px rgba(0,0,0,0.6), 0 8px 0 #0f121c; transform: scale(0.95); transition: transform 0.2s; position: relative; }
+        .sub-confirm-modal.show .sub-confirm-content { transform: scale(1); }
+        .modal-close-x { position: absolute; top: 15px; right: 15px; width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(145deg, #3a4050, #2a2f40); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1rem; color: #b0c4de; transition: all 0.2s ease; border: 1px solid #4a80c0; z-index: 10; }
+        .modal-close-x:hover { background: linear-gradient(145deg, #ff4444, #cc2222); color: white; border-color: #ffd700; }
+        .sub-confirm-header { text-align: center; margin-bottom: 1rem; border-bottom: 2px solid rgba(74, 128, 192, 0.5); padding-bottom: 0.5rem; }
+        .sub-confirm-header h3 { font-size: 1.4rem; font-weight: 900; background: linear-gradient(135deg, #ffd700, #ffaa33); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.25rem; }
+        .sub-confirm-header p { color: #7ec8ff; font-size: 0.8rem; }
+        .info-grid { background: linear-gradient(145deg, #1a2a3a, #0a1a2a); border: 1px solid #4a80c0; border-radius: 28px; padding: 0.8rem 1rem; margin-bottom: 1rem; }
+        .info-row { display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid rgba(74, 128, 192, 0.2); font-size: 0.85rem; }
+        .info-row:last-child { border-bottom: none; }
+        .info-label { color: #9ac2f0; }
+        .info-value { color: #ffd966; font-weight: 700; font-family: monospace; }
+        .highlight-value { color: #ffaa33; }
+        .cost-value { color: #ff7777; }
+        .sub-confirm-input-group { margin: 1rem 0; }
+        .sub-confirm-input-group label { display: block; color: #ffd966; margin-bottom: 0.5rem; font-size: 0.85rem; font-weight: 600; }
+        .sub-confirm-input-group input { width: 100%; padding: 0.7rem; background: linear-gradient(145deg, #1a2a3a, #0e1a2a); border: 2px solid #4a80c0; border-radius: 30px; color: #ffd966; font-size: 1rem; font-weight: 700; text-align: center; }
+        .sub-confirm-input-group input:focus { outline: none; border-color: #ffd700; }
+        .sub-confirm-actions { display: flex; gap: 1rem; margin-top: 1.2rem; }
+        .sub-confirm-btn { flex: 1; padding: 0.7rem; border-radius: 40px; font-weight: 800; cursor: pointer; text-align: center; transition: all 0.1s ease; font-size: 0.9rem; border: none; }
+        .sub-confirm-btn:active { transform: translateY(3px); }
+        .sub-confirm-btn.secondary { background: linear-gradient(145deg, #3a4050, #2a2f40); border: 1px solid #4a80c0; color: #b0c4de; box-shadow: inset 0 2px 5px rgba(255,255,255,0.2), inset 0 -3px 5px rgba(0,0,0,0.4), 0 5px 0 #0f121c; }
+        .sub-confirm-btn.primary { background: linear-gradient(145deg, #ffaa33, #ff8c00); border: 1px solid #ffd700; color: #2a1f0a; text-shadow: 0 1px 2px rgba(255,255,255,0.3); box-shadow: inset 0 2px 5px rgba(255,255,255,0.5), inset 0 -3px 5px rgba(0,0,0,0.2), 0 5px 0 #b85e00; }
+        .sub-confirm-btn.disabled-btn, .sub-confirm-btn.primary.disabled-btn { opacity: 0.5; pointer-events: none; filter: grayscale(0.2); transform: none; }
+        .text-warning { color: #ffaa66; font-size: 0.7rem; margin-top: 0.5rem; text-align: center; }
+        .text-error { color: #ff6666; }
+
         .stats-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
         .stat-card { background: #2a2f3f; padding: 4px 12px; border-radius: 30px; font-size: 11px; transition: all 0.3s ease; }
         .bet-modal-table-container { flex: 1; overflow: auto; border-radius: 16px; border: 1px solid #4a80c0; }
@@ -570,20 +237,8 @@
         .video-bet-row { cursor: pointer; background: linear-gradient(90deg, rgba(59,130,246,0.25), transparent); border-left: 4px solid #3b82f6; }
         .video-bet-row:hover { background: linear-gradient(90deg, rgba(59,130,246,0.45), rgba(59,130,246,0.1)); }
         .play-hint { display: inline-flex; align-items: center; gap: 4px; background: #1e3a8a; padding: 2px 8px; border-radius: 20px; font-size: 9px; margin-left: 8px; color: #93c5fd; }
-        
-        .machine-card {
-            background: linear-gradient(145deg, #1a1f2f, #0f1425);
-            border: 2px solid #4a80c0;
-            border-radius: 24px;
-            padding: 16px;
-            margin-bottom: 12px;
-            display: flex;
-            gap: 14px;
-            align-items: center;
-            transition: all 0.2s ease;
-            position: relative;
-            overflow: hidden;
-        }
+
+        .machine-card { background: linear-gradient(145deg, #1a1f2f, #0f1425); border: 2px solid #4a80c0; border-radius: 24px; padding: 16px; margin-bottom: 12px; display: flex; gap: 14px; align-items: center; transition: all 0.2s ease; position: relative; overflow: hidden; }
         .machine-card::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,215,0,0.1), transparent); transition: left 0.5s ease; }
         .machine-card:hover::before { left: 100%; }
         .machine-card:hover { transform: translateX(4px); border-color: #ffd966; box-shadow: 0 0 15px rgba(255,217,102,0.3); }
@@ -604,110 +259,23 @@
         .empty-state i { font-size: 4rem; color: #4a80c0; margin-bottom: 16px; opacity: 0.5; }
         .empty-state p { font-size: 0.9rem; }
         .empty-state .hint { font-size: 0.7rem; margin-top: 12px; color: #ffd966; }
-        
-        /* ========= 底部導覽列 - 與其他頁面統一 ========= */
-        .bottom-nav {
-            background: linear-gradient(145deg, #2a2f3f, #1a1f2f);
-            border-top: 2px solid #4a80c0;
-            border-bottom: 2px solid #4a80c0;
-            box-shadow: 0 -5px 15px rgba(74, 128, 192, 0.3), 0 8px 10px rgba(0, 0, 0, 0.6), inset 0 2px 5px rgba(255, 255, 255, 0.3), inset 0 -3px 8px rgba(0, 0, 0, 0.6);
-            width: 100%;
-            padding: 0.6rem 1rem;
-            position: relative;
-            overflow: visible;
-            border-radius: 30px 30px 30px 30px;
-            flex-shrink: 0;
-            margin-top: auto;
-            transition: all 0.3s ease;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            left: 0;
-        }
-        .bottom-nav::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent); transform: skewX(-20deg); animation: shine 4s infinite; pointer-events: none; }
+
+        .bottom-nav { background: linear-gradient(145deg, #2a2f3f, #1a1f2f); border-top: 2px solid #4a80c0; border-bottom: 2px solid #4a80c0; box-shadow: 0 -5px 15px rgba(74,128,192,0.3), 0 8px 10px rgba(0,0,0,0.6), inset 0 2px 5px rgba(255,255,255,0.3), inset 0 -3px 8px rgba(0,0,0,0.6); width: 100%; padding: 0.6rem 1rem; position: relative; overflow: visible; border-radius: 30px; display: flex; justify-content: space-between; align-items: flex-end; flex-shrink: 0; margin-top: auto; transition: all 0.3s ease; }
+        .bottom-nav::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transform: skewX(-20deg); animation: shine 4s infinite; pointer-events: none; }
         @keyframes shine { 0% { left: -100%; } 20% { left: 120%; } 100% { left: 120%; } }
-        
-        /* 一般導航按鈕 */
-        .nav-item {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: #b0c4de;
-            transition: all 0.1s ease;
-            border-radius: 20px;
-            padding: 0.5rem 0.6rem;
-            text-decoration: none;
-            outline: none;
-            font-family: 'Noto Sans TC', 'Noto Sans JP', 'Orbitron', sans-serif;
-            background: linear-gradient(145deg, #3a4050, #2a2f40);
-            box-shadow: 0 5px 0 #0f121c, inset 0 2px 5px rgba(255, 255, 255, 0.3), inset 0 -3px 5px rgba(0, 0, 0, 0.3);
-            text-shadow: 0 2px 3px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(74, 128, 192, 0.2);
-            cursor: pointer;
-            text-align: center;
-            flex: none;
-            min-width: 50px;
-        }
-        .nav-item:hover { transform: translateY(-5px); box-shadow: 0 8px 0 #0f121c, 0 12px 20px rgba(74, 128, 192, 0.4), inset 0 2px 5px rgba(255, 255, 255, 0.5), inset 0 -3px 5px rgba(0, 0, 0, 0.3); color: #ffffff; border-color: rgba(74, 128, 192, 0.6); }
-        .nav-item:active { transform: translateY(3px); box-shadow: 0 2px 0 #0f121c, inset 0 5px 8px rgba(0, 0, 0, 0.5), inset 0 -2px 5px rgba(255, 255, 255, 0.2); color: #4a80c0; }
-        .nav-item.current-page { background: linear-gradient(145deg, #4a5065, #3a4055); box-shadow: 0 5px 0 #0f121c, 0 10px 15px rgba(74, 128, 192, 0.5), inset 0 2px 8px rgba(255, 255, 255, 0.6), inset 0 -3px 8px rgba(0, 0, 0, 0.4); color: white; border: 1px solid #4a80c0; transform: scale(1.05); text-shadow: 0 0 8px #4a80c0; }
-        .nav-item i { font-size: 1.4rem; margin-bottom: 2px; filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.5)); }
+
+        .nav-item { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #b0c4de; transition: all 0.1s ease; border-radius: 20px; padding: 0.5rem 0.6rem; text-decoration: none; outline: none; font-family: 'Noto Sans TC', 'Noto Sans JP', 'Orbitron', sans-serif; background: linear-gradient(145deg, #3a4050, #2a2f40); box-shadow: 0 5px 0 #0f121c, inset 0 2px 5px rgba(255,255,255,0.3), inset 0 -3px 5px rgba(0,0,0,0.3); border: 1px solid rgba(74,128,192,0.2); cursor: pointer; text-align: center; flex: none; min-width: 50px; }
+        .nav-item:hover { transform: translateY(-5px); box-shadow: 0 8px 0 #0f121c, 0 12px 20px rgba(74,128,192,0.4), inset 0 2px 5px rgba(255,255,255,0.5), inset 0 -3px 5px rgba(0,0,0,0.3); color: #ffffff; border-color: rgba(74,128,192,0.6); }
+        .nav-item:active { transform: translateY(3px); box-shadow: 0 2px 0 #0f121c, inset 0 5px 8px rgba(0,0,0,0.5), inset 0 -2px 5px rgba(255,255,255,0.2); color: #4a80c0; }
+        .nav-item.current-page { background: linear-gradient(145deg, #4a5065, #3a4055); box-shadow: 0 5px 0 #0f121c, 0 10px 15px rgba(74,128,192,0.5), inset 0 2px 8px rgba(255,255,255,0.6), inset 0 -3px 8px rgba(0,0,0,0.4); color: white; border: 1px solid #4a80c0; transform: scale(1.05); text-shadow: 0 0 8px #4a80c0; }
+        .nav-item i { font-size: 1.4rem; margin-bottom: 2px; filter: drop-shadow(0 3px 2px rgba(0,0,0,0.5)); }
         .nav-item span { font-weight: 700; letter-spacing: 0.5px; font-size: 0.7rem; }
-        
-        /* 凸起按鈕樣式 */
-        .nav-item.lobby-special {
-            background: linear-gradient(145deg, #9b4dff, #6a1b9a, #4a0080);
-            transform: translateY(-26px) scale(1.1);
-            box-shadow: 0 10px 0 #2a004d, 0 18px 25px rgba(0, 0, 0, 0.5), inset 0 2px 12px rgba(255, 255, 255, 0.4), inset 0 -4px 8px rgba(0, 0, 0, 0.3), 0 0 20px #bf5eff, 0 0 8px #7c3aed;
-            color: #ffffff;
-            border: 1px solid #d8b4ff;
-            text-shadow: 0 0 8px #bf5eff;
-            transition: all 0.15s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            z-index: 60;
-            padding: 0.5rem 0.6rem;
-            min-width: 54px;
-        }
-        .nav-item.lobby-special i {
-            font-size: 1.7rem;
-            margin-bottom: 3px;
-            text-shadow: 0 2px 0 #2a004d, 0 0 12px #d8b4ff;
-            filter: drop-shadow(0 0 4px #bf5eff);
-        }
-        .nav-item.lobby-special span {
-            font-size: 0.75rem;
-            font-weight: 900;
-            letter-spacing: 1px;
-            text-shadow: 0 1px 0 #2a004d, 0 0 10px #bf5eff;
-        }
-        @keyframes neonPulse {
-            0% { 
-                box-shadow: 0 10px 0 #2a004d, 0 18px 25px rgba(0, 0, 0, 0.5), inset 0 2px 12px rgba(255, 255, 255, 0.4), inset 0 -4px 8px rgba(0, 0, 0, 0.3), 0 0 15px #9b4dff, 0 0 5px #6a1b9a;
-                background: linear-gradient(145deg, #9b4dff, #6a1b9a, #4a0080);
-            }
-            100% { 
-                box-shadow: 0 10px 0 #2a004d, 0 20px 28px rgba(0, 0, 0, 0.55), inset 0 2px 14px rgba(255, 255, 255, 0.55), inset 0 -4px 8px rgba(0, 0, 0, 0.3), 0 0 35px #d8b4ff, 0 0 15px #bf5eff;
-                background: linear-gradient(145deg, #b77dff, #8b3dff, #6a1b9a);
-            }
-        }
-        .nav-item.lobby-special { animation: neonPulse 1.3s ease-in-out infinite alternate; }
-        .nav-item.lobby-special:active { transform: translateY(-18px) scale(1.07); box-shadow: 0 6px 0 #2a004d, 0 14px 20px rgba(0, 0, 0, 0.45), inset 0 2px 10px rgba(255,255,255,0.5), 0 0 28px #bf5eff; animation: none; }
-        .nav-item.lobby-special:active i { text-shadow: 0 1px 0 #2a004d; }
-        .nav-item.lobby-special:active span { text-shadow: 0 0 6px #bf5eff; }
-        
-        @media (max-width: 420px) { 
-            .bottom-nav { padding: 0.5rem 0.8rem; } 
-            .nav-item { padding: 0.4rem 0.4rem; min-width: 42px; } 
-            .nav-item i { font-size: 1.2rem; } 
-            .nav-item span { font-size: 0.6rem; }
-            .nav-item.lobby-special { min-width: 46px; transform: translateY(-24px) scale(1.08); }
-            .nav-item.lobby-special i { font-size: 1.5rem; }
-        }
-        
-        .nav-badge { position: absolute; top: 4px; right: 12px; width: 10px; height: 10px; background-color: #ff4d4d; border-radius: 50%; border: 1px solid rgba(255,215,0,0.6); box-shadow: 0 0 6px #ff4d4d; display: none; }
-        .nav-badge.show { display: block; }
-        
+
+        .nav-item.lobby-special { background: linear-gradient(145deg, #9b4dff, #6a1b9a, #4a0080); transform: translateY(-26px) scale(1.1); box-shadow: 0 10px 0 #2a004d, 0 18px 25px rgba(0,0,0,0.5), inset 0 2px 12px rgba(255,255,255,0.4), inset 0 -4px 8px rgba(0,0,0,0.3), 0 0 20px #bf5eff, 0 0 8px #7c3aed; color: #ffffff; border: 1px solid #d8b4ff; text-shadow: 0 0 8px #bf5eff; transition: all 0.15s cubic-bezier(0.2,0.9,0.4,1.1); z-index: 60; padding: 0.5rem 0.6rem; min-width: 54px; animation: neonPulse 1.3s infinite alternate; }
+        .nav-item.lobby-special i { font-size: 1.7rem; margin-bottom: 3px; text-shadow: 0 2px 0 #2a004d, 0 0 12px #d8b4ff; filter: drop-shadow(0 0 4px #bf5eff); }
+        .nav-item.lobby-special span { font-size: 0.75rem; font-weight: 900; letter-spacing: 1px; text-shadow: 0 1px 0 #2a004d, 0 0 10px #bf5eff; }
+        @keyframes neonPulse { 0% { box-shadow: 0 10px 0 #2a004d, 0 18px 25px rgba(0,0,0,0.5), inset 0 2px 12px rgba(255,255,255,0.4), inset 0 -4px 8px rgba(0,0,0,0.3), 0 0 15px #9b4dff, 0 0 5px #6a1b9a; background: linear-gradient(145deg, #9b4dff, #6a1b9a, #4a0080); } 100% { box-shadow: 0 10px 0 #2a004d, 0 20px 28px rgba(0,0,0,0.55), inset 0 2px 14px rgba(255,255,255,0.55), inset 0 -4px 8px rgba(0,0,0,0.3), 0 0 35px #d8b4ff, 0 0 15px #bf5eff; background: linear-gradient(145deg, #b77dff, #8b3dff, #6a1b9a); } }
+
         .section-title { color: #ffd966; font-size: 18px; font-weight: bold; border-bottom: 2px solid #ffaa33; padding-bottom: 8px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; transition: color 0.3s ease, border-color 0.3s ease; }
         .flex { display: flex; }
         .items-center { align-items: center; }
@@ -723,16 +291,74 @@
         .space-y-2 > * + * { margin-top: 8px; }
         .mb-4 { margin-bottom: 16px; }
         .cursor-pointer { cursor: pointer; }
+
+        /* ========== Loading 動畫樣式 ========== */
+        .hologram-loading { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0, 0, 0, 0.95); 
+            backdrop-filter: blur(12px);
+            z-index: 20000; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            opacity: 0; 
+            visibility: hidden; 
+            transition: opacity 0.3s ease, visibility 0.3s ease; 
+        }
+        .hologram-loading.show { 
+            opacity: 1; 
+            visibility: visible; 
+        }
         
-        .hologram-loading { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(8px); z-index: 20000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: 0.2s; }
-        .hologram-loading.show { opacity: 1; visibility: visible; }
-        .hologram-content { position: relative; width: 90%; max-width: 400px; min-height: 450px; text-align: center; }
-        .loading-video { width: 100%; height: auto; border-radius: 20px; box-shadow: 0 0 30px rgba(74,128,192,0.5); }
-        .loading-text { font-size: 24px; font-weight: 900; color: #ffd700; text-shadow: 0 0 10px #ffd700; margin-top: 10px; }
-        .progress-bar { width: 80%; height: 6px; background: rgba(255,255,255,0.2); border-radius: 10px; margin: 10px auto; overflow: hidden; }
-        .progress-fill { height: 100%; width: 60%; background: linear-gradient(90deg, #ffd700, #4a80c0); animation: loadingMove 1s ease-in-out infinite alternate; }
-        @keyframes loadingMove { from { width: 20%; } to { width: 80%; } }
+        .loading-container {
+            text-align: center;
+            width: 90%;
+            max-width: 380px;
+        }
         
+        .loading-video {
+            width: 100%;
+            max-height: 280px;
+            border-radius: 24px;
+            box-shadow: 0 0 30px rgba(74, 128, 192, 0.6);
+            border: 2px solid #ffd700;
+        }
+        
+        .loading-text-main {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #ffd700;
+            text-shadow: 0 0 15px #ffd700;
+            margin-top: 15px;
+            letter-spacing: 4px;
+        }
+        
+        .progress-bar-load {
+            width: 80%;
+            height: 6px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            margin: 15px auto 0 auto;
+            overflow: hidden;
+        }
+        
+        .progress-fill-load {
+            height: 100%;
+            width: 30%;
+            background: linear-gradient(90deg, #ffd700, #ffaa33, #ffd700);
+            border-radius: 10px;
+            animation: loadingMove 1s ease-in-out infinite alternate;
+        }
+        
+        @keyframes loadingMove {
+            from { width: 20%; margin-left: 0; }
+            to { width: 80%; margin-left: 20%; }
+        }
+
         .toast-message { position: fixed; top: 80px; left: 50%; transform: translateX(-50%); z-index: 30000; background: linear-gradient(145deg, #2a2f3f, #1a1f2f); border: 1px solid #ffd700; color: #ffd966; padding: 10px 20px; border-radius: 40px; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3); animation: fadeInOut 2s ease forwards; white-space: nowrap; }
         @keyframes fadeInOut { 0% { opacity: 0; transform: translateX(-50%) translateY(-10px); } 15% { opacity: 1; transform: translateX(-50%) translateY(0); } 85% { opacity: 1; } 100% { opacity: 0; transform: translateX(-50%) translateY(-10px); } }
     </style>
@@ -750,10 +376,7 @@
                     <div class="flex items-center gap-1">
                         <span id="displayNickname" class="nickname-edit">郝可愛</span>
                         <i class="fa fa-pencil-square-o text-blue-400 text-sm"></i>
-                        <div class="settings-icon" id="settingsBtn">
-                            <i class="fa fa-cog"></i>
-                            <span class="settings-tooltip">設定</span>
-                        </div>
+                        <div class="settings-icon" id="settingsBtn"><i class="fa fa-cog"></i><span class="settings-tooltip">設定</span></div>
                     </div>
                     <div class="flex items-center gap-2 mt-1">
                         <span class="vip-badge" id="vipBadge">VIP 1</span>
@@ -762,11 +385,8 @@
                 </div>
             </div>
             <div class="flex items-center gap-2">
-                <div class="points-display" id="headerPoints">💰 <span id="userPoints">6,600</span></div>
-                <a href="javascript:void(0)" class="home-icon-btn" data-page="index">
-                    <i class="fa fa-home"></i>
-                    <span class="home-tooltip">回首頁</span>
-                </a>
+                <div class="points-display" id="headerPoints">💰 <span id="userPoints">6,600.0000</span></div>
+                <a href="javascript:void(0)" class="home-icon-btn" data-page="index"><i class="fa fa-home"></i><span class="home-tooltip">回首頁</span></a>
             </div>
         </div>
         <div class="progress-bar mt-2"><div class="progress-fill"></div></div>
@@ -782,257 +402,104 @@
 
     <main class="flex-1 overflow-y-auto px-4 py-3">
         <div class="section-title"><i class="fa fa-list-alt"></i> 記錄總覽</div>
-        
         <div class="search-layout">
             <div class="search-row">
-                <div class="date-group">
-                    <input type="date" id="startDate" value="2026-03-01">
-                    <span>~</span>
-                    <input type="date" id="endDate" value="2026-03-31">
-                </div>
+                <div class="date-group"><input type="date" id="startDate" value="2026-03-01"><span>~</span><input type="date" id="endDate" value="2026-03-31"></div>
                 <button id="dateSearchBtn" class="search-btn">搜尋</button>
             </div>
             <div class="search-row">
-                <div class="search-box">
-                    <i class="fa fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="搜尋機台名稱或編號...">
-                </div>
+                <div class="search-box"><i class="fa fa-search"></i><input type="text" id="searchInput" placeholder="搜尋機台名稱或編號..."></div>
                 <select id="filterSelect" class="filter-select">
                     <option value="all" selected>全部記錄</option>
                     <option value="bet_detail">注單明細</option>
-                    <option value="platform_in">平台轉入</option>
-                    <option value="platform_out">平台轉出</option>
-                    <option value="platform_add">人工上分</option>
-                    <option value="platform_sub">人工下分</option>
-                    <option value="token_in">代幣帶入</option>
-                    <option value="token_out">代幣帶出</option>
+                    <option value="platform_add">人工開點</option>
+                    <option value="platform_sub">人工洗點</option>
+                    <option value="token_in">購買代幣</option>
+                    <option value="token_out">兌換點數</option>
                     <option value="bonus">活動贈分</option>
                     <option value="shop">購買道具</option>
                 </select>
             </div>
         </div>
-
         <div id="statsContainer"></div>
         <div id="transactionContainer" class="space-y-2 mb-4"></div>
         <div id="sessionsContainer" class="space-y-2"></div>
     </main>
 
-    <!-- ========== 下方導覽列 - 5個按鈕，我的為 current-page，首頁凸起 ========== -->
     <nav class="bottom-nav">
-        <a href="javascript:void(0)" class="nav-item" data-page="index"><i class="fa fa-gamepad"></i><span>遊戲</span></a>
+        <a href="javascript:void(0)" class="nav-item" data-page="index"><i class="fa fa-gamepad"></i><span>大廳</span></a>
         <a href="javascript:void(0)" class="nav-item" data-page="machines"><i class="fa fa-heart"></i><span>收藏</span></a>
-        <a href="javascript:void(0)" class="nav-item lobby-special" data-page="lobby"><i class="fa fa-home"></i><span>首頁</span></a>
+        <a href="javascript:void(0)" class="nav-item lobby-special" data-page="index"><i class="fa fa-home"></i><span>遊戲</span></a>
         <a href="javascript:void(0)" class="nav-item" data-page="news"><i class="fa fa-bell"></i><span>公告</span></a>
-        <a href="javascript:void(0)" class="nav-item current-page" data-page="about"><i class="fa fa-user"></i><span>我的</span></a>
+        <a href="javascript:void(0)" class="nav-item current-page" data-page="about"><i class="fa fa-user"></i><span>紀錄</span></a>
     </nav>
 </div>
 
-<div id="settingsModal" class="settings-modal">
-    <div class="settings-content">
-        <div class="settings-header">
-            <h3><i class="fa fa-cog"></i> 設定</h3>
-            <div class="settings-close" id="closeSettingsBtn"><i class="fa fa-times"></i></div>
+<!-- 兌換視窗 -->
+<div class="sub-confirm-modal" id="subConfirmModal">
+    <div class="sub-confirm-content">
+        <div class="modal-close-x" id="closeXBtn"><i class="fa fa-times"></i></div>
+        <div class="sub-confirm-header">
+            <h3 id="confirmMachineName">GOGO 小丑</h3>
+            <p id="confirmSubName">1號機</p>
         </div>
-        <div class="settings-section">
-            <div class="settings-section-title"><i class="fa fa-moon-o"></i> 外觀</div>
-            <div class="settings-row">
-                <span class="settings-label"><i class="fa fa-paint-brush"></i> 深色模式</span>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="darkModeToggle" checked>
-                    <span class="toggle-slider"></span>
-                </label>
-            </div>
+        <div class="info-grid">
+            <div class="info-row"><span class="info-label">每枚</span><span class="info-value" id="confirmRatio">2.5</span><span class="info-label" style="margin-left:auto;">點差</span><span class="info-value highlight-value" id="pointDiffDisplay">0.15</span></div>
+            <div class="info-row"><span class="info-label">目前點數</span><span class="info-value" id="confirmPoints">6,600.0000</span></div>
+            <div class="info-row"><span class="info-label">兌換代幣</span><span class="info-value" id="exchangeTokens">0 枚</span></div>
+            <div class="info-row"><span class="info-label">消耗點數</span><span class="info-value cost-value" id="costPoints">0</span></div>
+            <div class="info-row"><span class="info-label">損耗點數</span><span class="info-value cost-value" id="wastePoints">0</span></div>
+            <div class="info-row"><span class="info-label">剩餘點數</span><span class="info-value" id="remainPoints">6,600.0000</span></div>
         </div>
-        <div class="settings-section">
-            <div class="settings-section-title"><i class="fa fa-language"></i> 語言</div>
-            <select id="langSelect" class="lang-select">
-                <option value="zh-TW">🇹🇼 繁體中文</option>
-                <option value="zh-CN">🇨🇳 简体中文</option>
-                <option value="en">🇬🇧 English</option>
-                <option value="ja">🇯🇵 日本語</option>
-                <option value="ko">🇰🇷 한국어</option>
-            </select>
+        <div class="sub-confirm-input-group">
+            <label><i class="fa fa-ticket"></i> 兌換代幣 (最低 50 枚)</label>
+            <input type="number" id="confirmTokenInput" min="0" step="1" placeholder="請輸入代幣枚數" value="100">
+            <div class="text-warning" id="warningMsg"></div>
         </div>
-        <div class="settings-section">
-            <div class="settings-section-title"><i class="fa fa-volume-up"></i> 音效</div>
-            <div class="settings-row">
-                <span class="settings-label"><i class="fa fa-music"></i> 遊戲音效</span>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="soundToggle" checked>
-                    <span class="toggle-slider"></span>
-                </label>
-            </div>
-        </div>
-        <div class="settings-section">
-            <div class="settings-section-title"><i class="fa fa-bell"></i> 通知</div>
-            <div class="settings-row">
-                <span class="settings-label"><i class="fa fa-bell-o"></i> 推播通知</span>
-                <label class="toggle-switch">
-                    <input type="checkbox" id="notifyToggle" checked>
-                    <span class="toggle-slider"></span>
-                </label>
-            </div>
-        </div>
-        <div class="text-center text-gray-400 text-xs mt-3 pt-2 border-t border-gray-700">
-            T-PACHIN v1.0 | © 2026
+        <div class="sub-confirm-actions">
+            <button class="sub-confirm-btn secondary" id="confirmCancelBtn">取消</button>
+            <button class="sub-confirm-btn primary" id="confirmOk">確認兌換</button>
         </div>
     </div>
 </div>
 
-<div id="betModal" class="bet-modal">
-    <div class="bet-modal-content">
-        <div class="modal-header"><span><i class="fa fa-list-alt"></i> <span id="betModalTitle">機台明細</span></span><span class="modal-close" onclick="closeBetModal()">✕</span></div>
-        <div class="stats-row" id="betStats"></div>
-        <div class="bet-modal-table-container"><table class="bet-modal-table"><thead id="betTableHead"></thead><tbody id="betModalTableBody"></tbody></table></div>
-    </div>
-</div>
-
-<div id="videoModal" class="video-modal">
-    <div class="video-modal-content">
-        <div class="video-header"><span><i class="fa fa-video-camera"></i> 遊戲錄影回放</span><span class="modal-close" onclick="closeVideoModal()">✕</span></div>
-        <video id="videoPlayer" controls autoplay></video>
-        <div class="text-center text-gray-400 text-xs py-2">🎬 從帶入代幣到帶出代幣 · 完整遊戲過程</div>
-    </div>
-</div>
-
-<div id="txDetailModal" class="tx-detail-modal">
-    <div class="modal-content">
-        <div class="modal-header"><span>交易明細</span><span class="modal-close" onclick="closeTxModal()">✕</span></div>
-        <div id="txDetailContent"></div>
-    </div>
-</div>
-
+<div id="settingsModal" class="settings-modal"><div class="settings-content"><div class="settings-header"><h3><i class="fa fa-cog"></i> 設定</h3><div class="settings-close" id="closeSettingsBtn"><i class="fa fa-times"></i></div></div><div class="settings-section"><div class="settings-section-title"><i class="fa fa-moon-o"></i> 外觀</div><div class="settings-row"><span class="settings-label"><i class="fa fa-paint-brush"></i> 深色模式</span><label class="toggle-switch"><input type="checkbox" id="darkModeToggle" checked><span class="toggle-slider"></span></label></div></div><div class="settings-section"><div class="settings-section-title"><i class="fa fa-language"></i> 語言</div><select id="langSelect" class="lang-select"><option value="zh-TW">🇹🇼 繁體中文</option><option value="zh-CN">🇨🇳 简体中文</option><option value="en">🇬🇧 English</option><option value="ja">🇯🇵 日本語</option><option value="ko">🇰🇷 한국어</option></select></div><div class="settings-section"><div class="settings-section-title"><i class="fa fa-volume-up"></i> 音效</div><div class="settings-row"><span class="settings-label"><i class="fa fa-music"></i> 遊戲音效</span><label class="toggle-switch"><input type="checkbox" id="soundToggle" checked><span class="toggle-slider"></span></label></div></div><div class="settings-section"><div class="settings-section-title"><i class="fa fa-bell"></i> 通知</div><div class="settings-row"><span class="settings-label"><i class="fa fa-bell-o"></i> 推播通知</span><label class="toggle-switch"><input type="checkbox" id="notifyToggle" checked><span class="toggle-slider"></span></label></div></div><div class="text-center text-gray-400 text-xs mt-3 pt-2 border-t border-gray-700">T-PACHIN v1.0 | © 2026</div></div></div>
+<div id="betModal" class="bet-modal"><div class="bet-modal-content"><div class="modal-header"><span><i class="fa fa-list-alt"></i> <span id="betModalTitle">機台明細</span></span><span class="modal-close" onclick="closeBetModal()">✕</span></div><div class="stats-row" id="betStats"></div><div class="bet-modal-table-container"><table class="bet-modal-table"><thead id="betTableHead"></thead><tbody id="betModalTableBody"></tbody></table></div></div></div>
+<div id="videoModal" class="video-modal"><div class="video-modal-content"><div class="video-header"><span><i class="fa fa-video-camera"></i> 遊戲錄影回放</span><span class="modal-close" onclick="closeVideoModal()">✕</span></div><video id="videoPlayer" controls autoplay></video><div class="text-center text-gray-400 text-xs py-2">🎬 從帶入代幣到帶出代幣 · 完整遊戲過程</div></div></div>
+<div id="txDetailModal" class="tx-detail-modal"><div class="modal-content"><div class="modal-header"><span><i class="fa fa-info-circle"></i> 交易明細</span><span class="modal-close" onclick="closeTxModal()">✕</span></div><div id="txDetailContent"></div></div></div>
 <div id="favoriteModal" class="favorite-modal"><div class="favorite-modal-content"><div class="modal-header"><span><i class="fa fa-heart"></i> 我的收藏</span><span class="modal-close" onclick="closeFavoriteModal()">✕</span></div><div id="favoriteModalBody"></div></div></div>
 <div id="keepModal" class="keep-modal"><div class="keep-modal-content"><div class="modal-header"><span><i class="fa fa-bookmark"></i> 我的保留</span><span class="modal-close" onclick="closeKeepModal()">✕</span></div><div id="keepModalBody"></div></div></div>
 
+<!-- Loading 動畫 -->
 <div class="hologram-loading" id="hologramLoading">
-    <div class="hologram-content">
-        <video id="mascotVideo" autoplay muted loop playsinline src="https://video.wixstatic.com/video/d5e540_d63f842135e8416f891842373bc0f582/720p/mp4/file.mp4" style="width:100%;border-radius:20px"></video>
-        <div class="loading-text" id="loadingMachineTitle">LOADING</div>
-        <div class="progress-bar"><div class="progress-fill"></div></div>
+    <div class="loading-container">
+        <video id="mascotVideo" class="loading-video" autoplay muted loop playsinline src="https://video.wixstatic.com/video/d5e540_d63f842135e8416f891842373bc0f582/720p/mp4/file.mp4"></video>
+        <div class="loading-text-main" id="loadingMachineTitle">LOADING</div>
+        <div class="progress-bar-load">
+            <div class="progress-fill-load"></div>
+        </div>
     </div>
 </div>
 
 <script src="shared.js"></script>
 <script>
 (function() {
+    // ==================== 全域變數 ====================
     let userPoints = 6600;
     let betSortOrder = 'desc';
+    const POINT_DIFF = 0.15;
+    let currentSubData = null;
     const videoUrls = ["https://www.w3schools.com/html/mov_bbb.mp4", "https://www.w3schools.com/html/movie.mp4", "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4", "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/earth.mp4"];
     const JOKER_IMAGE_URL = "https://i.pinimg.com/736x/c3/72/db/c372db1b020ebf778ef707f63c122bf7.jpg";
+    const MACHINE_NAMES = ["GOGO 小丑", "我是小丑-EX", "快樂小丑 VII", "新我是小丑-EX水晶版"];
     
-    // ==================== 設定功能 ====================
-    const darkModeToggle = document.getElementById('darkModeToggle');
-    const body = document.body;
-    
-    function loadSettings() {
-        const darkMode = localStorage.getItem('t_pachin_dark_mode');
-        if (darkMode === 'false') {
-            body.classList.add('light-mode');
-            if (darkModeToggle) darkModeToggle.checked = false;
-        } else {
-            body.classList.remove('light-mode');
-            if (darkModeToggle) darkModeToggle.checked = true;
-        }
-        
-        const soundEnabled = localStorage.getItem('t_pachin_sound');
-        const soundToggle = document.getElementById('soundToggle');
-        if (soundToggle) soundToggle.checked = soundEnabled !== 'false';
-        
-        const notifyEnabled = localStorage.getItem('t_pachin_notify');
-        const notifyToggle = document.getElementById('notifyToggle');
-        if (notifyToggle) notifyToggle.checked = notifyEnabled !== 'false';
-        
-        const language = localStorage.getItem('t_pachin_language') || 'zh-TW';
-        const langSelect = document.getElementById('langSelect');
-        if (langSelect) langSelect.value = language;
+    // ==================== 輔助函數 ====================
+    // 格式化點數 - 支援小數後4位
+    function formatPointsDecimal(value) {
+        return value.toLocaleString(undefined, { minimumFractionDigits: 4, maximumFractionDigits: 4 });
     }
-    
-    function saveDarkMode(enabled) {
-        if (enabled) {
-            body.classList.remove('light-mode');
-            localStorage.setItem('t_pachin_dark_mode', 'true');
-        } else {
-            body.classList.add('light-mode');
-            localStorage.setItem('t_pachin_dark_mode', 'false');
-        }
-    }
-    
-    function saveSound(enabled) { localStorage.setItem('t_pachin_sound', enabled); }
-    function saveNotify(enabled) { localStorage.setItem('t_pachin_notify', enabled); }
-    
-    function saveLanguage(lang) {
-        localStorage.setItem('t_pachin_language', lang);
-        const langNames = { 'zh-TW': '繁體中文', 'zh-CN': '简体中文', 'en': 'English', 'ja': '日本語', 'ko': '한국어' };
-        showToast(`🌐 語言已切換為 ${langNames[lang] || lang}`);
-    }
-    
-    if (darkModeToggle) darkModeToggle.addEventListener('change', function() { saveDarkMode(this.checked); });
-    const soundToggle = document.getElementById('soundToggle');
-    if (soundToggle) soundToggle.addEventListener('change', function() { saveSound(this.checked); });
-    const notifyToggle = document.getElementById('notifyToggle');
-    if (notifyToggle) notifyToggle.addEventListener('change', function() { saveNotify(this.checked); });
-    const langSelect = document.getElementById('langSelect');
-    if (langSelect) langSelect.addEventListener('change', function() { saveLanguage(this.value); });
-    
-    const settingsBtn = document.getElementById('settingsBtn');
-    const settingsModal = document.getElementById('settingsModal');
-    const closeSettingsBtn = document.getElementById('closeSettingsBtn');
-    if (settingsBtn) settingsBtn.addEventListener('click', () => { loadSettings(); settingsModal.classList.add('show'); });
-    if (closeSettingsBtn) closeSettingsBtn.addEventListener('click', () => { settingsModal.classList.remove('show'); });
-    if (settingsModal) settingsModal.addEventListener('click', (e) => { if (e.target === settingsModal) settingsModal.classList.remove('show'); });
-    
-    // VIP 經驗值系統
-    let currentVipLevel = 1;
-    let currentExp = 680;
-    const vipExpNeeded = { 1: 1200, 2: 2500, 3: 5000, 4: 10000, 5: 20000 };
-    
-    function updateVipProgress() {
-        const needed = vipExpNeeded[currentVipLevel] || 1200;
-        const percent = Math.min(100, Math.floor((currentExp / needed) * 100));
-        const progressFill = document.querySelector('.progress-fill');
-        const vipBadge = document.getElementById('vipBadge');
-        const expText = document.getElementById('expText');
-        if (progressFill) progressFill.style.width = percent + '%';
-        if (vipBadge) vipBadge.textContent = 'VIP ' + currentVipLevel;
-        if (expText) expText.textContent = '經驗值 ' + currentExp + '/' + needed;
-    }
-    
-    function showVipInfo() {
-        const needed = vipExpNeeded[currentVipLevel] || 1200;
-        const remaining = needed - currentExp;
-        alert('🎖️ VIP ' + currentVipLevel + ' 特權\n\n• 返水 ' + (currentVipLevel * 0.2).toFixed(1) + '%\n• 每日免費 ' + (currentVipLevel * 10) + ' 枚代幣\n• 專屬客服通道\n\n📊 升級進度\n目前 ' + currentExp + ' / ' + needed + '\n距離下一級還需 ' + remaining + ' 經驗');
-    }
-    
-    function showExpInfo() {
-        const needed = vipExpNeeded[currentVipLevel] || 1200;
-        const remaining = needed - currentExp;
-        alert('📊 經驗值詳解\n\n目前：' + currentExp + ' / ' + needed + '\n距離下一級：' + remaining + ' 經驗\n\n✨ 獲得經驗方式：\n• 每遊玩 1 轉 = +1 經驗\n• 每日登入 = +50 經驗\n• 活動任務 = 額外加成');
-    }
-    
-    // 導航欄連動（已更新，支援新增的大廳按鈕）
-    function initNavigation() {
-        document.querySelectorAll('.nav-item, .home-icon-btn, [data-page]').forEach(el => {
-            if (el.classList && (el.classList.contains('nav-item') || el.classList.contains('home-icon-btn') || el.hasAttribute('data-page'))) {
-                el.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const page = this.dataset.page;
-                    if (page === 'index') window.location.href = 'index.html';
-                    else if (page === 'machines') window.location.href = 'machines.html';
-                    else if (page === 'lobby') window.location.href = 'index.html';  // 大廳 → 首頁
-                    else if (page === 'news') window.location.href = 'news.html';
-                    else if (page === 'about') window.location.href = 'about.html';
-                });
-            }
-        });
-    }
-    
-    function showLoadingAndGoToSimulator(machineName, machineId, ratio) {
-        const machineInfo = { name: machineName, ratio: parseFloat(ratio), machineId: machineId, subName: machineId + '號機', coins: 0 };
-        localStorage.setItem('t_pachin_machine_info', JSON.stringify(machineInfo));
-        const loadingDiv = document.getElementById('hologramLoading');
-        if (loadingDiv) { loadingDiv.classList.add('show'); setTimeout(() => { window.location.href = 'simulator.html'; }, 2500); }
-        else { window.location.href = 'simulator.html'; }
+    function formatPointsInt(value) {
+        return Math.floor(value).toLocaleString();
     }
     
     function showToast(message) {
@@ -1043,28 +510,322 @@
         setTimeout(() => toast.remove(), 2000);
     }
     
-    let favoriteMachines = [];
-    let keepMachines = [];
+    // 取得目前點數 (從全域儲存)
+    function getCurrentPoints() {
+        if (window.T_PACHIN_STORAGE) {
+            return T_PACHIN_STORAGE.getPoints();
+        }
+        return 6600;
+    }
     
+    function updatePointsDisplay() {
+        const points = getCurrentPoints();
+        const pointsSpan = document.getElementById('userPoints');
+        const confirmPoints = document.getElementById('confirmPoints');
+        const remainPointsSpan = document.getElementById('remainPoints');
+        if (pointsSpan) pointsSpan.innerText = formatPointsDecimal(points);
+        if (confirmPoints) confirmPoints.textContent = formatPointsDecimal(points);
+        if (remainPointsSpan && currentSubData) remainPointsSpan.textContent = formatPointsDecimal(points);
+    }
+    
+    function syncPointsWithStorage() {
+        if (window.T_PACHIN_STORAGE) {
+            userPoints = getCurrentPoints();
+            updatePointsDisplay();
+        }
+    }
+    
+    function showLoadingAndGoToSimulator(machineName, machineId, ratio, coinsAmount) {
+        const machineInfo = { 
+            name: machineName, 
+            ratio: parseFloat(ratio), 
+            machineId: machineId, 
+            subName: machineId + '號機', 
+            coins: coinsAmount || 100,
+            pointDiff: POINT_DIFF
+        };
+        localStorage.setItem('t_pachin_machine_info', JSON.stringify(machineInfo));
+        
+        const loadingDiv = document.getElementById('hologramLoading');
+        const loadingTitle = document.getElementById('loadingMachineTitle');
+        
+        if (loadingTitle) loadingTitle.textContent = `${machineName} NO.${machineId}`;
+        
+        if (loadingDiv) { 
+            loadingDiv.classList.add('show'); 
+            setTimeout(() => { 
+                window.location.href = 'simulator.html'; 
+            }, 2000); 
+        } else { 
+            window.location.href = 'simulator.html'; 
+        }
+    }
+    
+    // ==================== 兌換視窗邏輯 ====================
+    const subConfirmModal = document.getElementById('subConfirmModal');
+    const confirmTokenInput = document.getElementById('confirmTokenInput');
+    const warningMsgDiv = document.getElementById('warningMsg');
+    const exchangeTokensSpan = document.getElementById('exchangeTokens');
+    const costPointsSpan = document.getElementById('costPoints');
+    const wastePointsSpan = document.getElementById('wastePoints');
+    const remainPointsSpan = document.getElementById('remainPoints');
+    const confirmOkBtn = document.getElementById('confirmOk');
+    
+    function updateExchangeCalculation() {
+        if (!currentSubData) return;
+        let tokenAmount = parseInt(confirmTokenInput.value) || 0;
+        if (tokenAmount < 0) tokenAmount = 0;
+        let ratio = currentSubData.ratio;
+        let costPointsVal = tokenAmount * ratio;
+        let wastePointsVal = tokenAmount * POINT_DIFF;
+        let totalCost = costPointsVal + wastePointsVal;
+        let currentPoints = getCurrentPoints();
+        let isValid = true;
+        let warningMsg = '';
+        if (tokenAmount <= 0) {
+            warningMsg = '⚠️ 請輸入大於 0 的代幣數量';
+            isValid = false;
+        } else if (tokenAmount < 50) {
+            warningMsg = '⚠️ 最低兌換 50 枚代幣，目前數量不足';
+            isValid = false;
+        } else if (totalCost > currentPoints) {
+            warningMsg = `❌ 點數不足！需要 ${formatPointsDecimal(totalCost)} 點，目前 ${formatPointsDecimal(currentPoints)} 點`;
+            isValid = false;
+        }
+        warningMsgDiv.innerHTML = warningMsg ? `<span class="text-error">${warningMsg}</span>` : '';
+        exchangeTokensSpan.textContent = `${tokenAmount} 枚`;
+        costPointsSpan.textContent = formatPointsInt(costPointsVal);
+        wastePointsSpan.textContent = formatPointsInt(wastePointsVal);
+        let remainAfter = currentPoints - totalCost;
+        remainPointsSpan.textContent = formatPointsDecimal(remainAfter >= 0 ? remainAfter : 0);
+        if (isValid) {
+            confirmOkBtn.classList.remove('disabled-btn');
+            confirmOkBtn.style.pointerEvents = 'auto';
+            confirmOkBtn.style.opacity = '1';
+        } else {
+            confirmOkBtn.classList.add('disabled-btn');
+            confirmOkBtn.style.pointerEvents = 'none';
+            confirmOkBtn.style.opacity = '0.5';
+        }
+    }
+    
+    function doEnterGame() {
+        if (!currentSubData) return;
+        
+        let tokenAmount = parseInt(confirmTokenInput.value) || 0;
+        if (tokenAmount < 50) {
+            showToast('⚠️ 最低兌換 50 枚代幣！');
+            return;
+        }
+        
+        let ratio = currentSubData.ratio;
+        let totalCost = (tokenAmount * ratio) + (tokenAmount * POINT_DIFF);
+        let currentPoints = getCurrentPoints();
+        
+        if (totalCost > currentPoints) {
+            showToast('❌ 點數不足，您的點數不足');
+            return;
+        }
+        
+        // 扣除點數 (支出) - 使用全域儲存
+        if (window.T_PACHIN_STORAGE) {
+            T_PACHIN_STORAGE.updatePoints(-totalCost);
+            userPoints = getCurrentPoints();
+        } else {
+            userPoints -= totalCost;
+        }
+        updatePointsDisplay();
+        
+        // 保存資料
+        const machineName = currentSubData.machineName;
+        const machineId = currentSubData.machineId;
+        const machineRatio = currentSubData.ratio;
+        
+        // 先關閉兌換視窗
+        closeSubConfirm();
+        
+        // 顯示 Loading 並跳轉
+        showLoadingAndGoToSimulator(machineName, machineId, machineRatio, tokenAmount);
+    }
+    
+    function closeSubConfirm() {
+        if (subConfirmModal) subConfirmModal.classList.remove('show');
+        currentSubData = null;
+    }
+    
+    window.openSubConfirm = function(machineName, machineId, ratio) {
+        syncPointsWithStorage();
+        
+        currentSubData = { 
+            machineName: machineName, 
+            machineId: machineId, 
+            ratio: parseFloat(ratio) 
+        };
+        
+        const confirmMachineName = document.getElementById('confirmMachineName');
+        const confirmSubName = document.getElementById('confirmSubName');
+        const confirmRatio = document.getElementById('confirmRatio');
+        const confirmPoints = document.getElementById('confirmPoints');
+        const remainPoints = document.getElementById('remainPoints');
+        const currentPoints = getCurrentPoints();
+        
+        if (confirmMachineName) confirmMachineName.textContent = machineName;
+        if (confirmSubName) confirmSubName.textContent = machineId + '號機';
+        if (confirmRatio) confirmRatio.textContent = ratio;
+        if (confirmPoints) confirmPoints.textContent = formatPointsDecimal(currentPoints);
+        if (remainPoints) remainPoints.textContent = formatPointsDecimal(currentPoints);
+        
+        if (confirmTokenInput) confirmTokenInput.value = 100;
+        
+        updateExchangeCalculation();
+        
+        if (subConfirmModal) {
+            subConfirmModal.classList.add('show');
+        } else {
+            console.error('找不到 subConfirmModal 元素');
+            alert('系統錯誤：無法開啟兌換視窗');
+        }
+    };
+    
+    window.enterKeepMachine = function(machineName, machineId, ratio, savedCoins) {
+        showLoadingAndGoToSimulator(machineName, machineId, ratio, savedCoins);
+    };
+    
+    // ==================== 設定功能 ====================
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const body = document.body;
+    function loadSettings() {
+        if (window.T_PACHIN_STORAGE) {
+            const settings = T_PACHIN_STORAGE.getSettings();
+            if (!settings.darkMode) {
+                body.classList.add('light-mode');
+                if (darkModeToggle) darkModeToggle.checked = false;
+            } else {
+                body.classList.remove('light-mode');
+                if (darkModeToggle) darkModeToggle.checked = true;
+            }
+            const soundToggle = document.getElementById('soundToggle');
+            if (soundToggle) soundToggle.checked = settings.sound !== false;
+            const notifyToggle = document.getElementById('notifyToggle');
+            if (notifyToggle) notifyToggle.checked = settings.notify !== false;
+            const langSelect = document.getElementById('langSelect');
+            if (langSelect) langSelect.value = settings.language || 'zh-TW';
+        } else {
+            // Fallback to localStorage
+            const darkMode = localStorage.getItem('t_pachin_dark_mode');
+            if (darkMode === 'false') { body.classList.add('light-mode'); if (darkModeToggle) darkModeToggle.checked = false; }
+            else { body.classList.remove('light-mode'); if (darkModeToggle) darkModeToggle.checked = true; }
+            const soundEnabled = localStorage.getItem('t_pachin_sound');
+            const soundToggle = document.getElementById('soundToggle');
+            if (soundToggle) soundToggle.checked = soundEnabled !== 'false';
+            const notifyEnabled = localStorage.getItem('t_pachin_notify');
+            const notifyToggle = document.getElementById('notifyToggle');
+            if (notifyToggle) notifyToggle.checked = notifyEnabled !== 'false';
+            const language = localStorage.getItem('t_pachin_language') || 'zh-TW';
+            const langSelect = document.getElementById('langSelect');
+            if (langSelect) langSelect.value = language;
+        }
+    }
+    function saveDarkMode(enabled) { 
+        if (window.T_PACHIN_STORAGE) {
+            T_PACHIN_STORAGE.updateSetting('darkMode', enabled);
+        } else {
+            if (enabled) { body.classList.remove('light-mode'); localStorage.setItem('t_pachin_dark_mode', 'true'); } 
+            else { body.classList.add('light-mode'); localStorage.setItem('t_pachin_dark_mode', 'false'); }
+        }
+    }
+    function saveSound(enabled) { 
+        if (window.T_PACHIN_STORAGE) {
+            T_PACHIN_STORAGE.updateSetting('sound', enabled);
+        } else {
+            localStorage.setItem('t_pachin_sound', enabled);
+        }
+    }
+    function saveNotify(enabled) { 
+        if (window.T_PACHIN_STORAGE) {
+            T_PACHIN_STORAGE.updateSetting('notify', enabled);
+        } else {
+            localStorage.setItem('t_pachin_notify', enabled);
+        }
+    }
+    function saveLanguage(lang) { 
+        if (window.T_PACHIN_STORAGE) {
+            T_PACHIN_STORAGE.updateSetting('language', lang);
+        } else {
+            localStorage.setItem('t_pachin_language', lang);
+        }
+        const langNames = { 'zh-TW': '繁體中文', 'zh-CN': '简体中文', 'en': 'English', 'ja': '日本語', 'ko': '한국어' }; 
+        showToast(`🌐 語言已切換為 ${langNames[lang] || lang}`); 
+    }
+    if (darkModeToggle) darkModeToggle.addEventListener('change', function() { saveDarkMode(this.checked); });
+    const soundToggle = document.getElementById('soundToggle');
+    if (soundToggle) soundToggle.addEventListener('change', function() { saveSound(this.checked); });
+    const notifyToggle = document.getElementById('notifyToggle');
+    if (notifyToggle) notifyToggle.addEventListener('change', function() { saveNotify(this.checked); });
+    const langSelect = document.getElementById('langSelect');
+    if (langSelect) langSelect.addEventListener('change', function() { saveLanguage(this.value); });
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsModal = document.getElementById('settingsModal');
+    const closeSettingsBtn = document.getElementById('closeSettingsBtn');
+    if (settingsBtn) settingsBtn.addEventListener('click', () => { loadSettings(); settingsModal.classList.add('show'); });
+    if (closeSettingsBtn) closeSettingsBtn.addEventListener('click', () => { settingsModal.classList.remove('show'); });
+    if (settingsModal) settingsModal.addEventListener('click', (e) => { if (e.target === settingsModal) settingsModal.classList.remove('show'); });
+    
+    // VIP 經驗值
+    let currentVipLevel = 1, currentExp = 680;
+    const vipExpNeeded = { 1: 1200, 2: 2500, 3: 5000, 4: 10000, 5: 20000 };
+    function updateVipProgress() {
+        const needed = vipExpNeeded[currentVipLevel] || 1200;
+        const percent = Math.min(100, Math.floor((currentExp / needed) * 100));
+        const progressFill = document.querySelector('.progress-fill');
+        const vipBadge = document.getElementById('vipBadge');
+        const expText = document.getElementById('expText');
+        if (progressFill) progressFill.style.width = percent + '%';
+        if (vipBadge) vipBadge.textContent = 'VIP ' + currentVipLevel;
+        if (expText) expText.textContent = '經驗值 ' + currentExp + '/' + needed;
+    }
+    function showVipInfo() { const needed = vipExpNeeded[currentVipLevel] || 1200; const remaining = needed - currentExp; alert('🎖️ VIP ' + currentVipLevel + ' 特權\n\n• 返水 ' + (currentVipLevel * 0.2).toFixed(1) + '%\n• 每日免費 ' + (currentVipLevel * 10) + ' 枚代幣\n• 專屬客服通道\n\n📊 升級進度\n目前 ' + currentExp + ' / ' + needed + '\n距離下一級還需 ' + remaining + ' 經驗'); }
+    function showExpInfo() { const needed = vipExpNeeded[currentVipLevel] || 1200; const remaining = needed - currentExp; alert('📊 經驗值詳解\n\n目前：' + currentExp + ' / ' + needed + '\n距離下一級：' + remaining + ' 經驗\n\n✨ 獲得經驗方式：\n• 每遊玩 1 轉 = +1 經驗\n• 每日登入 = +50 經驗\n• 活動任務 = 額外加成'); }
+    
+    function initNavigation() {
+        document.querySelectorAll('.nav-item, .home-icon-btn, [data-page]').forEach(el => {
+            if (el.classList && (el.classList.contains('nav-item') || el.classList.contains('home-icon-btn') || el.hasAttribute('data-page'))) {
+                if (el._navHandler) return;
+                el._navHandler = function(e) {
+                    e.preventDefault();
+                    const page = this.dataset.page;
+                    if (page === 'index') window.location.href = 'index.html';
+                    else if (page === 'machines') window.location.href = 'machines.html';
+                    else if (page === 'lobby') window.location.href = 'index.html';
+                    else if (page === 'news') window.location.href = 'news.html';
+                    else if (page === 'about') window.location.href = 'about.html';
+                };
+                el.addEventListener('click', el._navHandler);
+            }
+        });
+    }
+    
+    let favoriteMachines = [], keepMachines = [];
     function initFavoriteAndReserve() {
         if (window.T_PACHIN_STORAGE) {
             favoriteMachines = T_PACHIN_STORAGE.getFavorites();
             keepMachines = T_PACHIN_STORAGE.getReserves();
         } else {
             favoriteMachines = [
-                { id: 1, name: 'GOGO 小丑', number: 'J001', image: JOKER_IMAGE_URL, ratio: '2.5' },
-                { id: 2, name: '我是小丑-EX', number: 'J002', image: JOKER_IMAGE_URL, ratio: '2.8' }
+                { id: 1, name: 'GOGO 小丑', number: 'J001', image: JOKER_IMAGE_URL, ratio: '2.5', spread: 0.15 },
+                { id: 2, name: '我是小丑-EX', number: 'J002', image: JOKER_IMAGE_URL, ratio: '2.8', spread: 0.15 }
             ];
             keepMachines = [
-                { id: 4, name: '新我是小丑-EX水晶版', number: 'J004', image: JOKER_IMAGE_URL, ratio: '3.0' }
+                { id: 4, name: '新我是小丑-EX水晶版', number: 'J004', image: JOKER_IMAGE_URL, ratio: '3.0', spread: 0.15, savedCoins: 250 }
             ];
         }
         updateBadges();
     }
-    
-    function updateBadges() {
-        document.getElementById('favCount').innerText = favoriteMachines.length;
-        document.getElementById('keepCount').innerText = keepMachines.length;
+    function updateBadges() { 
+        const favCountSpan = document.getElementById('favCount');
+        const keepCountSpan = document.getElementById('keepCount');
+        if (favCountSpan) favCountSpan.innerText = favoriteMachines.length;
+        if (keepCountSpan) keepCountSpan.innerText = keepMachines.length;
     }
     
     window.removeFromFavorite = function(machineId) {
@@ -1093,34 +854,23 @@
         showToast('已取消保留');
     };
     
-    window.enterMachine = function(machineName, machineId, ratio) {
-        showLoadingAndGoToSimulator(machineName, machineId, ratio);
-    };
-    
     function renderFavoriteModal() {
         let html = '';
         if (favoriteMachines.length === 0) {
             html = '<div class="empty-state"><i class="fa fa-heart-o"></i><p>暫無收藏機台</p><p class="hint">可至機台頁面點擊收藏您喜愛的機台</p></div>';
         } else {
-            favoriteMachines.forEach((m, idx) => {
-                const lastPlay = '2026/03/' + (10 + idx) + ' 14:30';
-                const hotText = idx === 0 ? '<span class="hot-badge">熱門</span>' : '';
-                const machineImage = m.image || JOKER_IMAGE_URL;
-                html += '<div class="machine-card">' +
-                    '<img src="' + machineImage + '" alt="小丑機台" onerror="this.src=\'https://i.pravatar.cc/150?img=13\'">' +
-                    '<div class="machine-info">' +
-                        '<div class="machine-name">' + m.name + ' ' + hotText + '</div>' +
-                        '<div class="machine-stats"><span>' + (m.number || 'J' + m.id) + '</span><span>每枚 ' + (m.ratio || '2.5') + '</span><span>上次 ' + lastPlay + '</span><span>天井 1280</span></div>' +
-                        '<div class="action-buttons">' +
-                            '<div class="play-btn" onclick="enterMachine(\'' + m.name.replace(/'/g, "\\'") + '\', ' + m.id + ', \'' + (m.ratio || 2.5) + '\')">進入遊戲</div>' +
-                            '<div class="cancel-btn" onclick="removeFromFavorite(' + m.id + ')">取消收藏</div>' +
-                        '</div>' +
-                    '</div>' +
-                '</div>';
+            favoriteMachines.forEach((m, idx) => { 
+                const lastPlay = '2026/03/' + (10 + idx) + ' 14:30'; 
+                const hotText = idx === 0 ? '<span class="hot-badge">熱門</span>' : ''; 
+                const machineImage = m.image || JOKER_IMAGE_URL; 
+                const spreadValue = (m.spread !== undefined) ? m.spread : 0.15; 
+                html += '<div class="machine-card"><img src="' + machineImage + '" alt="小丑機台" onerror="this.src=\'https://i.pravatar.cc/150?img=13\'"><div class="machine-info"><div class="machine-name">' + m.name + ' ' + hotText + '</div><div class="machine-stats"><span>' + (m.number || 'J' + m.id) + '</span><span>每枚 ' + (m.ratio || '2.5') + '</span><span>點差 ' + spreadValue.toFixed(2) + '</span><span>上次 ' + lastPlay + '</span><span>天井 1280</span></div><div class="action-buttons"><div class="play-btn" onclick="window.openSubConfirm(\'' + m.name.replace(/'/g, "\\'") + '\', ' + m.id + ', \'' + (m.ratio || 2.5) + '\')">進入遊戲</div><div class="cancel-btn" onclick="window.removeFromFavorite(' + m.id + ')">取消收藏</div></div></div></div>'; 
             });
         }
-        document.getElementById('favoriteModalBody').innerHTML = html;
-        document.getElementById('favoriteModal').classList.add('active');
+        const favoriteModalBody = document.getElementById('favoriteModalBody');
+        const favoriteModal = document.getElementById('favoriteModal');
+        if (favoriteModalBody) favoriteModalBody.innerHTML = html;
+        if (favoriteModal) favoriteModal.classList.add('active');
     }
     
     function renderKeepModal() {
@@ -1128,118 +878,220 @@
         if (keepMachines.length === 0) {
             html = '<div class="empty-state"><i class="fa fa-bookmark-o"></i><p>暫無保留機台</p><p class="hint">可至機台頁面點擊保留，下次快速進入</p></div>';
         } else {
-            keepMachines.forEach((m, idx) => {
-                const lastPlay = '2026/03/' + (15 + idx) + ' 20:15';
-                const saveNote = idx === 0 ? '最愛玩這台' : '試試手氣';
-                const machineImage = m.image || JOKER_IMAGE_URL;
-                html += '<div class="machine-card">' +
-                    '<img src="' + machineImage + '" alt="小丑保留機台" onerror="this.src=\'https://i.pravatar.cc/150?img=13\'">' +
-                    '<div class="machine-info">' +
-                        '<div class="machine-name">' + m.name + '</div>' +
-                        '<div class="machine-stats"><span>' + (m.number || 'J' + m.id) + '</span><span>每枚 ' + (m.ratio || '2.5') + '</span><span>上次 ' + lastPlay + '</span><span>' + saveNote + '</span><span>天井 980</span></div>' +
-                        '<div class="action-buttons">' +
-                            '<div class="play-btn" onclick="enterMachine(\'' + m.name.replace(/'/g, "\\'") + '\', ' + m.id + ', \'' + (m.ratio || 2.5) + '\')">進入遊戲</div>' +
-                            '<div class="cancel-btn" onclick="removeFromKeep(' + m.id + ')">取消保留</div>' +
-                        '</div>' +
-                    '</div>' +
-                '</div>';
+            keepMachines.forEach((m, idx) => { 
+                const lastPlay = '2026/03/' + (15 + idx) + ' 20:15'; 
+                const saveNote = idx === 0 ? '最愛玩這台' : '試試手氣'; 
+                const machineImage = m.image || JOKER_IMAGE_URL; 
+                const spreadValue = (m.spread !== undefined) ? m.spread : 0.15;
+                const savedCoins = m.savedCoins || 100;
+                html += '<div class="machine-card"><img src="' + machineImage + '" alt="小丑保留機台" onerror="this.src=\'https://i.pravatar.cc/150?img=13\'"><div class="machine-info"><div class="machine-name">' + m.name + '</div><div class="machine-stats"><span>' + (m.number || 'J' + m.id) + '</span><span>每枚 ' + (m.ratio || '2.5') + '</span><span>點差 ' + spreadValue.toFixed(2) + '</span><span>保留代幣 ' + savedCoins + ' 枚</span><span>上次 ' + lastPlay + '</span><span>' + saveNote + '</span><span>天井 980</span></div><div class="action-buttons"><div class="play-btn" onclick="window.enterKeepMachine(\'' + m.name.replace(/'/g, "\\'") + '\', ' + m.id + ', \'' + (m.ratio || 2.5) + '\', ' + savedCoins + ')">進入遊戲</div><div class="cancel-btn" onclick="window.removeFromKeep(' + m.id + ')">取消保留</div></div></div></div>'; 
             });
         }
-        document.getElementById('keepModalBody').innerHTML = html;
-        document.getElementById('keepModal').classList.add('active');
+        const keepModalBody = document.getElementById('keepModalBody');
+        const keepModal = document.getElementById('keepModal');
+        if (keepModalBody) keepModalBody.innerHTML = html;
+        if (keepModal) keepModal.classList.add('active');
     }
     
-    function bindStorageEvents() {
-        if (!window.T_PACHIN_STORAGE) return;
-        window.addEventListener('t-pachin:favorites-updated', function(e) {
-            favoriteMachines = e.detail;
-            updateBadges();
-            const favModal = document.getElementById('favoriteModal');
-            if (favModal && favModal.classList.contains('active')) renderFavoriteModal();
-        });
-        window.addEventListener('t-pachin:reserves-updated', function(e) {
-            keepMachines = e.detail;
-            updateBadges();
-            const keepModal = document.getElementById('keepModal');
-            if (keepModal && keepModal.classList.contains('active')) renderKeepModal();
-        });
-        window.addEventListener('points-updated', function(e) {
-            if (e.detail && e.detail.points !== undefined) { userPoints = e.detail.points; updatePointsDisplay(); }
-        });
-    }
-    
-    function updatePointsDisplay() {
-        const pointsSpan = document.getElementById('userPoints');
-        if (pointsSpan) pointsSpan.innerText = userPoints;
-    }
-    
-    function syncPointsWithStorage() {
-        if (window.T_PACHIN_STORAGE) {
-            const syncedPoints = T_PACHIN_STORAGE.getPoints();
-            if (userPoints !== syncedPoints) { userPoints = syncedPoints; updatePointsDisplay(); }
-        }
-    }
-    
-    function generateSessions() {
-        const machines = [{ name: 'GOGO 小丑', number: 'J001' }, { name: '我是小丑-EX', number: 'J002' }, { name: '快樂小丑 VII', number: 'J003' }, { name: '新我是小丑-EX水晶版', number: 'J004' }];
-        const sessions = [];
-        for (let i = 0; i < machines.length; i++) {
-            const m = machines[i];
-            const day = 5 + i * 6;
-            const bringInTime = new Date(2026, 2, day, 14, 30);
-            const bringOutTime = new Date(2026, 2, day, 15, 45);
-            const bringInAmount = 500 + i * 150;
-            const details = [];
-            details.push({ date: new Date(bringInTime), type: 'BRING_IN', bet: 0, win: bringInAmount, total: bringInAmount, betId: 'IN' + (i+1) });
-            let currentTotal = bringInAmount;
-            let totalBet = 0, totalWin = 0;
-            const spinCount = 10 + Math.floor(Math.random() * 10);
-            for (let s = 0; s < spinCount; s++) {
-                const spinTime = new Date(bringInTime.getTime() + (s + 1) * 75000);
-                const bet = 6 + Math.floor(Math.random() * 14);
-                const win = Math.random() < 0.42 ? bet * (1 + Math.floor(Math.random() * 3)) : 0;
-                currentTotal = currentTotal - bet + win;
-                totalBet += bet;
-                totalWin += win;
-                details.push({ date: spinTime, type: 'SPIN', bet: bet, win: win, total: currentTotal, betId: 'SP' + (i+1) + '-' + (s+1), isFirstSpin: (s === 0) });
+    function bindStorageEvents() { 
+        if (!window.T_PACHIN_STORAGE) return; 
+        window.addEventListener('t-pachin:favorites-updated', function(e) { favoriteMachines = e.detail; updateBadges(); const favModal = document.getElementById('favoriteModal'); if (favModal && favModal.classList.contains('active')) renderFavoriteModal(); }); 
+        window.addEventListener('t-pachin:reserves-updated', function(e) { keepMachines = e.detail; updateBadges(); const keepModal = document.getElementById('keepModal'); if (keepModal && keepModal.classList.contains('active')) renderKeepModal(); }); 
+        window.addEventListener('points-updated', function(e) { if (e.detail && e.detail.points !== undefined) { userPoints = e.detail.points; updatePointsDisplay(); } }); 
+        window.addEventListener('t-pachin:user-updated', function(e) {
+            if (e.detail && e.detail.points !== undefined) {
+                updatePointsDisplay();
             }
-            const bringOutAmount = Math.max(100, currentTotal - Math.random() * 280);
-            details.push({ date: new Date(bringOutTime), type: 'BRING_OUT', bet: 0, win: 0, total: bringOutAmount, betId: 'OUT' + (i+1) });
-            sessions.push({
-                machineName: m.name, machineNumber: m.number, bringInTime, bringOutTime,
-                bringInAmount, bringOutAmount: Math.floor(bringOutAmount),
-                netProfit: Math.floor(bringOutAmount - bringInAmount),
-                details, stats: { totalSpins: spinCount, totalBet, totalWin },
-                videoUrl: videoUrls[i % videoUrls.length]
-            });
-        }
-        return sessions;
+            if (e.detail && e.detail.nickname) {
+                document.getElementById('displayNickname').textContent = e.detail.nickname;
+            }
+        });
     }
     
-    function generateTransactions() {
-        const platforms = ['BBIN', 'TZ', '搖錢樹', 'FDY', '富大爺'];
-        const types = [
-            { type: 'platform_in', name: '平台轉入', icon: 'fa-download', isOut: false, unit: '點', inLabel: '總轉入', outLabel: '總轉出', hasOut: true },
-            { type: 'platform_out', name: '平台轉出', icon: 'fa-upload', isOut: true, unit: '點', inLabel: '總轉入', outLabel: '總轉出', hasOut: true },
-            { type: 'platform_add', name: '人工上分', icon: 'fa-user-plus', isOut: false, unit: '點', inLabel: '總上分', outLabel: '總下分', hasOut: true },
-            { type: 'platform_sub', name: '人工下分', icon: 'fa-user-minus', isOut: true, unit: '點', inLabel: '總上分', outLabel: '總下分', hasOut: true },
-            { type: 'token_in', name: '代幣帶入', icon: 'fa-arrow-down', isOut: false, unit: '枚', inLabel: '總帶入', outLabel: '總帶出', hasOut: true },
-            { type: 'token_out', name: '代幣帶出', icon: 'fa-arrow-up', isOut: true, unit: '枚', inLabel: '總帶入', outLabel: '總帶出', hasOut: true },
-            { type: 'bonus', name: '活動贈分', icon: 'fa-gift', isOut: false, unit: '點', inLabel: '總贈分', outLabel: null, hasOut: false },
-            { type: 'shop', name: '購買道具', icon: 'fa-shopping-cart', isOut: true, unit: '點', inLabel: '總購買', outLabel: null, hasOut: false }
-        ];
-        let txs = [];
+    // ==================== 模擬資料產生函數 ====================
+    function generateSessions() { 
+        const machines = [{ name: 'GOGO 小丑', number: 'J001' }, { name: '我是小丑-EX', number: 'J002' }, { name: '快樂小丑 VII', number: 'J003' }, { name: '新我是小丑-EX水晶版', number: 'J004' }]; 
+        const sessions = []; 
+        for (let i = 0; i < machines.length; i++) { 
+            const m = machines[i]; 
+            const day = 5 + i * 6; 
+            const bringInTime = new Date(2026, 2, day, 14, 30); 
+            const bringOutTime = new Date(2026, 2, day, 15, 45); 
+            const bringInAmount = 500 + i * 150; 
+            const details = []; 
+            details.push({ date: new Date(bringInTime), type: 'BRING_IN', bet: 0, win: bringInAmount, total: bringInAmount, betId: 'IN' + (i+1) }); 
+            let currentTotal = bringInAmount; 
+            let totalBet = 0, totalWin = 0; 
+            const spinCount = 10 + Math.floor(Math.random() * 10); 
+            for (let s = 0; s < spinCount; s++) { 
+                const spinTime = new Date(bringInTime.getTime() + (s + 1) * 75000); 
+                const bet = 6 + Math.floor(Math.random() * 14); 
+                const win = Math.random() < 0.42 ? bet * (1 + Math.floor(Math.random() * 3)) : 0; 
+                currentTotal = currentTotal - bet + win; 
+                totalBet += bet; 
+                totalWin += win; 
+                details.push({ date: spinTime, type: 'SPIN', bet: bet, win: win, total: currentTotal, betId: 'SP' + (i+1) + '-' + (s+1), isFirstSpin: (s === 0) }); 
+            } 
+            const bringOutAmount = Math.max(100, currentTotal - Math.random() * 280); 
+            details.push({ date: new Date(bringOutTime), type: 'BRING_OUT', bet: 0, win: 0, total: bringOutAmount, betId: 'OUT' + (i+1) }); 
+            sessions.push({ machineName: m.name, machineNumber: m.number, bringInTime, bringOutTime, bringInAmount, bringOutAmount: Math.floor(bringOutAmount), netProfit: Math.floor(bringOutAmount - bringInAmount), details, stats: { totalSpins: spinCount, totalBet, totalWin }, videoUrl: videoUrls[i % videoUrls.length] }); 
+        } 
+        return sessions; 
+    }
+    
+    // 產生交易記錄
+    function generateTransactions() { 
+        const txs = []; 
         let idCounter = 1;
-        types.forEach(tt => {
-            for (let i = 0; i < 5; i++) {
-                let day = 5 + Math.floor(Math.random() * 25);
-                let date = new Date(2026, 2, day, Math.floor(Math.random() * 24), Math.floor(Math.random() * 60));
-                let points = Math.floor(Math.random() * 3000) + 100;
-                let platformName = tt.type === 'shop' ? '商城' : platforms[Math.floor(Math.random() * platforms.length)];
-                txs.push({ id: tt.type + '_' + idCounter++, type: tt.type, name: tt.name, icon: tt.icon, platform: platformName, points: points, isOut: tt.isOut, unit: tt.unit, inLabel: tt.inLabel, outLabel: tt.outLabel, hasOut: tt.hasOut, date: date });
-            }
-        });
-        return txs.sort((a, b) => b.date - a.date);
+        
+        // 人工開點 (無平台)
+        for (let i = 0; i < 5; i++) { 
+            let day = 5 + Math.floor(Math.random() * 25); 
+            let date = new Date(2026, 2, day, Math.floor(Math.random() * 24), Math.floor(Math.random() * 60)); 
+            let points = Math.floor(Math.random() * 3000) + 100; 
+            txs.push({ 
+                id: 'platform_add_' + idCounter++, 
+                type: 'platform_add', 
+                name: '人工開點', 
+                icon: 'fa-user-plus', 
+                platform: null,
+                machineName: null,
+                points: points, 
+                isOut: false, 
+                unit: '點', 
+                hasPlatform: false,
+                date: date 
+            }); 
+        }
+        
+        // 人工洗點 (無平台)
+        for (let i = 0; i < 5; i++) { 
+            let day = 5 + Math.floor(Math.random() * 25); 
+            let date = new Date(2026, 2, day, Math.floor(Math.random() * 24), Math.floor(Math.random() * 60)); 
+            let points = Math.floor(Math.random() * 3000) + 100; 
+            txs.push({ 
+                id: 'platform_sub_' + idCounter++, 
+                type: 'platform_sub', 
+                name: '人工洗點', 
+                icon: 'fa-user-minus', 
+                platform: null,
+                machineName: null,
+                points: points, 
+                isOut: true, 
+                unit: '點', 
+                hasPlatform: false,
+                date: date 
+            }); 
+        }
+        
+        // 購買代幣（用點數購買代幣 => 點數支出，綠色 -）
+        for (let i = 0; i < 4; i++) {
+            let day = 8 + Math.floor(Math.random() * 22);
+            let date = new Date(2026, 2, day, Math.floor(Math.random() * 24), Math.floor(Math.random() * 60));
+            let coinsAmount = [100, 200, 300, 500, 1000][Math.floor(Math.random() * 5)];
+            let ratio = [2.5, 2.8, 3.0][Math.floor(Math.random() * 3)];
+            let pointDiff = 0.15;
+            let costPoints = coinsAmount * ratio;
+            let wastePoints = coinsAmount * pointDiff;
+            let totalPointsCost = Math.floor(costPoints + wastePoints);
+            let machineName = MACHINE_NAMES[Math.floor(Math.random() * MACHINE_NAMES.length)];
+            let machineId = Math.floor(Math.random() * 5) + 1;
+            
+            txs.push({
+                id: 'token_in_' + idCounter++,
+                type: 'token_in',
+                name: '購買代幣',
+                icon: 'fa-arrow-down',
+                platform: null,
+                machineName: machineName,
+                machineId: machineId,
+                points: totalPointsCost,
+                isOut: true,
+                unit: '點',
+                detailInfo: {
+                    coins: coinsAmount,
+                    ratio: ratio,
+                    pointDiff: pointDiff,
+                    costPoints: costPoints,
+                    wastePoints: wastePoints
+                },
+                hasPlatform: false,
+                date: date
+            });
+        }
+        
+        // 兌換點數（用代幣兌換點數 => 點數收入，紅色 +）
+        for (let i = 0; i < 3; i++) {
+            let day = 10 + Math.floor(Math.random() * 20);
+            let date = new Date(2026, 2, day, Math.floor(Math.random() * 24), Math.floor(Math.random() * 60));
+            let coinsAmount = [50, 100, 200, 500][Math.floor(Math.random() * 4)];
+            let ratio = [2.5, 2.8, 3.0][Math.floor(Math.random() * 3)];
+            let earnedPoints = Math.floor(coinsAmount * ratio);
+            let machineName = MACHINE_NAMES[Math.floor(Math.random() * MACHINE_NAMES.length)];
+            let machineId = Math.floor(Math.random() * 5) + 1;
+            
+            txs.push({
+                id: 'token_out_' + idCounter++,
+                type: 'token_out',
+                name: '兌換點數',
+                icon: 'fa-arrow-up',
+                platform: null,
+                machineName: machineName,
+                machineId: machineId,
+                points: earnedPoints,
+                isOut: false,
+                unit: '點',
+                detailInfo: {
+                    coins: coinsAmount,
+                    ratio: ratio,
+                    earnedPoints: earnedPoints
+                },
+                hasPlatform: false,
+                date: date
+            });
+        }
+        
+        // 活動贈分
+        for (let i = 0; i < 3; i++) {
+            let day = 5 + Math.floor(Math.random() * 25);
+            let date = new Date(2026, 2, day, Math.floor(Math.random() * 24), Math.floor(Math.random() * 60));
+            let points = Math.floor(Math.random() * 800) + 50;
+            txs.push({
+                id: 'bonus_' + idCounter++,
+                type: 'bonus',
+                name: '活動贈分',
+                icon: 'fa-gift',
+                platform: '活動中心',
+                machineName: null,
+                points: points,
+                isOut: false,
+                unit: '點',
+                hasPlatform: true,
+                date: date
+            });
+        }
+        
+        // 購買道具
+        for (let i = 0; i < 3; i++) {
+            let day = 5 + Math.floor(Math.random() * 25);
+            let date = new Date(2026, 2, day, Math.floor(Math.random() * 24), Math.floor(Math.random() * 60));
+            let points = Math.floor(Math.random() * 500) + 50;
+            txs.push({
+                id: 'shop_' + idCounter++,
+                type: 'shop',
+                name: '購買道具',
+                icon: 'fa-shopping-cart',
+                platform: '商城',
+                machineName: null,
+                points: points,
+                isOut: true,
+                unit: '點',
+                hasPlatform: true,
+                date: date
+            });
+        }
+        
+        return txs.sort((a, b) => b.date - a.date); 
     }
     
     let allSessions = generateSessions();
@@ -1253,205 +1105,191 @@
     function formatDateTime(d) { return d.getFullYear() + '/' + String(d.getMonth()+1).padStart(2,'0') + '/' + String(d.getDate()).padStart(2,'0') + ' ' + String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0'); }
     function formatDate(d) { return d.getFullYear() + '/' + String(d.getMonth()+1).padStart(2,'0') + '/' + String(d.getDate()).padStart(2,'0'); }
     function formatTime(d) { return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0'); }
+    function getFilteredSessions() { let f = allSessions.filter(s => s.bringInTime >= dateStart && s.bringInTime <= dateEnd); if (searchTerm) f = f.filter(s => s.machineName.toLowerCase().includes(searchTerm) || s.machineNumber.toLowerCase().includes(searchTerm)); return f; }
+    function getFilteredTransactions() { let f = allTransactions.filter(t => t.date >= dateStart && t.date <= dateEnd); if (currentFilter !== 'all' && currentFilter !== 'bet_detail') f = f.filter(t => t.type === currentFilter); if (searchTerm && currentFilter !== 'bet_detail') f = f.filter(t => t.name.toLowerCase().includes(searchTerm) || (t.machineName && t.machineName.toLowerCase().includes(searchTerm))); return f; }
+    function getPointStatsLabels() { if (currentFilter === 'all') return { inLabel: '總轉入', outLabel: '總轉出', hasOut: true }; return { inLabel: '總存入', outLabel: '總提出', hasOut: true }; }
+    function render() { if (currentFilter === 'bet_detail') { document.getElementById('transactionContainer').style.display = 'none'; document.getElementById('sessionsContainer').style.display = 'block'; renderSessions(); } else { document.getElementById('transactionContainer').style.display = 'block'; document.getElementById('sessionsContainer').style.display = 'none'; renderTransactions(); } }
     
-    function getFilteredSessions() {
-        let f = allSessions.filter(s => s.bringInTime >= dateStart && s.bringInTime <= dateEnd);
-        if (searchTerm) f = f.filter(s => s.machineName.toLowerCase().includes(searchTerm) || s.machineNumber.toLowerCase().includes(searchTerm));
-        return f;
-    }
-    
-    function getFilteredTransactions() {
-        let f = allTransactions.filter(t => t.date >= dateStart && t.date <= dateEnd);
-        if (currentFilter !== 'all' && currentFilter !== 'bet_detail') f = f.filter(t => t.type === currentFilter);
-        if (searchTerm && currentFilter !== 'bet_detail') f = f.filter(t => t.name.toLowerCase().includes(searchTerm));
-        return f;
-    }
-    
-    function getPointStatsLabels() {
-        if (currentFilter === 'all') return { inLabel: '總轉入', outLabel: '總轉出', hasOut: true };
-        let sampleTx = allTransactions.find(t => t.type === currentFilter);
-        if (sampleTx) return { inLabel: sampleTx.inLabel, outLabel: sampleTx.outLabel, hasOut: sampleTx.hasOut };
-        return { inLabel: '總存入', outLabel: '總提出', hasOut: true };
-    }
-    
-    function render() {
-        if (currentFilter === 'bet_detail') {
-            document.getElementById('transactionContainer').style.display = 'none';
-            document.getElementById('sessionsContainer').style.display = 'block';
-            renderSessions();
-        } else {
-            document.getElementById('transactionContainer').style.display = 'block';
-            document.getElementById('sessionsContainer').style.display = 'none';
-            renderTransactions();
+    function renderSessions() { 
+        let f = getFilteredSessions(); 
+        let totalBet = f.reduce((a, b) => a + b.stats.totalBet, 0); 
+        let totalWin = f.reduce((a, b) => a + b.stats.totalWin, 0); 
+        let net = totalWin - totalBet; 
+        const statsContainer = document.getElementById('statsContainer');
+        const sessionsContainer = document.getElementById('sessionsContainer');
+        if (statsContainer) {
+            statsContainer.innerHTML = '<div class="stats-card-compact"><div class="stats-group"><div class="stats-group-title"><i class="fa fa-bar-chart"></i> 📊 注單統計</div><div class="stats-row-compact"><div class="stats-item"><div class="stats-item-label">總投注</div><div class="stats-item-value in">' + totalBet + '</div></div><div class="stats-item"><div class="stats-item-label">總獲得</div><div class="stats-item-value out">' + totalWin + '</div></div><div class="stats-item"><div class="stats-item-label">淨損益</div><div class="stats-item-value net ' + (net >= 0 ? 'positive' : 'negative') + '">' + (net >= 0 ? '+' : '') + net + '</div></div></div></div><div class="stats-group"><div class="stats-group-title"><i class="fa fa-gamepad"></i> 🎰 機台數據</div><div class="stats-row-compact"><div class="stats-item"><div class="stats-item-label">總轉數</div><div class="stats-item-value in">' + f.reduce((a, b) => a + b.stats.totalSpins, 0) + '</div></div><div class="stats-item"><div class="stats-item-label">BB次數</div><div class="stats-item-value out">' + f.reduce((a, b) => a + b.stats.totalBB || 0, 0) + '</div></div><div class="stats-item"><div class="stats-item-label">RB次數</div><div class="stats-item-value net">' + f.reduce((a, b) => a + b.stats.totalRB || 0, 0) + '</div></div></div></div></div>'; 
         }
+        if (f.length === 0) { 
+            if (sessionsContainer) sessionsContainer.innerHTML = '<div class="text-center text-gray-400 py-8">沒有注單記錄</div>'; 
+            return; 
+        } 
+        let html = ''; 
+        f.forEach((s, idx) => { 
+            let profitClass = s.netProfit >= 0 ? 'positive' : 'negative'; 
+            html += '<div class="main-row" onclick="openBetModal(' + idx + ')"><div><div class="machine-title"><span class="name">' + s.machineName + '</span><span class="number">' + s.machineNumber + '</span></div><div class="date-range">' + formatDate(s.bringInTime) + ' ~ ' + formatDate(s.bringOutTime) + ' ' + formatTime(s.bringInTime) + '~' + formatTime(s.bringOutTime) + '</div><div class="amount-info"><span class="bring-in">帶入 ' + s.bringInAmount + '</span> → <span class="bring-out">帶出 ' + s.bringOutAmount + '</span> | <span class="net-profit ' + profitClass + '">淨利 ' + (s.netProfit >= 0 ? '+' : '') + s.netProfit + '</span></div></div></div>'; 
+        }); 
+        if (sessionsContainer) sessionsContainer.innerHTML = html; 
     }
     
-    function renderSessions() {
-        let f = getFilteredSessions();
-        let totalBet = f.reduce((a, b) => a + b.stats.totalBet, 0);
-        let totalWin = f.reduce((a, b) => a + b.stats.totalWin, 0);
-        let net = totalWin - totalBet;
-        document.getElementById('statsContainer').innerHTML = 
-            '<div class="stats-card-compact">' +
-                '<div class="stats-group"><div class="stats-group-title"><i class="fa fa-bar-chart"></i> 📊 注單統計</div>' +
-                '<div class="stats-row-compact">' +
-                    '<div class="stats-item"><div class="stats-item-label">總投注</div><div class="stats-item-value in">' + totalBet + '</div></div>' +
-                    '<div class="stats-item"><div class="stats-item-label">總獲得</div><div class="stats-item-value out">' + totalWin + '</div></div>' +
-                    '<div class="stats-item"><div class="stats-item-label">淨損益</div><div class="stats-item-value net ' + (net >= 0 ? 'positive' : 'negative') + '">' + (net >= 0 ? '+' : '') + net + '</div></div>' +
-                '</div></div>' +
-                '<div class="stats-group"><div class="stats-group-title"><i class="fa fa-gamepad"></i> 🎰 機台數據</div>' +
-                '<div class="stats-row-compact">' +
-                    '<div class="stats-item"><div class="stats-item-label">總轉數</div><div class="stats-item-value in">' + f.reduce((a, b) => a + b.stats.totalSpins, 0) + '</div></div>' +
-                    '<div class="stats-item"><div class="stats-item-label">BB次數</div><div class="stats-item-value out">' + f.reduce((a, b) => a + b.stats.totalBB || 0, 0) + '</div></div>' +
-                    '<div class="stats-item"><div class="stats-item-label">RB次數</div><div class="stats-item-value net">' + f.reduce((a, b) => a + b.stats.totalRB || 0, 0) + '</div></div>' +
-                '</div></div>' +
-            '</div>';
-        if (f.length === 0) { document.getElementById('sessionsContainer').innerHTML = '<div class="text-center text-gray-400 py-8">沒有注單記錄</div>'; return; }
-        let html = '';
-        f.forEach((s, idx) => {
-            let profitClass = s.netProfit >= 0 ? 'positive' : 'negative';
-            html += '<div class="main-row" onclick="openBetModal(' + idx + ')"><div><div class="machine-title"><span class="name">' + s.machineName + '</span><span class="number">' + s.machineNumber + '</span></div><div class="date-range">' + formatDate(s.bringInTime) + ' ~ ' + formatDate(s.bringOutTime) + ' ' + formatTime(s.bringInTime) + '~' + formatTime(s.bringOutTime) + '</div><div class="amount-info"><span class="bring-in">帶入 ' + s.bringInAmount + '</span> → <span class="bring-out">帶出 ' + s.bringOutAmount + '</span> | <span class="net-profit ' + profitClass + '">淨利 ' + (s.netProfit >= 0 ? '+' : '') + s.netProfit + '</span></div></div></div>';
-        });
-        document.getElementById('sessionsContainer').innerHTML = html;
-    }
-    
-    function renderTransactions() {
-        let f = getFilteredTransactions();
-        
-        let pointIn = f.filter(t => !t.isOut && t.unit === '點').reduce((a, b) => a + b.points, 0);
-        let pointOut = f.filter(t => t.isOut && t.unit === '點').reduce((a, b) => a + b.points, 0);
-        let pointNet = pointIn - pointOut;
-        
-        let tokenIn = f.filter(t => !t.isOut && t.unit === '枚').reduce((a, b) => a + b.points, 0);
-        let tokenOut = f.filter(t => t.isOut && t.unit === '枚').reduce((a, b) => a + b.points, 0);
-        let tokenNet = tokenIn - tokenOut;
-        
-        let labels = getPointStatsLabels();
-        
-        let pointStatsHtml = '';
-        if (labels.hasOut) {
-            pointStatsHtml = '<div class="stats-row-compact">' +
-                '<div class="stats-item"><div class="stats-item-label">' + labels.inLabel + '</div><div class="stats-item-value in">+' + pointIn.toLocaleString() + '</div></div>' +
-                '<div class="stats-item"><div class="stats-item-label">' + labels.outLabel + '</div><div class="stats-item-value out">-' + pointOut.toLocaleString() + '</div></div>' +
-                '<div class="stats-item"><div class="stats-item-label">淨變化</div><div class="stats-item-value net ' + (pointNet >= 0 ? 'positive' : 'negative') + '">' + (pointNet >= 0 ? '+' : '') + pointNet.toLocaleString() + '</div></div>' +
-            '</div>';
-        } else {
-            pointStatsHtml = '<div class="stats-row-compact" style="justify-content: center;">' +
-                '<div class="stats-item" style="max-width: 150px;"><div class="stats-item-label">' + labels.inLabel + '</div><div class="stats-item-value in">+' + pointIn.toLocaleString() + '</div></div>' +
-                '<div class="stats-item" style="max-width: 150px;"><div class="stats-item-label">淨變化</div><div class="stats-item-value net positive">+' + pointIn.toLocaleString() + '</div></div>' +
-            '</div>';
+    // 顯示交易卡片
+    function renderTransactions() { 
+        let f = getFilteredTransactions(); 
+        let pointIn = f.filter(t => !t.isOut && t.unit === '點').reduce((a, b) => a + b.points, 0); 
+        let pointOut = f.filter(t => t.isOut && t.unit === '點').reduce((a, b) => a + b.points, 0); 
+        let pointNet = pointIn - pointOut; 
+        let labels = getPointStatsLabels(); 
+        let pointStatsHtml = '<div class="stats-row-compact"><div class="stats-item"><div class="stats-item-label">' + labels.inLabel + '</div><div class="stats-item-value in">+' + pointIn.toLocaleString() + '</div></div><div class="stats-item"><div class="stats-item-label">' + labels.outLabel + '</div><div class="stats-item-value out">-' + pointOut.toLocaleString() + '</div></div><div class="stats-item"><div class="stats-item-label">淨變化</div><div class="stats-item-value net ' + (pointNet >= 0 ? 'positive' : 'negative') + '">' + (pointNet >= 0 ? '+' : '') + pointNet.toLocaleString() + '</div></div></div>'; 
+        const statsContainer = document.getElementById('statsContainer');
+        const transactionContainer = document.getElementById('transactionContainer');
+        if (statsContainer) {
+            statsContainer.innerHTML = '<div class="stats-card-compact"><div class="stats-group"><div class="stats-group-title"><i class="fa fa-credit-card"></i> 💰 點數統計</div>' + pointStatsHtml + '</div></div>'; 
         }
-        
-        document.getElementById('statsContainer').innerHTML = 
-            '<div class="stats-card-compact">' +
-                '<div class="stats-group"><div class="stats-group-title"><i class="fa fa-credit-card"></i> 💰 點數統計</div>' + pointStatsHtml + '</div>' +
-                '<div class="stats-group"><div class="stats-group-title"><i class="fa fa-ticket"></i> 🎰 代幣統計</div>' +
-                '<div class="stats-row-compact">' +
-                    '<div class="stats-item"><div class="stats-item-label">總帶入</div><div class="stats-item-value in">+' + tokenIn.toLocaleString() + '</div></div>' +
-                    '<div class="stats-item"><div class="stats-item-label">總帶出</div><div class="stats-item-value out">-' + tokenOut.toLocaleString() + '</div></div>' +
-                    '<div class="stats-item"><div class="stats-item-label">淨變化</div><div class="stats-item-value net ' + (tokenNet >= 0 ? 'positive' : 'negative') + '">' + (tokenNet >= 0 ? '+' : '') + tokenNet.toLocaleString() + '</div></div>' +
-                '</div></div>' +
-            '</div>';
-        
-        if (f.length === 0) { document.getElementById('transactionContainer').innerHTML = '<div class="text-center text-gray-400 py-8">沒有交易記錄</div>'; return; }
-        
-        let html = '';
-        f.forEach((tx) => {
-            let isOut = tx.isOut;
-            let symbol = isOut ? '-' : '+';
+        if (f.length === 0) { 
+            if (transactionContainer) transactionContainer.innerHTML = '<div class="text-center text-gray-400 py-8">沒有交易記錄</div>'; 
+            return; 
+        } 
+        let html = ''; 
+        f.forEach((tx) => { 
+            let isOut = tx.isOut; 
+            let symbol = isOut ? '-' : '+'; 
             let colorClass = isOut ? 'out' : 'in';
-            html += '<div class="tx-card" onclick="showTxDetail(\'' + tx.id + '\',\'' + tx.name + '\',\'' + tx.platform + '\',' + tx.points + ',\'' + formatDateTime(tx.date) + '\',' + isOut + ',\'' + tx.unit + '\')">' +
-                '<div class="tx-name">' + tx.name + '</div>' +
-                '<div class="tx-platform">' + tx.platform + '</div>' +
-                '<div class="tx-points ' + colorClass + '">' + symbol + tx.points + ' ' + tx.unit + '</div>' +
-                '<div class="tx-date">' + formatDateTime(tx.date) + '</div>' +
-            '</div>';
-        });
-        document.getElementById('transactionContainer').innerHTML = html;
-    }
-    
-    window.showTxDetail = function(id, name, platform, points, dateStr, isOut, unit) {
-        let symbol = isOut ? '-' : '+';
-        let color = isOut ? '#88ff88' : '#ff6666';
-        let actionText = isOut ? '帶出' : '帶入';
-        let detailHtml = '<div class="space-y-3">' +
-            '<div class="flex justify-between py-2 border-b border-gray-700"><span class="text-gray-400">明細編號</span><span class="text-yellow-400">' + id + '</span></div>' +
-            '<div class="flex justify-between py-2 border-b border-gray-700"><span class="text-gray-400">類型</span><span class="text-yellow-400">' + actionText + '</span></div>' +
-            '<div class="flex justify-between py-2 border-b border-gray-700"><span class="text-gray-400">平台</span><span class="text-yellow-400">' + platform + '</span></div>' +
-            '<div class="flex justify-between py-2 border-b border-gray-700"><span class="text-gray-400">數量</span><span class="text-xl font-bold" style="color:' + color + '">' + symbol + points + ' ' + unit + '</span></div>' +
-            '<div class="flex justify-between py-2"><span class="text-gray-400">時間日期</span><span class="text-yellow-400">' + dateStr + '</span></div>' +
-        '</div>';
-        document.getElementById('txDetailContent').innerHTML = detailHtml;
-        document.getElementById('txDetailModal').classList.add('active');
-    };
-    
-    function renderBetModalTable() {
-        if (!currentSession) return;
-        let details = [...currentSession.details].sort((a, b) => betSortOrder === 'desc' ? new Date(b.date) - new Date(a.date) : new Date(a.date) - new Date(b.date));
-        let rows = '';
-        let bringInAmount = currentSession.bringInAmount;
-        details.forEach(d => {
-            let typeLabel = '', typeClass = '';
-            if (d.type === 'BRING_IN') { typeLabel = '帶入'; typeClass = 'type-bringin'; }
-            else if (d.type === 'BRING_OUT') { typeLabel = '帶出'; typeClass = 'type-bringout'; }
-            else { typeLabel = '一般轉'; typeClass = 'type-spin'; }
-            
-            let betDisplay = d.type === 'SPIN' ? '-' + d.bet : '-';
-            let winDisplay = d.type === 'SPIN' ? (d.win > 0 ? '+' + d.win : '-') : '-';
-            
-            let totalDisplay = '';
-            if (d.type === 'BRING_IN') {
-                totalDisplay = '+' + d.win;
-            } else if (d.type === 'BRING_OUT') {
-                let diff = d.total - bringInAmount;
-                let prefix = diff >= 0 ? '+' : '';
-                totalDisplay = prefix + Math.floor(diff);
-            } else {
-                totalDisplay = Math.floor(d.total);
+            let infoHtml = '';
+            if (tx.hasPlatform && tx.platform) {
+                infoHtml = '<div class="tx-platform">' + tx.platform + '</div>';
+            } else if (!tx.hasPlatform && tx.machineName) {
+                infoHtml = '<div class="tx-machine-name">🎰 ' + tx.machineName + (tx.machineId ? ' ' + tx.machineId + '號機' : '') + '</div>';
             }
             
-            let isFirstSpinBet = (d.type === 'SPIN' && d.isFirstSpin === true);
-            rows += '<tr class="' + (isFirstSpinBet ? 'video-bet-row' : '') + '" ' + (isFirstSpinBet ? 'onclick="playCurrentVideo()"' : '') + ' style="' + (isFirstSpinBet ? 'cursor:pointer' : '') + '">' +
-                '<td style="white-space:nowrap">' + formatDateTime(d.date) + '</td>' +
-                '<td><span class="record-type ' + typeClass + '">' + typeLabel + '</span></td>' +
-                '<td class="amount-bet">' + betDisplay + '</td>' +
-                '<td class="amount-win">' + winDisplay + '</td>' +
-                '<td class="total-amount">' + totalDisplay + '</td>' +
-                '<td><span class="text-blue-300 text-xs">' + d.betId + '</span>' + (isFirstSpinBet ? '<span class="play-hint">點擊觀看</span>' : '') + '</td>' +
-              '</tr>';
-        });
-        document.getElementById('betTableHead').innerHTML = '<tr><th onclick="toggleBetSort()">日期時間 <span class="sort-icon">' + (betSortOrder === 'desc' ? '▼' : '▲') + '</span></th><th>類型</th><th>投注</th><th>獲得</th><th>小計</th><th>注單編號</th></tr>';
-        document.getElementById('betModalTableBody').innerHTML = rows;
+            html += '<div class="tx-card" onclick="showTxDetail(\'' + tx.id + '\')">' + 
+                '<div class="tx-name">' + tx.name + '</div>' + infoHtml + 
+                '<div class="tx-points ' + colorClass + '">' + symbol + tx.points + ' ' + tx.unit + '</div>' + 
+                '<div class="tx-date">' + formatDateTime(tx.date) + '</div></div>'; 
+        }); 
+        if (transactionContainer) transactionContainer.innerHTML = html; 
+    }
+    
+    // 顯示詳細明細視窗
+    window.showTxDetail = function(txId) { 
+        const tx = allTransactions.find(t => t.id === txId);
+        if (!tx) return;
+        
+        let symbol = tx.isOut ? '-' : '+'; 
+        let color = tx.isOut ? '#88ff88' : '#ff6666';
+        
+        let detailHtml = '<div class="detail-row"><span class="detail-label">明細編號</span><span class="detail-value">' + tx.id + '</span></div>';
+        detailHtml += '<div class="detail-row"><span class="detail-label">類型</span><span class="detail-value">' + tx.name + '</span></div>';
+        
+        if (tx.hasPlatform && tx.platform) {
+            detailHtml += '<div class="detail-row"><span class="detail-label">平台</span><span class="detail-value">' + tx.platform + '</span></div>';
+        }
+        if (tx.machineName) {
+            detailHtml += '<div class="detail-row"><span class="detail-label">機台</span><span class="detail-value">' + tx.machineName + (tx.machineId ? ' ' + tx.machineId + '號機' : '') + '</span></div>';
+        }
+        
+        if (tx.type === 'token_in' && tx.detailInfo) {
+            detailHtml += '<div class="detail-row"><span class="detail-label">購買代幣</span><span class="detail-value">' + tx.detailInfo.coins + ' 枚</span></div>';
+            detailHtml += '<div class="detail-row"><span class="detail-label">每枚價格</span><span class="detail-value">' + tx.detailInfo.ratio + ' 點</span></div>';
+            detailHtml += '<div class="detail-row"><span class="detail-label">消耗點數</span><span class="detail-value">' + Math.floor(tx.detailInfo.costPoints) + ' 點</span></div>';
+            detailHtml += '<div class="detail-row"><span class="detail-label">損耗點數</span><span class="detail-value">' + Math.floor(tx.detailInfo.wastePoints) + ' 點</span></div>';
+            detailHtml += '<div class="detail-row"><span class="detail-label">總支出</span><span class="detail-value" style="color:' + color + '">' + symbol + tx.points + ' ' + tx.unit + '</span></div>';
+        } 
+        else if (tx.type === 'token_out' && tx.detailInfo) {
+            detailHtml += '<div class="detail-row"><span class="detail-label">消耗代幣</span><span class="detail-value">' + tx.detailInfo.coins + ' 枚</span></div>';
+            detailHtml += '<div class="detail-row"><span class="detail-label">每枚價格</span><span class="detail-value">' + tx.detailInfo.ratio + ' 點</span></div>';
+            detailHtml += '<div class="detail-row"><span class="detail-label">獲得點數</span><span class="detail-value" style="color:' + color + '">+' + tx.points + ' ' + tx.unit + '</span></div>';
+            detailHtml += '<div class="detail-row"><span class="detail-label">備註</span><span class="detail-value" style="color:#888;">&nbsp;</span></div>';
+        }
+        else {
+            detailHtml += '<div class="detail-row"><span class="detail-label">數量</span><span class="detail-value" style="color:' + color + '">' + symbol + tx.points + ' ' + tx.unit + '</span></div>';
+        }
+        
+        detailHtml += '<div class="detail-row"><span class="detail-label">時間日期</span><span class="detail-value">' + formatDateTime(tx.date) + '</span></div>';
+        
+        const txDetailContent = document.getElementById('txDetailContent');
+        const txDetailModal = document.getElementById('txDetailModal');
+        if (txDetailContent) txDetailContent.innerHTML = detailHtml;
+        if (txDetailModal) txDetailModal.classList.add('active'); 
+    };
+    
+    function renderBetModalTable() { 
+        if (!currentSession) return; 
+        let details = [...currentSession.details].sort((a, b) => betSortOrder === 'desc' ? new Date(b.date) - new Date(a.date) : new Date(a.date) - new Date(b.date)); 
+        let rows = ''; 
+        let bringInAmount = currentSession.bringInAmount; 
+        details.forEach(d => { 
+            let typeLabel = '', typeClass = ''; 
+            if (d.type === 'BRING_IN') { typeLabel = '帶入'; typeClass = 'type-bringin'; } 
+            else if (d.type === 'BRING_OUT') { typeLabel = '帶出'; typeClass = 'type-bringout'; } 
+            else { typeLabel = '一般轉'; typeClass = 'type-spin'; } 
+            let betDisplay = d.type === 'SPIN' ? '-' + d.bet : '-'; 
+            let winDisplay = d.type === 'SPIN' ? (d.win > 0 ? '+' + d.win : '-') : '-'; 
+            let totalDisplay = ''; 
+            if (d.type === 'BRING_IN') totalDisplay = '+' + d.win; 
+            else if (d.type === 'BRING_OUT') { let diff = d.total - bringInAmount; let prefix = diff >= 0 ? '+' : ''; totalDisplay = prefix + Math.floor(diff); } 
+            else totalDisplay = Math.floor(d.total); 
+            let isFirstSpinBet = (d.type === 'SPIN' && d.isFirstSpin === true); 
+            rows += '<tr class="' + (isFirstSpinBet ? 'video-bet-row' : '') + '" ' + (isFirstSpinBet ? 'onclick="playCurrentVideo()"' : '') + ' style="' + (isFirstSpinBet ? 'cursor:pointer' : '') + '"><td style="white-space:nowrap">' + formatDateTime(d.date) + '<td><span class="record-type ' + typeClass + '">' + typeLabel + '</span></td><td class="amount-bet">' + betDisplay + '</td><td class="amount-win">' + winDisplay + '</td><td class="total-amount">' + totalDisplay + '<td><span class="text-blue-300 text-xs">' + d.betId + '</span>' + (isFirstSpinBet ? '<span class="play-hint">點擊觀看</span>' : '') + '</span></td></tr>'; 
+        }); 
+        const betTableHead = document.getElementById('betTableHead');
+        const betModalTableBody = document.getElementById('betModalTableBody');
+        if (betTableHead) betTableHead.innerHTML = '<tr><th onclick="toggleBetSort()">日期時間 <span class="sort-icon">' + (betSortOrder === 'desc' ? '▼' : '▲') + '</span></th><th>類型</th><th>投注</th><th>獲得</th><th>小計</th><th>注單編號</th></tr>';
+        if (betModalTableBody) betModalTableBody.innerHTML = rows; 
     }
     
     window.toggleBetSort = function() { betSortOrder = betSortOrder === 'desc' ? 'asc' : 'desc'; renderBetModalTable(); };
-    window.openBetModal = function(idx) {
-        let f = getFilteredSessions();
-        currentSession = f[idx];
-        if (!currentSession) return;
-        document.getElementById('betModalTitle').innerHTML = currentSession.machineName + ' ' + currentSession.machineNumber;
-        document.getElementById('betStats').innerHTML = '<div class="stat-card">總轉數 ' + currentSession.stats.totalSpins + '</div><div class="stat-card">總投注 ' + currentSession.stats.totalBet + '</div><div class="stat-card">總獲得 ' + currentSession.stats.totalWin + '</div>';
-        renderBetModalTable();
-        document.getElementById('betModal').classList.add('active');
+    window.openBetModal = function(idx) { 
+        let f = getFilteredSessions(); 
+        currentSession = f[idx]; 
+        if (!currentSession) return; 
+        const betModalTitle = document.getElementById('betModalTitle');
+        const betStats = document.getElementById('betStats');
+        const betModal = document.getElementById('betModal');
+        if (betModalTitle) betModalTitle.innerHTML = currentSession.machineName + ' ' + currentSession.machineNumber;
+        if (betStats) betStats.innerHTML = '<div class="stat-card">總轉數 ' + currentSession.stats.totalSpins + '</div><div class="stat-card">總投注 ' + currentSession.stats.totalBet + '</div><div class="stat-card">總獲得 ' + currentSession.stats.totalWin + '</div>';
+        renderBetModalTable(); 
+        if (betModal) betModal.classList.add('active'); 
     };
-    window.playCurrentVideo = function() { if (currentSession && currentSession.videoUrl) { let v = document.getElementById('videoPlayer'); v.src = currentSession.videoUrl; v.load(); v.play().catch(e=>console.log); document.getElementById('videoModal').classList.add('active'); } else { alert('影片載入中'); } };
-    window.closeBetModal = () => document.getElementById('betModal').classList.remove('active');
-    window.closeVideoModal = () => { let v = document.getElementById('videoPlayer'); v.pause(); v.src = ''; document.getElementById('videoModal').classList.remove('active'); };
-    window.closeTxModal = () => document.getElementById('txDetailModal').classList.remove('active');
-    window.closeFavoriteModal = () => document.getElementById('favoriteModal').classList.remove('active');
-    window.closeKeepModal = () => document.getElementById('keepModal').classList.remove('active');
+    window.playCurrentVideo = function() { if (currentSession && currentSession.videoUrl) { let v = document.getElementById('videoPlayer'); v.src = currentSession.videoUrl; v.load(); v.play().catch(e=>console.log); const videoModal = document.getElementById('videoModal'); if (videoModal) videoModal.classList.add('active'); } else { alert('影片載入中'); } };
+    window.closeBetModal = () => { const betModal = document.getElementById('betModal'); if (betModal) betModal.classList.remove('active'); };
+    window.closeVideoModal = () => { let v = document.getElementById('videoPlayer'); if (v) { v.pause(); v.src = ''; } const videoModal = document.getElementById('videoModal'); if (videoModal) videoModal.classList.remove('active'); };
+    window.closeTxModal = () => { const txDetailModal = document.getElementById('txDetailModal'); if (txDetailModal) txDetailModal.classList.remove('active'); };
+    window.closeFavoriteModal = () => { const favoriteModal = document.getElementById('favoriteModal'); if (favoriteModal) favoriteModal.classList.remove('active'); };
+    window.closeKeepModal = () => { const keepModal = document.getElementById('keepModal'); if (keepModal) keepModal.classList.remove('active'); };
     
-    document.getElementById('favMachinesBtn').onclick = renderFavoriteModal;
-    document.getElementById('keepMachinesBtn').onclick = renderKeepModal;
-    document.getElementById('supportBtn').onclick = () => alert('客服專線: 0800-666-888');
-    document.getElementById('dateSearchBtn').onclick = () => { let s = document.getElementById('startDate').value, e = document.getElementById('endDate').value; dateStart = new Date(s); dateStart.setHours(0,0,0,0); dateEnd = new Date(e); dateEnd.setHours(23,59,59,999); render(); };
-    document.getElementById('searchInput').addEventListener('input', (e) => { searchTerm = e.target.value.toLowerCase(); render(); });
-    document.getElementById('filterSelect').addEventListener('change', (e) => { currentFilter = e.target.value; render(); });
-    document.getElementById('avatarContainer').onclick = () => { let av = ['https://i.pravatar.cc/150?img=7', 'https://i.pravatar.cc/150?img=5', 'https://i.pravatar.cc/150?img=9']; document.getElementById('avatarImage').src = av[Math.floor(Math.random() * av.length)]; alert('更換頭像'); };
-    document.getElementById('displayNickname').onclick = () => { let n = prompt('新暱稱', '郝可愛'); if (n && n.trim()) { document.getElementById('displayNickname').innerText = n; if (window.T_PACHIN_STORAGE) T_PACHIN_STORAGE.setNickname(n); } };
-    document.getElementById('headerPoints').onclick = () => alert('點數: ' + userPoints);
-    document.getElementById('vipBadge').onclick = showVipInfo;
-    document.getElementById('expText').onclick = showExpInfo;
+    // 綁定按鈕事件
+    const favMachinesBtn = document.getElementById('favMachinesBtn');
+    const keepMachinesBtn = document.getElementById('keepMachinesBtn');
+    const supportBtn = document.getElementById('supportBtn');
+    const dateSearchBtn = document.getElementById('dateSearchBtn');
+    const searchInput = document.getElementById('searchInput');
+    const filterSelect = document.getElementById('filterSelect');
+    const avatarContainer = document.getElementById('avatarContainer');
+    const displayNickname = document.getElementById('displayNickname');
+    const headerPoints = document.getElementById('headerPoints');
+    const vipBadge = document.getElementById('vipBadge');
+    const expText = document.getElementById('expText');
+    
+    if (favMachinesBtn) favMachinesBtn.onclick = () => renderFavoriteModal();
+    if (keepMachinesBtn) keepMachinesBtn.onclick = () => renderKeepModal();
+    if (supportBtn) supportBtn.onclick = () => alert('客服專線: 0800-666-888');
+    if (dateSearchBtn) dateSearchBtn.onclick = () => { let s = document.getElementById('startDate').value, e = document.getElementById('endDate').value; dateStart = new Date(s); dateStart.setHours(0,0,0,0); dateEnd = new Date(e); dateEnd.setHours(23,59,59,999); render(); };
+    if (searchInput) searchInput.addEventListener('input', (e) => { searchTerm = e.target.value.toLowerCase(); render(); });
+    if (filterSelect) filterSelect.addEventListener('change', (e) => { currentFilter = e.target.value; render(); });
+    if (avatarContainer) avatarContainer.onclick = () => { let av = ['https://i.pravatar.cc/150?img=7', 'https://i.pravatar.cc/150?img=5', 'https://i.pravatar.cc/150?img=9']; const avatarImage = document.getElementById('avatarImage'); if (avatarImage) avatarImage.src = av[Math.floor(Math.random() * av.length)]; alert('更換頭像'); };
+    if (displayNickname) displayNickname.onclick = () => { let n = prompt('新暱稱', '郝可愛'); if (n && n.trim()) { displayNickname.innerText = n; if (window.T_PACHIN_STORAGE) window.T_PACHIN_STORAGE.setNickname(n); } };
+    if (headerPoints) headerPoints.onclick = () => alert(`💰 目前點數：${formatPointsDecimal(getCurrentPoints())}`);
+    if (vipBadge) vipBadge.onclick = showVipInfo;
+    if (expText) expText.onclick = showExpInfo;
+    
+    const confirmOk = document.getElementById('confirmOk');
+    const confirmCancelBtn = document.getElementById('confirmCancelBtn');
+    const closeXBtn = document.getElementById('closeXBtn');
+    
+    if (confirmOk) confirmOk.addEventListener('click', doEnterGame);
+    if (confirmCancelBtn) confirmCancelBtn.addEventListener('click', closeSubConfirm);
+    if (closeXBtn) closeXBtn.addEventListener('click', closeSubConfirm);
+    if (confirmTokenInput) confirmTokenInput.addEventListener('input', updateExchangeCalculation);
     
     initNavigation();
     initFavoriteAndReserve();
@@ -1460,8 +1298,11 @@
     updateBadges();
     updateVipProgress();
     loadSettings();
-    document.getElementById('transactionContainer').style.display = 'block';
-    document.getElementById('sessionsContainer').style.display = 'none';
+    
+    const transactionContainer = document.getElementById('transactionContainer');
+    const sessionsContainer = document.getElementById('sessionsContainer');
+    if (transactionContainer) transactionContainer.style.display = 'block';
+    if (sessionsContainer) sessionsContainer.style.display = 'none';
     render();
 })();
 </script>

@@ -317,12 +317,20 @@ const T_PACHIN_STORAGE = {
         this.saveOccupiedTokens(occupied);
     },
     
-    // ==================== 導航高亮 ====================
+    // ==================== 導航高亮 (根據 data-page) ====================
     highlightCurrentNav() {
         const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+        const pageMap = {
+            'index.html': 'index',
+            'machines.html': 'machines',
+            'news.html': 'news',
+            'about.html': 'about'
+        };
+        const currentPage = pageMap[currentPath] || 'index';
+        
         document.querySelectorAll('.nav-item').forEach(item => {
-            const href = item.getAttribute('href');
-            if (href === currentPath) {
+            const page = item.dataset.page;
+            if (page === currentPage) {
                 item.classList.add('current-page');
             } else {
                 item.classList.remove('current-page');
@@ -347,6 +355,48 @@ const T_PACHIN_STORAGE = {
         return nickname;
     }
 };
+
+// ==================== 導航列跳轉統一初始化 (所有頁面共用) ====================
+function initGlobalNavigation() {
+    document.querySelectorAll('.nav-item').forEach(item => {
+        // 避免重複綁定
+        if (item._navHandler) return;
+        
+        const handler = function(e) {
+            e.preventDefault();
+            const page = this.dataset.page;
+            if (page === 'index') window.location.href = 'index.html';
+            else if (page === 'machines') window.location.href = 'machines.html';
+            else if (page === 'news') window.location.href = 'news.html';
+            else if (page === 'about') window.location.href = 'about.html';
+        };
+        
+        item._navHandler = handler;
+        item.addEventListener('click', handler);
+    });
+    
+    // Logo 跳轉 (如果有 .logo 元素)
+    document.querySelectorAll('.logo').forEach(logo => {
+        if (logo._logoHandler) return;
+        const handler = function(e) {
+            e.preventDefault();
+            window.location.href = 'index.html';
+        };
+        logo._logoHandler = handler;
+        logo.addEventListener('click', handler);
+    });
+    
+    // 公告按鈕跳轉 (如果有 .combo-announce-btn)
+    document.querySelectorAll('.combo-announce-btn').forEach(btn => {
+        if (btn._announceHandler) return;
+        const handler = function(e) {
+            e.preventDefault();
+            window.location.href = 'news.html';
+        };
+        btn._announceHandler = handler;
+        btn.addEventListener('click', handler);
+    });
+}
 
 // ==================== 倒數計時器管理 ====================
 const CountdownManager = {
@@ -414,6 +464,9 @@ function initializeSharedFeatures() {
     T_PACHIN_STORAGE.updateAllPointsDisplay();
     T_PACHIN_STORAGE.highlightCurrentNav();
     
+    // 初始化全域導航
+    initGlobalNavigation();
+    
     // 監聽設定更新事件
     window.addEventListener('t-pachin:settings-updated', function(e) {
         const newSettings = e.detail;
@@ -463,6 +516,7 @@ if (document.readyState === 'loading') {
 window.T_PACHIN_STORAGE = T_PACHIN_STORAGE;
 window.CountdownManager = CountdownManager;
 window.initializeSharedFeatures = initializeSharedFeatures;
+window.initGlobalNavigation = initGlobalNavigation;
 
 // 相容性別名
 window.TPachin = {

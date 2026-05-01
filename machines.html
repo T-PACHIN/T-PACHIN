@@ -8,8 +8,40 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;500;700;900&family=Noto+Sans+JP:wght@300;500;700;900&family=Russo+One&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <style>
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+        
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: #0a0c1a; color: #fff; font-family: 'Noto Sans JP', 'Noto Sans TC', 'Orbitron', sans-serif; min-height: 100vh; display: flex; flex-direction: column; position: relative; }
+        body.light-mode { background: #e8ecf2; color: #1a1a2e; }
+        body.light-mode .max-w-md { background: linear-gradient(145deg, #f0f2f8, #e8ecf2); }
+        body.light-mode .metal-header { background: linear-gradient(145deg, #dce0e8, #d0d4e0); border-bottom-color: #4a80c0; }
+        body.light-mode .points-display { background: linear-gradient(145deg, #e0d6b0, #d0c6a0); color: #1a1a2e; border-color: #c9a03d; text-shadow: none; }
+        body.light-mode .nickname-display { color: #1a1a2e; text-shadow: none; }
+        body.light-mode .bottom-nav { background: linear-gradient(145deg, #dce0e8, #d0d4e0); }
+        body.light-mode .nav-item { background: linear-gradient(145deg, #e0e4ec, #d0d4e0); color: #2a4055; text-shadow: none; }
+        body.light-mode .nav-item.current-page { background: linear-gradient(145deg, #c0c8d8, #b0b8c8); color: #1a1a2e; }
+        body.light-mode .category-tab { background: linear-gradient(145deg, #e0e4ec, #d0d4e0); color: #2a4055; }
+        body.light-mode .category-tab.active { background: linear-gradient(145deg, #c0c8d8, #b0b8c8); color: #1a1a2e; }
+        body.light-mode .flip-card { background: linear-gradient(145deg, #ffffff, #f5f7fa); }
+        body.light-mode .sub-confirm-content { background: linear-gradient(145deg, #ffffff, #f0f2f8); }
+        body.light-mode .info-grid { background: linear-gradient(145deg, #e0e4ec, #d0d4e0); }
+        body.light-mode .info-label { color: #2a4055; }
+        body.light-mode .info-value { color: #1a1a2e; }
+        body.light-mode .sub-confirm-header h3 { -webkit-text-fill-color: #1a1a2e; background: none; color: #1a1a2e; }
+        body.light-mode .stat-cell { background: linear-gradient(145deg, #e0e4ec, #d0d4e0); }
+        body.light-mode .stat-label { color: #2a4055; }
+        body.light-mode .model-name { color: #1a1a2e; }
+        body.light-mode .model-name strong { color: #1a1a2e; }
+        body.light-mode .ratio-mini { background: linear-gradient(145deg, #e0e4ec, #d0d4e0); color: #1a1a2e; }
+        
         body::before { content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-image: linear-gradient(rgba(74, 128, 192, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(153, 0, 255, 0.03) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; z-index: 0; }
         
         ::-webkit-scrollbar { width: 4px; height: 0px; background: transparent; }
@@ -64,12 +96,52 @@
         .category-tab { background: linear-gradient(145deg, #3a4050, #2a2f40); border: 1px solid #4a80c0; border-radius: 30px; padding: 0.6rem 1.2rem; font-size: 0.9rem; color: #b0c4de; transition: all 0.1s ease; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; box-shadow: inset 0 2px 5px rgba(255,255,255,0.3), inset 0 -3px 5px rgba(0,0,0,0.4), 0 5px 0 #0f121c; }
         .category-tab.active { background: linear-gradient(145deg, #4a5065, #3a4055); color: white; border: 1px solid #4a80c0; box-shadow: 0 0 15px #4a80c0, inset 0 2px 8px rgba(255,255,255,0.6), inset 0 -3px 8px rgba(0,0,0,0.4), 0 5px 0 #0f121c; }
         
-        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 2px solid #4a80c0; padding-bottom: 0.3rem; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 2px solid #4a80c0; padding-bottom: 0.3rem; flex-wrap: wrap; gap: 8px; }
         .section-title { font-size: 1.1rem; color: #fff; font-weight: 700; text-shadow: 0 0 10px #4a80c0; }
         .section-count { font-size: 0.8rem; background: linear-gradient(145deg, #3a4050, #2a2f40); padding: 0.2rem 0.8rem; border-radius: 30px; border: 1px solid #4a80c0; color: #ffd966; }
+        .filter-select-wrapper {
+            background: linear-gradient(145deg, #2a2f3f, #1a1f2f);
+            border-radius: 40px;
+            padding: 0.2rem 0.4rem;
+            border: 1px solid #4a80c0;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .filter-select-wrapper i {
+            font-size: 0.8rem;
+            color: #ffd966;
+            margin-left: 6px;
+        }
+        .played-filter-select {
+            background: #0a0e1f;
+            border: none;
+            color: #ffd966;
+            font-weight: bold;
+            font-size: 0.8rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 30px;
+            outline: none;
+            cursor: pointer;
+            font-family: 'Orbitron', monospace;
+        }
+        .played-filter-select option {
+            background: #1a1f2f;
+            color: #ffeca2;
+        }
         
-        .reserve-countdown-warning { animation: pulseRed 1s infinite !important; background: linear-gradient(145deg, #7a2a2a, #5a1a1a) !important; border-color: #ff4444 !important; }
-        @keyframes pulseRed { 0%, 100% { box-shadow: 0 0 0 0 rgba(255,68,68,0.4); border-color: #ff4444; } 50% { box-shadow: 0 0 0 4px rgba(255,68,68,0.6); border-color: #ff8888; } }
+        /* 保留倒數警示樣式 */
+        .reserve-countdown-warning { 
+            animation: pulseRed 1s infinite !important; 
+            background: linear-gradient(145deg, #7a2a2a, #5a1a1a) !important; 
+            border-color: #ff4444 !important; 
+            box-shadow: 0 0 12px rgba(255,68,68,0.8), inset 0 2px 5px rgba(255,255,255,0.2), inset 0 -3px 8px rgba(0,0,0,0.6), 0 8px 0 #3a0a0a !important;
+        }
+        @keyframes pulseRed { 
+            0% { box-shadow: 0 0 0 0 rgba(255,68,68,0.4), inset 0 2px 5px rgba(255,255,255,0.2), inset 0 -3px 8px rgba(0,0,0,0.6); border-color: #ff6666; } 
+            50% { box-shadow: 0 0 0 6px rgba(255,68,68,0.6), inset 0 2px 8px rgba(255,255,255,0.4), inset 0 -3px 8px rgba(0,0,0,0.6); border-color: #ff4444; } 
+            100% { box-shadow: 0 0 0 0 rgba(255,68,68,0.4), inset 0 2px 5px rgba(255,255,255,0.2), inset 0 -3px 8px rgba(0,0,0,0.6); border-color: #ff8888; }
+        }
         
         .flip-card { background: linear-gradient(145deg, #2a2f3f, #1a1f2f); border: 2px solid #4a80c0; border-radius: 24px; transition: all 0.2s ease; box-shadow: inset 0 2px 5px rgba(255,255,255,0.3), inset 0 -3px 8px rgba(0,0,0,0.6), 0 8px 0 #0f121c; cursor: pointer; width: 100%; padding: 1rem 0.9rem 0.8rem 0.9rem; margin-bottom: 1.5rem; }
         .flip-card:hover { transform: translateY(-5px); box-shadow: inset 0 2px 5px rgba(255,255,255,0.3), inset 0 -3px 8px rgba(0,0,0,0.6), 0 13px 0 #0f121c; }
@@ -78,7 +150,8 @@
         .page1-row1 { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
         .model-name { font-size: 1rem; font-weight: 700; color: #ffdb8e; flex: 1; }
         .model-name strong { font-size: 1.15rem; font-weight: 900; color: white; margin-right: 4px; background: rgba(0,0,0,0.3); padding: 0 4px; border-radius: 4px; }
-        .ratio-mini { font-size: 0.9rem; font-weight: 700; background: linear-gradient(145deg, #3a4050, #2a2f40); padding: 0.2rem 0.8rem; border-radius: 30px; border: 1px solid #4a80c0; color: #ffeca2; margin-left: 6px; }
+        .ratio-mini { font-size: 0.9rem; font-weight: 700; background: linear-gradient(145deg, #3a4050, #2a2f40); padding: 0.2rem 0.8rem; border-radius: 30px; border: 1px solid #4a80c0; color: #ffeca2; margin-left: 6px; display: inline-flex; align-items: center; gap: 6px; }
+        .point-diff-badge-mini { background: rgba(0,0,0,0.5); border-radius: 12px; padding: 2px 6px; font-size: 0.6rem; color: #7ec8ff; letter-spacing: 0.3px; font-weight: normal; }
         
         .page1-reserve-row { display: flex; align-items: center; gap: 0.8rem; background: linear-gradient(145deg, #2a3a4f, #1a2a3f); border-radius: 40px; padding: 0.2rem 1.2rem; border: 2px solid #e5a73e; width: fit-content; margin: 0.3rem 0 1rem 0; }
         .reserve-text { font-size: 0.9rem; font-weight: 700; color: #f6c445; }
@@ -124,74 +197,19 @@
         .favorite-btn.active i { color: #ff69b4; }
         .favorite-btn.inactive i { color: #9ca3af; }
         
-        /* 底部導覽列 - 讓凸起按鈕完整顯示 */
-        .bottom-nav { 
-            width: 100%; 
-            max-width: 448px; 
-            padding: 0.6rem 1rem; 
-            background: linear-gradient(145deg, #2a2f3f, #1a1f2f); 
-            border-top: 2px solid #4a80c0; 
-            border-bottom: 2px solid #4a80c0; 
-            border-radius: 30px 30px 30px 30px; 
-            box-shadow: 0 -5px 15px rgba(74, 128, 192, 0.3), 0 8px 10px rgba(0, 0, 0, 0.6), inset 0 2px 5px rgba(255, 255, 255, 0.3), inset 0 -3px 8px rgba(0, 0, 0, 0.6); 
-            position: fixed; 
-            bottom: 0; 
-            left: 50%; 
-            transform: translateX(-50%); 
-            z-index: 50; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: flex-end;
-            overflow: visible;
-        }
-        .bottom-nav::after { 
-            content: ''; 
-            position: absolute; 
-            top: 0; 
-            left: -100%; 
-            width: 50%; 
-            height: 100%; 
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent); 
-            transform: skewX(-20deg); 
-            animation: shine 4s infinite; 
-            pointer-events: none; 
-        }
+        .bottom-nav { width: 100%; max-width: 448px; padding: 0.6rem 1rem; background: linear-gradient(145deg, #2a2f3f, #1a1f2f); border-top: 2px solid #4a80c0; border-bottom: 2px solid #4a80c0; border-radius: 30px 30px 30px 30px; box-shadow: 0 -5px 15px rgba(74, 128, 192, 0.3), 0 8px 10px rgba(0, 0, 0, 0.6), inset 0 2px 5px rgba(255, 255, 255, 0.3), inset 0 -3px 8px rgba(0, 0, 0, 0.6); position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 50; display: flex; justify-content: space-between; align-items: flex-end; overflow: visible; }
+        .bottom-nav::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent); transform: skewX(-20deg); animation: shine 4s infinite; pointer-events: none; }
         
-        /* 一般導航按鈕 */
-        .nav-item { 
-            position: relative; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            padding: 0.5rem 0.6rem; 
-            border-radius: 20px; 
-            text-decoration: none; 
-            outline: none; 
-            background: linear-gradient(145deg, #3a4050, #2a2f40); 
-            box-shadow: 0 5px 0 #0f121c, inset 0 2px 5px rgba(255, 255, 255, 0.3), inset 0 -3px 5px rgba(0, 0, 0, 0.3); 
-            text-shadow: 0 2px 3px rgba(0, 0, 0, 0.5); 
-            border: 1px solid rgba(74, 128, 192, 0.2); 
-            color: #b0c4de; 
-            transition: all 0.1s ease; 
-            font-family: 'Noto Sans TC', 'Noto Sans JP', 'Orbitron', sans-serif; 
-            flex: none; 
-            min-width: 50px;
-        }
+        .nav-item { position: relative; display: flex; flex-direction: column; align-items: center; padding: 0.5rem 0.6rem; border-radius: 20px; text-decoration: none; outline: none; background: linear-gradient(145deg, #3a4050, #2a2f40); box-shadow: 0 5px 0 #0f121c, inset 0 2px 5px rgba(255, 255, 255, 0.3), inset 0 -3px 5px rgba(0, 0, 0, 0.3); text-shadow: 0 2px 3px rgba(0, 0, 0, 0.5); border: 1px solid rgba(74, 128, 192, 0.2); color: #b0c4de; transition: all 0.1s ease; font-family: 'Noto Sans TC', 'Noto Sans JP', 'Orbitron', sans-serif; flex: none; min-width: 50px; cursor: pointer; }
         .nav-item i { font-size: 1.4rem; margin-bottom: 2px; filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.5)); }
         .nav-item span { font-weight: 700; letter-spacing: 0.5px; font-size: 0.7rem; }
         .nav-item:active { transform: translateY(3px); box-shadow: 0 2px 0 #0f121c, inset 0 5px 8px rgba(0, 0, 0, 0.5), inset 0 -2px 5px rgba(255, 255, 255, 0.2); color: #4a80c0; }
         .nav-item.current-page { background: linear-gradient(145deg, #4a5065, #3a4055); box-shadow: 0 5px 0 #0f121c, 0 10px 15px rgba(74, 128, 192, 0.5), inset 0 2px 8px rgba(255, 255, 255, 0.6), inset 0 -3px 8px rgba(0, 0, 0, 0.4); color: white; border: 1px solid #4a80c0; transform: scale(1.05); text-shadow: 0 0 8px #4a80c0; }
         
-        /* 凸起按鈕 - 完整顯示在導覽列上方 */
         .nav-item.lobby-special {
             background: linear-gradient(145deg, #9b4dff, #6a1b9a, #4a0080);
             transform: translateY(-28px) scale(1.1);
-            box-shadow: 0 10px 0 #2a004d, 
-                        0 18px 25px rgba(0, 0, 0, 0.5),
-                        inset 0 2px 12px rgba(255, 255, 255, 0.4), 
-                        inset 0 -4px 8px rgba(0, 0, 0, 0.3),
-                        0 0 20px #bf5eff,
-                        0 0 8px #7c3aed;
+            box-shadow: 0 10px 0 #2a004d, 0 18px 25px rgba(0, 0, 0, 0.5), inset 0 2px 12px rgba(255, 255, 255, 0.4), inset 0 -4px 8px rgba(0, 0, 0, 0.3), 0 0 20px #bf5eff, 0 0 8px #7c3aed;
             color: #ffffff;
             border: 1px solid #d8b4ff;
             text-shadow: 0 0 8px #bf5eff;
@@ -199,43 +217,15 @@
             z-index: 60;
             padding: 0.5rem 0.6rem;
             min-width: 54px;
-        }
-        .nav-item.lobby-special i {
-            font-size: 1.7rem;
-            margin-bottom: 3px;
-            text-shadow: 0 2px 0 #2a004d, 0 0 12px #d8b4ff;
-            filter: drop-shadow(0 0 4px #bf5eff);
-        }
-        .nav-item.lobby-special span {
-            font-size: 0.75rem;
-            font-weight: 900;
-            letter-spacing: 1px;
-            text-shadow: 0 1px 0 #2a004d, 0 0 10px #bf5eff;
-        }
-        @keyframes neonPulse {
-            0% { 
-                box-shadow: 0 10px 0 #2a004d, 0 18px 25px rgba(0, 0, 0, 0.5), inset 0 2px 12px rgba(255, 255, 255, 0.4), inset 0 -4px 8px rgba(0, 0, 0, 0.3), 0 0 15px #9b4dff, 0 0 5px #6a1b9a;
-                background: linear-gradient(145deg, #9b4dff, #6a1b9a, #4a0080);
-            }
-            100% { 
-                box-shadow: 0 10px 0 #2a004d, 0 20px 28px rgba(0, 0, 0, 0.55), inset 0 2px 14px rgba(255, 255, 255, 0.55), inset 0 -4px 8px rgba(0, 0, 0, 0.3), 0 0 35px #d8b4ff, 0 0 15px #bf5eff;
-                background: linear-gradient(145deg, #b77dff, #8b3dff, #6a1b9a);
-            }
-        }
-        .nav-item.lobby-special {
             animation: neonPulse 1.3s ease-in-out infinite alternate;
         }
-        .nav-item.lobby-special:active {
-            transform: translateY(-20px) scale(1.07);
-            box-shadow: 0 6px 0 #2a004d, 0 14px 20px rgba(0, 0, 0, 0.45), inset 0 2px 10px rgba(255,255,255,0.5), 0 0 28px #bf5eff;
-            animation: none;
+        .nav-item.lobby-special i { font-size: 1.7rem; margin-bottom: 3px; text-shadow: 0 2px 0 #2a004d, 0 0 12px #d8b4ff; filter: drop-shadow(0 0 4px #bf5eff); }
+        .nav-item.lobby-special span { font-size: 0.75rem; font-weight: 900; letter-spacing: 1px; text-shadow: 0 1px 0 #2a004d, 0 0 10px #bf5eff; }
+        @keyframes neonPulse {
+            0% { box-shadow: 0 10px 0 #2a004d, 0 18px 25px rgba(0, 0, 0, 0.5), inset 0 2px 12px rgba(255, 255, 255, 0.4), inset 0 -4px 8px rgba(0, 0, 0, 0.3), 0 0 15px #9b4dff, 0 0 5px #6a1b9a; background: linear-gradient(145deg, #9b4dff, #6a1b9a, #4a0080); }
+            100% { box-shadow: 0 10px 0 #2a004d, 0 20px 28px rgba(0, 0, 0, 0.55), inset 0 2px 14px rgba(255, 255, 255, 0.55), inset 0 -4px 8px rgba(0, 0, 0, 0.3), 0 0 35px #d8b4ff, 0 0 15px #bf5eff; background: linear-gradient(145deg, #b77dff, #8b3dff, #6a1b9a); }
         }
-        .nav-item.lobby-special:active i {
-            text-shadow: 0 1px 0 #2a004d;
-        }
-        .nav-item.lobby-special:active span {
-            text-shadow: 0 0 6px #bf5eff;
-        }
+        .nav-item.lobby-special:active { transform: translateY(-20px) scale(1.07); box-shadow: 0 6px 0 #2a004d, 0 14px 20px rgba(0, 0, 0, 0.45), inset 0 2px 10px rgba(255,255,255,0.5), 0 0 28px #bf5eff; animation: none; }
         
         @media (max-width: 420px) { 
             .bottom-nav { padding: 0.5rem 0.8rem; } 
@@ -244,6 +234,7 @@
             .nav-item span { font-size: 0.6rem; }
             .nav-item.lobby-special { min-width: 46px; transform: translateY(-24px) scale(1.08); }
             .nav-item.lobby-special i { font-size: 1.5rem; }
+            .section-header { flex-direction: column; align-items: flex-start; }
         }
         
         .main-content { flex: 1; overflow-y: auto; padding: 0 1rem 20px 1rem; scrollbar-width: thin; scrollbar-color: #4a80c0 transparent; }
@@ -253,63 +244,127 @@
         
         .sub-confirm-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); backdrop-filter: blur(8px); z-index: 20000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: 0.2s; }
         .sub-confirm-modal.show { opacity: 1; visibility: visible; }
-        .sub-confirm-content { background: linear-gradient(145deg, #2a2f3f, #1a1f2f); border: 2px solid #ffd700; border-radius: 40px; max-width: 360px; width: 100%; padding: 1.5rem 1.5rem 1.8rem; box-shadow: 0 20px 40px rgba(74, 128, 192, 0.5), inset 0 2px 5px rgba(255,255,255,0.3), inset 0 -3px 8px rgba(0,0,0,0.6), 0 8px 0 #0f121c; transform: scale(0.95); transition: transform 0.2s; position: relative; }
+        .sub-confirm-content { background: linear-gradient(145deg, #2a2f3f, #1a1f2f); border: 2px solid #ffd700; border-radius: 40px; max-width: 360px; width: 90%; padding: 1.5rem; box-shadow: 0 20px 40px rgba(74, 128, 192, 0.5), inset 0 2px 5px rgba(255,255,255,0.3), inset 0 -3px 8px rgba(0,0,0,0.6), 0 8px 0 #0f121c; transform: scale(0.95); transition: transform 0.2s; position: relative; }
         .sub-confirm-modal.show .sub-confirm-content { transform: scale(1); }
         .modal-close-x { position: absolute; top: 15px; right: 15px; width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(145deg, #3a4050, #2a2f40); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1rem; color: #b0c4de; transition: all 0.2s ease; border: 1px solid #4a80c0; z-index: 10; }
         .modal-close-x:hover { background: linear-gradient(145deg, #ff4444, #cc2222); color: white; border-color: #ffd700; }
-        .sub-confirm-header { text-align: center; margin-bottom: 1.2rem; border-bottom: 2px solid rgba(74, 128, 192, 0.5); padding-bottom: 0.8rem; }
-        .sub-confirm-header h3 { font-size: 1.6rem; font-weight: 900; background: linear-gradient(135deg, #ffd700, #ffaa33, #ffd966); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.25rem; text-shadow: 0 2px 5px rgba(0,0,0,0.3); letter-spacing: 1px; }
-        .sub-confirm-header p { color: #7ec8ff; font-size: 0.9rem; font-weight: 500; text-shadow: 0 1px 2px black; }
-        .sub-confirm-detail { background: linear-gradient(145deg, #1a2a3a, #0a1a2a); border: 1px solid #4a80c0; border-radius: 28px; padding: 1rem 1.2rem; margin-bottom: 1.2rem; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.1); }
-        .detail-row { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 0; border-bottom: 1px solid rgba(74, 128, 192, 0.3); }
-        .detail-row:last-child { border-bottom: none; }
-        .detail-label { color: #b3e4ff; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.5px; }
-        .detail-value { color: #ffd966; font-size: 1.1rem; font-weight: 800; font-family: 'Orbitron', monospace; text-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
-        .sub-confirm-input-group { margin: 1.2rem 0; }
-        .sub-confirm-input-group label { display: block; color: #b3e4ff; margin-bottom: 0.6rem; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.5px; }
-        .sub-confirm-input-group label i { color: #ffaa33; margin-right: 4px; }
-        .sub-confirm-input-group input { width: 100%; padding: 0.8rem 1rem; background: linear-gradient(145deg, #1a2a3a, #0e1a2a); border: 2px solid #4a80c0; border-radius: 40px; color: #ffd966; font-size: 1rem; font-weight: 700; font-family: 'Orbitron', monospace; text-align: center; -moz-appearance: textfield; appearance: textfield; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5), 0 0 0 1px rgba(74,128,192,0.3); transition: all 0.2s ease; }
-        .sub-confirm-input-group input:focus { outline: none; border-color: #ffd700; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5), 0 0 15px rgba(255,215,0,0.4); }
-        .sub-confirm-balance { text-align: right; color: #ffaa66; font-size: 0.8rem; margin-top: 0.5rem; font-weight: 500; }
+        .sub-confirm-header { text-align: center; margin-bottom: 1rem; border-bottom: 2px solid rgba(74, 128, 192, 0.5); padding-bottom: 0.5rem; }
+        .sub-confirm-header h3 { font-size: 1.4rem; font-weight: 900; background: linear-gradient(135deg, #ffd700, #ffaa33); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.25rem; }
+        .sub-confirm-header p { color: #7ec8ff; font-size: 0.8rem; }
+        .info-grid { background: linear-gradient(145deg, #1a2a3a, #0a1a2a); border: 1px solid #4a80c0; border-radius: 28px; padding: 0.8rem 1rem; margin-bottom: 1rem; }
+        .info-row { display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid rgba(74, 128, 192, 0.2); font-size: 0.85rem; }
+        .info-row:last-child { border-bottom: none; }
+        .info-label { color: #9ac2f0; }
+        .info-value { color: #ffd966; font-weight: 700; font-family: monospace; }
+        .highlight-value { color: #ffaa33; }
+        .cost-value { color: #ff7777; }
+        .sub-confirm-input-group { margin: 1rem 0; }
+        .sub-confirm-input-group label { display: block; color: #ffd966; margin-bottom: 0.5rem; font-size: 0.85rem; font-weight: 600; }
+        .sub-confirm-input-group input { width: 100%; padding: 0.7rem; background: linear-gradient(145deg, #1a2a3a, #0e1a2a); border: 2px solid #4a80c0; border-radius: 30px; color: #ffd966; font-size: 1rem; font-weight: 700; text-align: center; }
+        .sub-confirm-input-group input:focus { outline: none; border-color: #ffd700; }
         .sub-confirm-actions { display: flex; gap: 1rem; margin-top: 1.2rem; }
-        .sub-confirm-btn { flex: 1; padding: 0.8rem; border-radius: 40px; font-weight: 800; cursor: pointer; text-align: center; transition: all 0.1s ease; font-family: 'Noto Sans TC', 'Noto Sans JP', sans-serif; letter-spacing: 1px; font-size: 0.9rem; border: none; }
+        .sub-confirm-btn { flex: 1; padding: 0.7rem; border-radius: 40px; font-weight: 800; cursor: pointer; text-align: center; transition: all 0.1s ease; font-size: 0.9rem; border: none; }
         .sub-confirm-btn:active { transform: translateY(3px); }
         .sub-confirm-btn.secondary { background: linear-gradient(145deg, #3a4050, #2a2f40); border: 1px solid #4a80c0; color: #b0c4de; box-shadow: inset 0 2px 5px rgba(255,255,255,0.2), inset 0 -3px 5px rgba(0,0,0,0.4), 0 5px 0 #0f121c; }
-        .sub-confirm-btn.secondary:active { box-shadow: inset 0 5px 8px rgba(0,0,0,0.6), inset 0 -2px 5px rgba(255,255,255,0.2), 0 2px 0 #0f121c; }
         .sub-confirm-btn.primary { background: linear-gradient(145deg, #ffaa33, #ff8c00); border: 1px solid #ffd700; color: #2a1f0a; text-shadow: 0 1px 2px rgba(255,255,255,0.3); box-shadow: inset 0 2px 5px rgba(255,255,255,0.5), inset 0 -3px 5px rgba(0,0,0,0.2), 0 5px 0 #b85e00; }
-        .sub-confirm-btn.primary:active { box-shadow: inset 0 5px 8px rgba(0,0,0,0.4), inset 0 -2px 5px rgba(255,255,255,0.3), 0 2px 0 #b85e00; transform: translateY(3px); }
+        .sub-confirm-btn.disabled-btn, .sub-confirm-btn.primary.disabled-btn { opacity: 0.5; pointer-events: none; filter: grayscale(0.2); transform: none; }
+        .text-warning { color: #ffaa66; font-size: 0.7rem; margin-top: 0.5rem; text-align: center; }
+        .text-error { color: #ff6666; }
         
-        .hologram-loading { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.95); z-index: 999999; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.3s; }
-        .hologram-loading.show { opacity: 1; visibility: visible; }
-        .video-loading { position: relative; min-width: 100%; min-height: 100%; display: flex; flex-direction: column; justify-content: space-between; align-items: center; }
-        .loading-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; z-index: 1; }
-        .loading-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); z-index: 2; }
-        .loading-top-group { position: relative; z-index: 3; text-align: center; padding-top: 40px; }
-        .loading-machine-name { font-size: 24px; font-weight: 900; background: linear-gradient(135deg, #ff7eb3, #ffd700); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 15px; }
-        .loading-bottom-group { position: relative; z-index: 3; text-align: center; padding-bottom: 40px; }
-        .loading-text { font-size: 24px; font-weight: 900; color: transparent; -webkit-text-stroke: 2px #4a80c0; animation: textPulse 2s infinite; }
-        @keyframes textPulse { 0%,100% { opacity:0.8; } 50% { opacity:1; } }
-        .progress-bar { width: 300px; height: 8px; background: rgba(255,255,255,0.1); border-radius: 8px; overflow: hidden; margin: 10px auto; }
-        .progress-fill { height: 100%; width: 30%; background: linear-gradient(90deg, #4a80c0, #ffd700); animation: move 2s infinite; }
-        @keyframes move { 0% { transform: translateX(-100%); } 100% { transform: translateX(400%); } }
+        /* ========== 修復後的 Loading 動畫樣式 ========== */
+        .hologram-loading { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0, 0, 0, 0.95); 
+            backdrop-filter: blur(12px);
+            z-index: 999999; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            opacity: 0; 
+            visibility: hidden; 
+            transition: opacity 0.3s ease, visibility 0.3s ease; 
+        }
+        .hologram-loading.show { 
+            opacity: 1; 
+            visibility: visible; 
+        }
+        
+        .loading-container {
+            text-align: center;
+            width: 90%;
+            max-width: 380px;
+        }
+        
+        .loading-video {
+            width: 100%;
+            max-height: 300px;
+            border-radius: 24px;
+            box-shadow: 0 0 30px rgba(74, 128, 192, 0.6), inset 0 0 20px rgba(255,215,0,0.3);
+            border: 2px solid #ffd700;
+        }
+        
+        .loading-machine-name {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #ffd966;
+            text-shadow: 0 0 15px #ffd700;
+            margin: 12px 0 8px 0;
+            letter-spacing: 2px;
+        }
+        
+        .loading-text {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #88ccff;
+            letter-spacing: 3px;
+            margin-top: 8px;
+        }
+        
+        .progress-bar-loading {
+            width: 80%;
+            height: 6px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            margin: 12px auto 0 auto;
+            overflow: hidden;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .progress-fill-loading {
+            height: 100%;
+            width: 30%;
+            background: linear-gradient(90deg, #ffd700, #ffaa33, #ffd700);
+            border-radius: 10px;
+            animation: loadingMove 1s ease-in-out infinite alternate;
+        }
+        
+        @keyframes loadingMove {
+            from { width: 20%; margin-left: 0; }
+            to { width: 80%; margin-left: 20%; }
+        }
         
         .hidden { display: none !important; }
         
+        /* 警示提示視窗 */
         .alert-toast {
             position: fixed;
             top: 100px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(0, 0, 0, 0.9);
             backdrop-filter: blur(12px);
-            color: #ff4444;
+            color: #ff8888;
             padding: 12px 24px;
             border-radius: 40px;
             font-weight: bold;
             font-size: 14px;
             z-index: 10001;
             border: 1px solid #ff4444;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 0 20px rgba(255,68,68,0.5);
             white-space: nowrap;
             font-family: 'Orbitron', monospace;
             letter-spacing: 1px;
@@ -317,11 +372,6 @@
             transition: transform 0.2s ease, opacity 0.2s ease;
             user-select: none;
             touch-action: pan-y pinch-zoom;
-        }
-        .alert-toast:active { cursor: grabbing; }
-        .alert-toast.swiping-up {
-            transform: translateX(-50%) translateY(-100px);
-            opacity: 0;
         }
     </style>
 </head>
@@ -335,7 +385,7 @@
             </a>
             <div class="text-right flex flex-col items-end">
                 <span class="nickname-display" id="nicknameDisplay">夫人會生氣</span>
-                <span class="points-display" id="tokenBtn">6,600</span>
+                <span class="points-display" id="tokenBtn">6,600.0000</span>
             </div>
         </div>
     </header>
@@ -344,7 +394,7 @@
         <div class="announcement-combo">
             <a href="javascript:void(0)" class="combo-announce-btn" data-page="news"><i class="fa fa-bullhorn"></i><span>公告</span></a>
             <div class="marquee-container">
-                <div class="marquee-content">◈ 春季人氣機台大賞 ◈ 甲賀忍法帖系列熱賣 ◈ 代幣優惠實施中 ◈</div>
+                <div class="marquee-content">◈ 春季人氣機台大賞 ◈ 點差0.15固定 ◈ 代幣優惠實施中 ◈</div>
             </div>
         </div>
     </div>
@@ -369,581 +419,101 @@
             <div id="noReserveMsg" class="text-center py-12 text-gray-400"><i class="fa fa-clock-o text-5xl mb-3"></i><p>目前沒有保留中機台</p><p class="text-xs mt-2">在機台頁面點擊「保留」即可加入</p></div>
         </div>
         <div id="played-section" class="category-section hidden">
-            <div class="section-header"><h2 class="section-title"><i class="fa fa-history text-blue-400"></i> 玩過</h2><span class="section-count" id="playedCount">0 台</span></div>
+            <div class="section-header">
+                <h2 class="section-title"><i class="fa fa-history text-blue-400"></i> 玩過</h2>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <div class="filter-select-wrapper">
+                        <i class="fa fa-calendar"></i>
+                        <select id="playedDaysFilter" class="played-filter-select">
+                            <option value="7">最近7天</option>
+                            <option value="15">最近15天</option>
+                            <option value="31" selected>最近31天</option>
+                        </select>
+                    </div>
+                    <span class="section-count" id="playedCount">0 台</span>
+                </div>
+            </div>
             <div id="playedContainer"></div>
             <div id="noPlayedMsg" class="text-center py-12 text-gray-400"><i class="fa fa-history text-5xl mb-3"></i><p>還沒有玩過機台</p><p class="text-xs mt-2">進入遊戲後會自動記錄</p></div>
         </div>
     </main>
 
-    <!-- 兌換 Modal -->
-    <div class="sub-confirm-modal" id="subConfirmModal">
-        <div class="sub-confirm-content">
-            <div class="modal-close-x" id="closeXBtn"><i class="fa fa-times"></i></div>
-            <div class="sub-confirm-header"><h3 id="confirmMachineName">GOGO 小丑</h3><p id="confirmSubName">1號機</p></div>
-            <div class="sub-confirm-detail">
-                <div class="detail-row"><span class="detail-label"><i class="fa fa-ticket"></i> 每枚代幣</span><span class="detail-value" id="confirmRatio">4.0</span></div>
-                <div class="detail-row"><span class="detail-label"><i class="fa fa-exchange"></i> 兌換代幣</span><span class="detail-value" id="exchangeTokens">0 枚</span></div>
-                <div class="detail-row"><span class="detail-label"><i class="fa fa-database"></i> 目前點數</span><span class="detail-value" id="confirmPoints">6,600</span></div>
-            </div>
-            <div class="sub-confirm-input-group">
-                <label><i class="fa fa-arrow-down"></i> 使用點數兌換代幣 <span style="color:#ffaa66;">(最低 50)</span></label>
-                <input type="number" id="confirmTokenInput" placeholder="請輸入點數" value="1000">
-                <div class="sub-confirm-balance" id="confirmTokenRemain"><i class="fa fa-credit-card"></i> 剩餘點數: 6,600</div>
-            </div>
-            <div class="sub-confirm-actions">
-                <button class="sub-confirm-btn secondary" id="confirmCancelBtn">取消</button>
-                <button class="sub-confirm-btn primary" id="confirmOk">確認進入</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Loading 動畫 -->
+    <!-- 確認兌換視窗 -->
+    <div class="sub-confirm-modal" id="subConfirmModal"><div class="sub-confirm-content"><div class="modal-close-x" id="closeXBtn"><i class="fa fa-times"></i></div><div class="sub-confirm-header"><h3 id="confirmMachineName">GOGO 小丑</h3><p id="confirmSubName">1號機</p></div><div class="info-grid"><div class="info-row"><span class="info-label">每枚</span><span class="info-value" id="confirmRatio">2.5</span><span class="info-label" style="margin-left:auto;">點差</span><span class="info-value highlight-value" id="pointDiffDisplay">0.15</span></div><div class="info-row"><span class="info-label">目前點數</span><span class="info-value" id="confirmPoints">6,600.0000</span></div><div class="info-row"><span class="info-label">兌換代幣</span><span class="info-value" id="exchangeTokens">0 枚</span></div><div class="info-row"><span class="info-label">消耗點數</span><span class="info-value cost-value" id="costPoints">0</span></div><div class="info-row"><span class="info-label">損耗點數</span><span class="info-value cost-value" id="wastePoints">0</span></div><div class="info-row"><span class="info-label">剩餘點數</span><span class="info-value" id="remainPoints">6,600.0000</span></div></div><div class="sub-confirm-input-group"><label><i class="fa fa-ticket"></i> 兌換代幣 (最低 50 枚)</label><input type="number" id="confirmTokenInput" min="0" step="1" placeholder="請輸入代幣枚數" value="100"><div class="text-warning" id="warningMsg"></div></div><div class="sub-confirm-actions"><button class="sub-confirm-btn secondary" id="confirmCancelBtn">取消</button><button class="sub-confirm-btn primary" id="confirmOk">確認兌換</button></div></div></div>
+    
+    <!-- 修復後的 Loading 動畫 -->
     <div class="hologram-loading" id="hologramLoading">
-        <div class="video-loading">
+        <div class="loading-container">
             <video id="mascotVideo" class="loading-video" autoplay muted loop playsinline src="https://video.wixstatic.com/video/d5e540_d63f842135e8416f891842373bc0f582/720p/mp4/file.mp4"></video>
-            <div class="loading-overlay"></div>
-            <div class="loading-top-group"><div class="loading-machine-name" id="loadingMachineTitle">超級奇蹟小丑</div></div>
-            <div class="loading-bottom-group"><div class="loading-text">LOADING</div><div class="progress-bar"><div class="progress-fill"></div></div></div>
+            <div class="loading-machine-name" id="loadingMachineTitle">超級奇蹟小丑</div>
+            <div class="loading-text">LOADING</div>
+            <div class="progress-bar-loading">
+                <div class="progress-fill-loading"></div>
+            </div>
         </div>
     </div>
 
-    <!-- ========== 下方導覽列 - 收藏按鈕為 current-page ========== -->
     <nav class="bottom-nav">
-        <a href="javascript:void(0)" class="nav-item" data-page="index"><i class="fa fa-gamepad"></i><span>遊戲</span></a>
+        <a href="javascript:void(0)" class="nav-item" data-page="index"><i class="fa fa-gamepad"></i><span>大廳</span></a>
         <a href="javascript:void(0)" class="nav-item current-page" data-page="machines"><i class="fa fa-heart"></i><span>收藏</span></a>
-        <a href="javascript:void(0)" class="nav-item lobby-special" data-page="lobby"><i class="fa fa-home"></i><span>首頁</span></a>
+        <a href="javascript:void(0)" class="nav-item lobby-special" data-page="index"><i class="fa fa-home"></i><span>遊戲</span></a>
         <a href="javascript:void(0)" class="nav-item" data-page="news"><i class="fa fa-bell"></i><span>公告</span></a>
-        <a href="javascript:void(0)" class="nav-item" data-page="about"><i class="fa fa-user"></i><span>我的</span></a>
+        <a href="javascript:void(0)" class="nav-item" data-page="about"><i class="fa fa-user"></i><span>紀錄</span></a>
     </nav>
 </div>
 
 <script src="shared.js"></script>
 <script>
 (function() {
-    let userPoints = 6600;
+    // ==================== 全域變數 (使用 T_PACHIN_STORAGE 統一管理) ====================
     let currentSubData = null;
     let countdownIntervals = {};
-    let currentToast = null;
+    const POINT_DIFF = 0.15;
+    let favorites = [], reserves = [], currentRawPlayed = [];
+    let currentFilterDays = 31;
+    let playedFiltered = [];
     
-    const machineDatabase = [
-        { id: 1, name: 'GOGO 小丑', sub: '歡樂版', ratio: '2.5', bb: 1250, rb: 620, curr: 280, total: 4200, image: 'https://i.pinimg.com/736x/b1/f1/ec/b1f1ec3a191e62e3d0e300ce79c9b593.jpg' },
-        { id: 2, name: '我是小丑-EX', sub: '進化版', ratio: '2.8', bb: 1180, rb: 550, curr: 215, total: 3850, image: 'https://i.pinimg.com/736x/4a/2a/30/4a2a3089197d997984a7a75921faf2d9.jpg' },
-        { id: 3, name: '快樂小丑 VII', sub: '慶典版', ratio: '2.0', bb: 1080, rb: 510, curr: 175, total: 3550, image: 'https://i.pinimg.com/736x/76/a7/ec/76a7eca59c0b7f7a8404e67e043841cb.jpg' },
-        { id: 4, name: '新我是小丑-EX水晶版', sub: '限定版', ratio: '3.0', bb: 1300, rb: 650, curr: 310, total: 4500, image: 'https://i.pinimg.com/736x/c3/72/db/c372db1b020ebf778ef707f63c122bf7.jpg' },
-        { id: 5, name: '小丑狂歡夜', sub: '派對版', ratio: '2.2', bb: 980, rb: 480, curr: 155, total: 3350, image: 'https://i.pinimg.com/736x/4a/2a/30/4a2a3089197d997984a7a75921faf2d9.jpg' },
-        { id: 6, name: '超級奇蹟小丑', sub: 'JOKER MAX', ratio: '3.5', bb: 1580, rb: 820, curr: 420, total: 5600, image: 'https://i.pinimg.com/736x/b1/f1/ec/b1f1ec3a191e62e3d0e300ce79c9b593.jpg' },
-        { id: 7, name: '惡魔小丑', sub: '闇黑版', ratio: '2.0', bb: 920, rb: 430, curr: 198, total: 3100, image: 'https://i.pinimg.com/736x/4a/2a/30/4a2a3089197d997984a7a75921faf2d9.jpg' },
-        { id: 8, name: '黃金小丑', sub: '金幣版', ratio: '4.0', bb: 2100, rb: 1050, curr: 680, total: 7200, image: 'https://i.pinimg.com/736x/c3/72/db/c372db1b020ebf778ef707f63c122bf7.jpg' },
-        { id: 9, name: '小丑夢工廠', sub: '夢幻版', ratio: '1.8', bb: 850, rb: 390, curr: 145, total: 2900, image: 'https://i.pinimg.com/736x/76/a7/ec/76a7eca59c0b7f7a8404e67e043841cb.jpg' },
-        { id: 10, name: '小丑嘉年華', sub: '節慶版', ratio: '2.5', bb: 1120, rb: 580, curr: 245, total: 3950, image: 'https://i.pinimg.com/736x/b1/f1/ec/b1f1ec3a191e62e3d0e300ce79c9b593.jpg' }
-    ];
-    
-    let favorites = [];
-    let reserves = [];
-    let played = [];
-    
-    const miniCardsData = [
-        { fillCount: 3, value: 300 }, { fillCount: 5, value: 891 }, { fillCount: 2, value: 245 }, { fillCount: 4, value: 672 },
-        { fillCount: 1, value: 128 }, { fillCount: 5, value: 999 }, { fillCount: 3, value: 456 }, { fillCount: 2, value: 334 }
-    ];
-    const miniCardsData2 = [
-        { fillCount: 4, value: 512 }, { fillCount: 2, value: 203 }, { fillCount: 5, value: 876 }, { fillCount: 3, value: 445 },
-        { fillCount: 1, value: 98 }, { fillCount: 4, value: 678 }, { fillCount: 2, value: 267 }, { fillCount: 5, value: 1024 }
-    ];
-    
-    // ==================== 警示浮窗（可滑動關閉） ====================
-    function removeToast(toast) {
-        if (toast && toast.parentNode) {
-            toast.remove();
-        }
-        if (currentToast === toast) {
-            currentToast = null;
-        }
+    // 格式化點數 - 支援小數後4位
+    function formatPointsDecimal(v) { 
+        return v.toLocaleString(undefined, { minimumFractionDigits: 4, maximumFractionDigits: 4 }); 
+    }
+    function formatPointsInt(v) { 
+        return Math.floor(v).toLocaleString(); 
     }
     
-    function bindSwipeToClose(toast) {
-        if (!toast) return;
-        let isDragging = false;
-        let startY = 0;
-        let currentTranslateY = 0;
-        
-        const onTouchStart = (e) => {
-            isDragging = true;
-            startY = e.touches ? e.touches[0].clientY : e.clientY;
-            currentTranslateY = 0;
-            toast.style.transition = 'none';
-            e.preventDefault();
-        };
-        
-        const onTouchMove = (e) => {
-            if (!isDragging) return;
-            const currentY = e.touches ? e.touches[0].clientY : e.clientY;
-            const deltaY = currentY - startY;
-            if (deltaY < 0) {
-                currentTranslateY = deltaY;
-                toast.style.transform = `translateX(-50%) translateY(${deltaY}px)`;
-                toast.style.opacity = Math.max(0, 1 + deltaY / 100);
-            }
-            e.preventDefault();
-        };
-        
-        const onTouchEnd = (e) => {
-            if (!isDragging) return;
-            isDragging = false;
-            toast.style.transition = 'transform 0.2s ease, opacity 0.2s ease';
-            if (currentTranslateY < -50) {
-                toast.style.transform = 'translateX(-50%) translateY(-100px)';
-                toast.style.opacity = '0';
-                setTimeout(() => removeToast(toast), 200);
-            } else {
-                toast.style.transform = 'translateX(-50%) translateY(0)';
-                toast.style.opacity = '1';
-            }
-            currentTranslateY = 0;
-            e.preventDefault();
-        };
-        
-        const onMouseDown = (e) => {
-            e.preventDefault();
-            onTouchStart(e);
-            window.addEventListener('mousemove', onMouseMove);
-            window.addEventListener('mouseup', onMouseUp);
-        };
-        
-        const onMouseMove = (e) => { onTouchMove(e); };
-        const onMouseUp = (e) => {
-            onTouchEnd(e);
-            window.removeEventListener('mousemove', onMouseMove);
-            window.removeEventListener('mouseup', onMouseUp);
-        };
-        
-        toast.addEventListener('touchstart', onTouchStart, { passive: false });
-        toast.addEventListener('touchmove', onTouchMove, { passive: false });
-        toast.addEventListener('touchend', onTouchEnd);
-        toast.addEventListener('mousedown', onMouseDown);
-    }
-    
-    function showToastAlert(machineName, minutesLeft) {
-        if (currentToast) removeToast(currentToast);
-        
-        const toast = document.createElement('div');
-        toast.className = 'alert-toast';
-        toast.innerHTML = `⚠️ 「${machineName}」保留剩 ${minutesLeft} 分鐘到期 ⚠️`;
-        document.body.appendChild(toast);
-        currentToast = toast;
-        bindSwipeToClose(toast);
-        
-        setTimeout(() => {
-            if (toast && toast.parentNode) {
-                toast.style.transition = 'transform 0.2s ease, opacity 0.2s ease';
-                toast.style.transform = 'translateX(-50%) translateY(-100px)';
-                toast.style.opacity = '0';
-                setTimeout(() => removeToast(toast), 200);
-            }
-            if (currentToast === toast) currentToast = null;
-        }, 4000);
-    }
-    
-    function generateMiniCards(data) {
-        let cardsHtml = '';
-        for (let i = 0; i < data.length; i++) {
-            const d = data[i];
-            let barsHtml = '';
-            for (let s = 0; s < 5; s++) {
-                const isRed = s >= 2;
-                const isFilled = s < d.fillCount;
-                const filledClass = isFilled ? (isRed ? 'filled-red' : 'filled-green') : '';
-                barsHtml += `<div class="card-bar-segment ${filledClass}"></div>`;
-            }
-            cardsHtml += `<div class="mini-card"><div class="card-number">${i+1}</div><div class="card-bars">${barsHtml}</div><div class="card-value">${d.value}</div></div>`;
-        }
-        return `<div class="mini-cards-row">${cardsHtml}</div>`;
-    }
-    
-    // ==================== 導航列連動 ====================
-    function initNavigation() {
-        document.querySelectorAll('.nav-item, .logo, .combo-announce-btn').forEach(el => {
-            el.addEventListener('click', function(e) {
-                e.preventDefault();
-                const page = this.dataset.page;
-                if (page === 'index') window.location.href = 'index.html';
-                else if (page === 'machines') window.location.href = 'machines.html';
-                else if (page === 'lobby') window.location.href = 'index.html';
-                else if (page === 'news') window.location.href = 'news.html';
-                else if (page === 'about') window.location.href = 'about.html';
-            });
-        });
-    }
-    
-    // ==================== 進入遊戲 ====================
-    function showLoadingAndGoToSimulator(machineName, machineId, ratio) {
-        const machineInfo = {
-            name: machineName,
-            ratio: parseFloat(ratio),
-            machineId: machineId,
-            subName: machineId + '號機',
-            coins: 0
-        };
-        localStorage.setItem('t_pachin_machine_info', JSON.stringify(machineInfo));
-        
-        const loadingDiv = document.getElementById('hologramLoading');
-        const loadingTitle = document.getElementById('loadingMachineTitle');
-        if (loadingTitle) loadingTitle.textContent = `${machineName} NO.${machineId} 每枚${ratio}`;
-        if (loadingDiv) {
-            loadingDiv.classList.add('show');
-            setTimeout(() => { window.location.href = 'simulator.html'; }, 2000);
-        } else {
-            window.location.href = 'simulator.html';
-        }
-    }
-    
-    function showMessage(title, msg) {
-        const div = document.createElement('div');
-        div.className = 'alert-popup';
-        div.innerHTML = `<strong style="color:#ffd700;">${title}</strong> ${msg}`;
-        document.body.appendChild(div);
-        setTimeout(() => div.remove(), 2500);
-    }
-    
-    // ==================== 資料初始化 ====================
-    function initAllData() {
+    // 取得目前點數 (從全域儲存，支援小數)
+    function getCurrentPoints() {
         if (window.T_PACHIN_STORAGE) {
-            favorites = T_PACHIN_STORAGE.getFavorites();
-            reserves = T_PACHIN_STORAGE.getReserves();
-            played = T_PACHIN_STORAGE.getPlayed();
-            userPoints = T_PACHIN_STORAGE.getPoints();
+            return T_PACHIN_STORAGE.getPoints();
         }
-        
-        if (favorites.length === 0) {
-            favorites = [
-                { id: 1, name: 'GOGO 小丑', sub: '歡樂版', ratio: '2.5', bb: 1250, rb: 620, curr: 280, total: 4200, image: 'https://i.pinimg.com/736x/b1/f1/ec/b1f1ec3a191e62e3d0e300ce79c9b593.jpg' },
-                { id: 3, name: '快樂小丑 VII', sub: '慶典版', ratio: '2.0', bb: 1080, rb: 510, curr: 175, total: 3550, image: 'https://i.pinimg.com/736x/76/a7/ec/76a7eca59c0b7f7a8404e67e043841cb.jpg' },
-                { id: 5, name: '小丑狂歡夜', sub: '派對版', ratio: '2.2', bb: 980, rb: 480, curr: 155, total: 3350, image: 'https://i.pinimg.com/736x/4a/2a/30/4a2a3089197d997984a7a75921faf2d9.jpg' }
-            ];
-        }
-        
-        if (reserves.length === 0) {
-            const tenMinutesLater = Date.now() + 10 * 60 * 1000;
-            reserves = [
-                { id: 2, name: '我是小丑-EX', sub: '進化版', ratio: '2.8', bb: 1180, rb: 550, curr: 215, total: 3850, reserveTime: '10:00', expiresAt: tenMinutesLater, image: 'https://i.pinimg.com/736x/4a/2a/30/4a2a3089197d997984a7a75921faf2d9.jpg' }
-            ];
-        }
-        
-        if (played.length === 0) {
-            played = [
-                { id: 4, name: '新我是小丑-EX水晶版', sub: '限定版', ratio: '3.0', bb: 1300, rb: 650, curr: 310, total: 4500, playCount: 3, playedDate: '2026/04/08', image: 'https://i.pinimg.com/736x/c3/72/db/c372db1b020ebf778ef707f63c122bf7.jpg' },
-                { id: 6, name: '超級奇蹟小丑', sub: 'JOKER MAX', ratio: '3.5', bb: 1580, rb: 820, curr: 420, total: 5600, playCount: 1, playedDate: '2026/04/09', image: 'https://i.pinimg.com/736x/b1/f1/ec/b1f1ec3a191e62e3d0e300ce79c9b593.jpg' }
-            ];
-        }
-        
-        updatePointsDisplay();
-        startAllReserveCountdowns();
+        return 6600;
     }
     
-    function startReserveCountdown(reserveItem, cardElement, timeElement) {
-        if (!reserveItem.expiresAt) return;
-        if (countdownIntervals[reserveItem.id]) {
-            clearInterval(countdownIntervals[reserveItem.id]);
-            delete countdownIntervals[reserveItem.id];
-        }
-        
-        let hasShown10 = false, hasShown8 = false, hasShown6 = false, hasShown4 = false, hasShown2 = false;
-        
-        const updateCountdown = () => {
-            const now = Date.now();
-            const remaining = reserveItem.expiresAt - now;
-            if (remaining <= 0) {
-                if (timeElement) timeElement.textContent = '已到期';
-                if (cardElement) cardElement.classList.add('reserve-countdown-warning');
-                clearInterval(countdownIntervals[reserveItem.id]);
-                delete countdownIntervals[reserveItem.id];
-                if (window.T_PACHIN_STORAGE) {
-                    T_PACHIN_STORAGE.removeReserve(reserveItem.id);
-                    reserves = T_PACHIN_STORAGE.getReserves();
-                } else {
-                    reserves = reserves.filter(r => r.id !== reserveItem.id);
-                }
-                updateReserveUI();
-                return;
-            }
-            const minutes = Math.floor(remaining / 60000);
-            const seconds = Math.floor((remaining % 60000) / 1000);
-            const timeStr = `${minutes}:${seconds.toString().padStart(2, '0')}`;
-            if (timeElement) timeElement.textContent = timeStr;
-            
-            if (remaining <= 600000) {
-                if (cardElement && !cardElement.classList.contains('reserve-countdown-warning')) {
-                    cardElement.classList.add('reserve-countdown-warning');
-                }
-                if (!hasShown10 && remaining <= 600000 && remaining > 480000) {
-                    hasShown10 = true; showToastAlert(reserveItem.name, '10');
-                } else if (!hasShown8 && remaining <= 480000 && remaining > 360000) {
-                    hasShown8 = true; showToastAlert(reserveItem.name, '8');
-                } else if (!hasShown6 && remaining <= 360000 && remaining > 240000) {
-                    hasShown6 = true; showToastAlert(reserveItem.name, '6');
-                } else if (!hasShown4 && remaining <= 240000 && remaining > 120000) {
-                    hasShown4 = true; showToastAlert(reserveItem.name, '4');
-                } else if (!hasShown2 && remaining <= 120000) {
-                    hasShown2 = true; showToastAlert(reserveItem.name, '2');
-                }
-            } else {
-                if (cardElement && cardElement.classList.contains('reserve-countdown-warning')) {
-                    cardElement.classList.remove('reserve-countdown-warning');
-                }
-            }
-        };
-        updateCountdown();
-        countdownIntervals[reserveItem.id] = setInterval(updateCountdown, 1000);
-    }
-    
-    function startAllReserveCountdowns() {
-        Object.keys(countdownIntervals).forEach(id => {
-            clearInterval(countdownIntervals[id]);
-            delete countdownIntervals[id];
-        });
-        setTimeout(() => {
-            document.querySelectorAll('.reserve-card').forEach(card => {
-                const machineId = parseInt(card.getAttribute('data-machine-id'));
-                const reserveItem = reserves.find(r => r.id === machineId);
-                if (reserveItem && reserveItem.expiresAt) {
-                    const timeElement = card.querySelector('.time-big');
-                    startReserveCountdown(reserveItem, card, timeElement);
-                }
-            });
-        }, 100);
-    }
-    
-    function createCardHTML(item, type) {
-        const isFav = favorites.some(f => f && f.id === item.id);
-        let topRow = '';
-        if (type === 'reserve') {
-            topRow = `<div class="page1-reserve-row"><span class="reserve-text">⏰ 保留倒數</span><span class="time-big">${item.reserveTime || '10:00'}</span></div>`;
-        } else if (type === 'played') {
-            topRow = `<div class="page1-played-row"><span class="played-text">玩過 ${item.playCount || 1}次</span><span class="played-date">${item.playedDate || '2026/04/09'}</span></div>`;
-        }
-        const machineImage = item.image || 'https://i.pinimg.com/736x/c3/72/db/c372db1b020ebf778ef707f63c122bf7.jpg';
-        
-        return `<div class="flip-card ${type}-card" data-machine-id="${item.id}">
-            <div class="page page-1">
-                <div class="page1-row1"><div class="model-name"><strong>NO.${item.id}</strong> ${item.name} <span style="color:#aac9ff;">${item.sub || ''}</span></div><span class="ratio-mini">每枚${item.ratio}</span></div>
-                ${topRow}
-                <div class="stats-grid"><div class="stat-cell"><div class="stat-label">BB</div><div class="stat-number bb-number">${item.bb || 1200}</div></div><div class="stat-cell"><div class="stat-label">RB</div><div class="stat-number rb-number">${item.rb || 600}</div></div><div class="stat-cell"><div class="stat-label">當前</div><div class="stat-number curr-number">${item.curr || 280}</div></div><div class="stat-cell"><div class="stat-label">總回</div><div class="stat-number total-number">${item.total || 4000}</div></div></div>
-            </div>
-            <div class="page page-2 hidden">
-                <div class="sub-page active">${generateMiniCards(miniCardsData)}</div>
-                <div class="sub-page">${generateMiniCards(miniCardsData2)}</div>
-                <div class="sub-page-indicator">
-                    <span class="sub-dot active"></span>
-                    <span class="sub-dot"></span>
-                </div>
-            </div>
-            <div class="card-actions">
-                <button class="enter-btn" onclick="window.openSubConfirm('${item.name.replace(/'/g, "\\'")}', ${item.id}, '${item.ratio}')">進入遊戲</button>
-                ${type === 'reserve' ? `<button class="leave-btn" onclick="window.removeFromReserve(${item.id}, '${item.name.replace(/'/g, "\\'")}')">離開</button>` : ''}
-                <button class="favorite-btn ${isFav ? 'active' : 'inactive'}" onclick="window.toggleFavorite(${item.id})"><i class="fa ${isFav ? 'fa-heart' : 'fa-heart-o'}"></i></button>
-            </div>
-        </div>`;
-    }
-    
-    function bindSubPageSwitches() {
-        document.querySelectorAll('.flip-card').forEach(card => {
-            const subDots = card.querySelectorAll('.sub-dot');
-            subDots.forEach((dot, idx) => {
-                dot.removeEventListener('click', dot._handler);
-                const handler = function(e) {
-                    e.stopPropagation();
-                    const subPages = card.querySelectorAll('.sub-page');
-                    subPages.forEach((p, i) => {
-                        if (i === idx) p.classList.add('active');
-                        else p.classList.remove('active');
-                    });
-                    card.querySelectorAll('.sub-dot').forEach((d, i) => {
-                        if (i === idx) d.classList.add('active');
-                        else d.classList.remove('active');
-                    });
-                };
-                dot._handler = handler;
-                dot.addEventListener('click', handler);
-            });
-        });
-    }
-    
-    function updateFavoriteUI() { 
-        let container = document.getElementById('favoriteContainer');
-        let countSpan = document.getElementById('favoriteCount');
-        let noMsg = document.getElementById('noFavoriteMsg');
-        countSpan.textContent = favorites.length + ' 台';
-        if(favorites.length === 0){ 
-            container.innerHTML = ''; 
-            noMsg.classList.remove('hidden'); 
-        } else { 
-            noMsg.classList.add('hidden'); 
-            container.innerHTML = favorites.map(m => createCardHTML(m, 'favorite')).join(''); 
-        } 
-        bindFlipEvents();
-        bindSubPageSwitches();
-    }
-    
-    function updateReserveUI() { 
-        let container = document.getElementById('reserveContainer');
-        let countSpan = document.getElementById('reserveCount');
-        let noMsg = document.getElementById('noReserveMsg');
-        countSpan.textContent = reserves.length + ' 台';
-        if(reserves.length === 0){ 
-            container.innerHTML = ''; 
-            noMsg.classList.remove('hidden'); 
-        } else { 
-            noMsg.classList.add('hidden'); 
-            container.innerHTML = reserves.map(m => createCardHTML(m, 'reserve')).join(''); 
-        } 
-        bindFlipEvents();
-        bindSubPageSwitches();
-        startAllReserveCountdowns();
-    }
-    
-    function updatePlayedUI() { 
-        let container = document.getElementById('playedContainer');
-        let countSpan = document.getElementById('playedCount');
-        let noMsg = document.getElementById('noPlayedMsg');
-        countSpan.textContent = played.length + ' 台';
-        if(played.length === 0){ 
-            container.innerHTML = ''; 
-            noMsg.classList.remove('hidden'); 
-        } else { 
-            noMsg.classList.add('hidden'); 
-            container.innerHTML = played.map(m => createCardHTML(m, 'played')).join(''); 
-        } 
-        bindFlipEvents();
-        bindSubPageSwitches();
-    }
-    
-    function bindFlipEvents() { 
-        document.querySelectorAll('.flip-card').forEach(card => { 
-            card.removeEventListener('click', handleCardClick); 
-            card.addEventListener('click', handleCardClick); 
-        }); 
-    }
-    
-    function handleCardClick(e) { 
-        if(e.target.closest('button')) return; 
-        const p1 = this.querySelector('.page-1'), p2 = this.querySelector('.page-2'); 
-        if(!p1 || !p2) return; 
-        if(!p1.classList.contains('hidden')){ 
-            p1.classList.add('hidden'); 
-            p2.classList.remove('hidden'); 
-        } else { 
-            p2.classList.add('hidden'); 
-            p1.classList.remove('hidden'); 
-        } 
-    }
-    
-    // ==================== 收藏/保留操作 ====================
-    window.toggleFavorite = function(id) {
-        const machine = machineDatabase.find(m => m.id === id);
-        if (!machine) return;
-        if (window.T_PACHIN_STORAGE) {
-            T_PACHIN_STORAGE.toggleFavorite(machine);
-            favorites = T_PACHIN_STORAGE.getFavorites();
-        } else {
-            const isFav = favorites.some(f => f.id === id);
-            if (isFav) favorites = favorites.filter(f => f.id !== id);
-            else favorites.push(machine);
-        }
-        updateFavoriteUI();
-        const isNowFav = favorites.some(f => f.id === id);
-        showMessage(isNowFav ? '❤️ 加入收藏' : '💔 取消收藏', `${machine.name} 已${isNowFav ? '加入' : '移除'}收藏`);
-    };
-    
-    window.removeFromReserve = function(id, name) {
-        if (confirm(`確定要離開「${name}」嗎？`)) {
-            if (window.T_PACHIN_STORAGE) {
-                T_PACHIN_STORAGE.removeReserve(id);
-                reserves = T_PACHIN_STORAGE.getReserves();
-            } else {
-                reserves = reserves.filter(r => r.id !== id);
-            }
-            if (countdownIntervals[id]) {
-                clearInterval(countdownIntervals[id]);
-                delete countdownIntervals[id];
-            }
-            updateReserveUI();
-            showMessage('✅ 已離開', `${name} 已從保留中移除`);
-        }
-    };
-    
-    // ==================== 進入遊戲彈窗 ====================
-    window.openSubConfirm = function(machineName, machineId, ratio) {
-        currentSubData = { machineName, machineId, ratio: parseFloat(ratio) };
-        document.getElementById('confirmMachineName').textContent = machineName;
-        document.getElementById('confirmSubName').textContent = machineId + '號機';
-        document.getElementById('confirmRatio').textContent = ratio;
-        document.getElementById('confirmPoints').textContent = userPoints.toLocaleString();
-        document.getElementById('confirmTokenInput').value = 1000;
-        updateRemainAndCoins();
-        document.getElementById('subConfirmModal').classList.add('show');
-    };
-    
-    function updateRemainAndCoins() {
-        const inputEl = document.getElementById('confirmTokenInput');
-        if (!inputEl || !currentSubData) return;
-        let inputPoints = parseInt(inputEl.value) || 0;
-        if (inputPoints < 0) inputPoints = 0;
-        if (inputPoints > userPoints) { inputPoints = userPoints; inputEl.value = inputPoints; }
-        let coins = Math.floor(inputPoints / currentSubData.ratio);
-        document.getElementById('exchangeTokens').textContent = `${coins} 枚`;
-        let remain = userPoints - inputPoints;
-        if (remain < 0) remain = 0;
-        document.getElementById('confirmTokenRemain').innerHTML = `<i class="fa fa-credit-card"></i> 剩餘點數: ${remain.toLocaleString()}`;
-    }
-    
-    function doEnterGame() {
-        if (!currentSubData) return;
-        const inputPoints = parseInt(document.getElementById('confirmTokenInput').value) || 0;
-        if (inputPoints <= 0) { showMessage('⚠️ 兌換限制', '請輸入要兌換的點數'); return; }
-        if (inputPoints < 50) { showMessage('⚠️ 兌換限制', '最低兌換 50 點數'); return; }
-        if (inputPoints > userPoints) { showMessage('❌ 點數不足', '您的點數不足'); return; }
-        const coins = Math.floor(inputPoints / currentSubData.ratio);
-        if (coins === 0) { showMessage('⚠️ 兌換限制', '點數不足以兌換 1 枚代幣'); return; }
-        
-        if (window.T_PACHIN_STORAGE) {
-            userPoints = T_PACHIN_STORAGE.updatePoints(-inputPoints);
-        } else {
-            userPoints -= inputPoints;
-        }
-        updatePointsDisplay();
-        
-        document.getElementById('subConfirmModal').classList.remove('show');
-        showLoadingAndGoToSimulator(currentSubData.machineName, currentSubData.machineId, currentSubData.ratio);
-    }
-    
+    // 更新頁面點數顯示
     function updatePointsDisplay() {
+        const points = getCurrentPoints();
         const tokenBtn = document.getElementById('tokenBtn');
-        if (tokenBtn) tokenBtn.textContent = userPoints.toLocaleString();
         const confirmPoints = document.getElementById('confirmPoints');
-        if (confirmPoints) confirmPoints.textContent = userPoints.toLocaleString();
-        if (document.getElementById('confirmTokenRemain') && currentSubData) {
-            updateRemainAndCoins();
-        }
+        const remainPoints = document.getElementById('remainPoints');
+        if (tokenBtn) tokenBtn.textContent = formatPointsDecimal(points);
+        if (confirmPoints) confirmPoints.textContent = formatPointsDecimal(points);
+        if (remainPoints && currentSubData) remainPoints.textContent = formatPointsDecimal(points);
+        if (currentSubData) updateCalc();
     }
     
-    // ==================== 標籤切換 ====================
-    document.querySelectorAll('.category-tab').forEach(tab => {
-        tab.addEventListener('click', function() {
-            document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
-            this.classList.add('active');
-            const target = this.dataset.tab;
-            document.querySelectorAll('.category-section').forEach(s => s.classList.add('hidden'));
-            document.getElementById(target + '-section').classList.remove('hidden');
-        });
-    });
-    
-    // ==================== 點數同步事件 ====================
-    function bindStorageEvents() {
-        if (!window.T_PACHIN_STORAGE) return;
+    // 監聽全域點數更新事件
+    if (window.T_PACHIN_STORAGE) {
         window.addEventListener('points-updated', function(e) {
             if (e.detail && e.detail.points !== undefined) {
-                userPoints = e.detail.points;
                 updatePointsDisplay();
+            }
+        });
+        window.addEventListener('t-pachin:user-updated', function(e) {
+            if (e.detail && e.detail.points !== undefined) {
+                updatePointsDisplay();
+            }
+            if (e.detail && e.detail.nickname) {
+                document.getElementById('nicknameDisplay').textContent = e.detail.nickname;
             }
         });
         window.addEventListener('t-pachin:favorites-updated', function(e) {
@@ -956,39 +526,391 @@
             startAllReserveCountdowns();
         });
         window.addEventListener('t-pachin:played-updated', function(e) {
-            played = e.detail;
-            updatePlayedUI();
+            currentRawPlayed = e.detail || [];
+            applyPlayedFilter();
         });
     }
     
-    // ==================== 初始化 ====================
-    function init() {
-        initNavigation();
-        initAllData();
-        bindStorageEvents();
-        updateFavoriteUI();
-        updateReserveUI();
-        updatePlayedUI();
-        
-        if (window.T_PACHIN_STORAGE) {
-            document.getElementById('nicknameDisplay').textContent = T_PACHIN_STORAGE.getNickname();
-        }
-        
-        document.getElementById('confirmOk')?.addEventListener('click', doEnterGame);
-        document.getElementById('confirmCancelBtn')?.addEventListener('click', () => {
-            document.getElementById('subConfirmModal').classList.remove('show');
-        });
-        document.getElementById('closeXBtn')?.addEventListener('click', () => {
-            document.getElementById('subConfirmModal').classList.remove('show');
-        });
-        
-        const tokenInput = document.getElementById('confirmTokenInput');
-        if (tokenInput) {
-            tokenInput.addEventListener('input', updateRemainAndCoins);
-        }
+    function filterPlayedByDays(days, raw) { 
+        if(!raw) return [];
+        const start = new Date(); start.setDate(start.getDate() - days); start.setHours(0,0,0,0);
+        return raw.filter(r => { 
+            if(!r.playedDate) return false; 
+            const parts = r.playedDate.split('/');
+            if (parts.length === 3) {
+                const [y,m,d] = parts;
+                return new Date(parseInt(y), parseInt(m)-1, parseInt(d)) >= start;
+            }
+            return false;
+        }).sort((a,b)=> new Date(b.playedDate) - new Date(a.playedDate));
     }
     
-    init();
+    const machineDatabase = [
+        { id: 1, name: 'GOGO 小丑', sub: '歡樂版', ratio: '2.5', bb: 1250, rb: 620, curr: 280, total: 4200 },
+        { id: 2, name: '我是小丑-EX', sub: '進化版', ratio: '2.8', bb: 1180, rb: 550, curr: 215, total: 3850 },
+        { id: 3, name: '快樂小丑 VII', sub: '慶典版', ratio: '2.0', bb: 1080, rb: 510, curr: 175, total: 3550 },
+        { id: 4, name: '新我是小丑-EX水晶版', sub: '限定版', ratio: '3.0', bb: 1300, rb: 650, curr: 310, total: 4500 },
+        { id: 5, name: '小丑狂歡夜', sub: '派對版', ratio: '2.2', bb: 980, rb: 480, curr: 155, total: 3350 },
+        { id: 6, name: '超級奇蹟小丑', sub: 'JOKER MAX', ratio: '3.5', bb: 1580, rb: 820, curr: 420, total: 5600 }
+    ];
+    
+    const miniCardsData = [{fillCount:3,value:300},{fillCount:5,value:891},{fillCount:2,value:245},{fillCount:4,value:672},{fillCount:1,value:128},{fillCount:5,value:999},{fillCount:3,value:456},{fillCount:2,value:334}];
+    const miniCardsData2 = [{fillCount:4,value:512},{fillCount:2,value:203},{fillCount:5,value:876},{fillCount:3,value:445},{fillCount:1,value:98},{fillCount:4,value:678},{fillCount:2,value:267},{fillCount:5,value:1024}];
+    
+    function generateMiniCards(data) { 
+        let html=''; 
+        for(let i=0;i<data.length;i++){ 
+            let bars=''; 
+            for(let s=0;s<5;s++){ 
+                let isRed=s>=2; 
+                let fill=s<data[i].fillCount; 
+                bars+=`<div class="card-bar-segment ${fill?(isRed?'filled-red':'filled-green'):''}"></div>`; 
+            } 
+            html+=`<div class="mini-card"><div class="card-number">${i+1}</div><div class="card-bars">${bars}</div><div class="card-value">${data[i].value}</div></div>`; 
+        } 
+        return `<div class="mini-cards-row">${html}</div>`; 
+    }
+    
+    function showToastAlert(machineName, minutesLeft) {
+        let existing = document.querySelector('.alert-toast'); if(existing) existing.remove();
+        let toast = document.createElement('div'); toast.className = 'alert-toast'; toast.innerHTML = `⚠️ 「${machineName}」保留剩 ${minutesLeft} 分鐘到期 ⚠️`;
+        document.body.appendChild(toast);
+        setTimeout(() => { if(toast && toast.parentNode) toast.remove(); }, 4000);
+    }
+    
+    function createCardHTML(item, type) {
+        let topRow = '';
+        if(type==='reserve') topRow = `<div class="page1-reserve-row"><span class="reserve-text">⏰ 保留倒數</span><span class="time-big" id="countdown-${item.id}">${item.reserveTime || '10:00'}</span></div>`;
+        else if(type==='played') topRow = `<div class="page1-played-row"><span class="played-text">玩過 ${item.playCount||1}次</span><span class="played-date">${item.playedDate||''}</span></div>`;
+        const isFav = favorites.some(f=>f.id===item.id);
+        return `<div class="flip-card ${type}-card" data-machine-id="${item.id}">
+            <div class="page page-1">
+                <div class="page1-row1">
+                    <div class="model-name"><strong>NO.${item.id}</strong> ${item.name} <span style="color:#aac9ff;">${item.sub||''}</span></div>
+                    <span class="ratio-mini"><i class="fa fa-ticket"></i> 每枚 ${item.ratio}<span class="point-diff-badge-mini">點差 0.15</span></span>
+                </div>
+                ${topRow}
+                <div class="stats-grid">
+                    <div class="stat-cell"><div class="stat-label">BB</div><div class="stat-number bb-number">${item.bb}</div></div>
+                    <div class="stat-cell"><div class="stat-label">RB</div><div class="stat-number rb-number">${item.rb}</div></div>
+                    <div class="stat-cell"><div class="stat-label">當前</div><div class="stat-number curr-number">${item.curr}</div></div>
+                    <div class="stat-cell"><div class="stat-label">總回</div><div class="stat-number total-number">${item.total}</div></div>
+                </div>
+            </div>
+            <div class="page page-2 hidden">
+                <div class="sub-page active">${generateMiniCards(miniCardsData)}</div>
+                <div class="sub-page">${generateMiniCards(miniCardsData2)}</div>
+                <div class="sub-page-indicator"><span class="sub-dot active"></span><span class="sub-dot"></span></div>
+            </div>
+            <div class="card-actions">
+                <button class="enter-btn" onclick="window.openSubConfirm('${item.name.replace(/'/g,"\\'")}', ${item.id}, '${item.ratio}')">進入遊戲</button>
+                ${type==='reserve'?`<button class="leave-btn" onclick="window.removeFromReserve(${item.id}, '${item.name.replace(/'/g,"\\'")}')">離開</button>`:''}
+                <button class="favorite-btn ${isFav?'active':'inactive'}" onclick="window.toggleFavorite(${item.id})"><i class="fa ${isFav?'fa-heart':'fa-heart-o'}"></i></button>
+            </div>
+        </div>`;
+    }
+    
+    function initAllData() {
+        if(window.T_PACHIN_STORAGE){
+            favorites = T_PACHIN_STORAGE.getFavorites();
+            reserves = T_PACHIN_STORAGE.getReserves();
+            currentRawPlayed = T_PACHIN_STORAGE.getPlayed() || [];
+            updatePointsDisplay();
+        } else {
+            // 初始預設資料
+            if(favorites.length===0) favorites = [machineDatabase[0], machineDatabase[2], machineDatabase[4]];
+            if(reserves.length===0) reserves = [{ ...machineDatabase[1], reserveTime:'10:00', expiresAt: Date.now() + 10*60*1000 }];
+            if(currentRawPlayed.length===0){
+                let dates=[1,3,7,12,20].map(day=>{ let dd=new Date(); dd.setDate(dd.getDate()-day); return `${dd.getFullYear()}/${String(dd.getMonth()+1).padStart(2,'0')}/${String(dd.getDate()).padStart(2,'0')}`; });
+                currentRawPlayed = machineDatabase.slice(0,4).map((m,i)=>({...m, playCount:i+1, playedDate:dates[i]}));
+            }
+        }
+        updateFavoriteUI(); 
+        updateReserveUI(); 
+        applyPlayedFilter(); 
+        startAllReserveCountdowns();
+    }
+    
+    function startReserveCountdown(item, card, timeSpan) {
+        if(!item.expiresAt) return;
+        if(countdownIntervals[item.id]) clearInterval(countdownIntervals[item.id]);
+        let alerted={};
+        const update=()=>{
+            let remain = item.expiresAt - Date.now();
+            if(remain<=0){
+                if(timeSpan) timeSpan.textContent='已到期';
+                if(card) card.classList.add('reserve-countdown-warning');
+                clearInterval(countdownIntervals[item.id]);
+                if(window.T_PACHIN_STORAGE) T_PACHIN_STORAGE.removeReserve(item.id);
+                else reserves = reserves.filter(r=>r.id!==item.id);
+                updateReserveUI(); 
+                return;
+            }
+            let mins = Math.floor(remain/60000), secs = Math.floor((remain%60000)/1000);
+            if(timeSpan) timeSpan.textContent = `${mins}:${secs.toString().padStart(2,'0')}`;
+            if(remain<=600000){
+                if(card && !card.classList.contains('reserve-countdown-warning')) card.classList.add('reserve-countdown-warning');
+                let minsLeft = Math.ceil(remain/60000);
+                if(!alerted[minsLeft] && minsLeft<=10 && minsLeft>0){ 
+                    alerted[minsLeft]=true; 
+                    showToastAlert(item.name, minsLeft); 
+                }
+            } else { 
+                if(card && card.classList.contains('reserve-countdown-warning')) card.classList.remove('reserve-countdown-warning'); 
+            }
+        };
+        update(); 
+        countdownIntervals[item.id] = setInterval(update,1000);
+    }
+    
+    function startAllReserveCountdowns(){ 
+        Object.keys(countdownIntervals).forEach(i=>clearInterval(countdownIntervals[i])); 
+        setTimeout(()=>{ 
+            document.querySelectorAll('.reserve-card').forEach(card=>{ 
+                let id=parseInt(card.dataset.machineId); 
+                let r=reserves.find(r=>r.id===id); 
+                if(r&&r.expiresAt){ 
+                    let t=card.querySelector('.time-big'); 
+                    startReserveCountdown(r,card,t); 
+                } 
+            }); 
+        },100); 
+    }
+    
+    function updateFavoriteUI(){ 
+        let c=document.getElementById('favoriteContainer'), cnt=document.getElementById('favoriteCount'), no=document.getElementById('noFavoriteMsg'); 
+        cnt.textContent=favorites.length+' 台'; 
+        if(favorites.length===0){ 
+            c.innerHTML=''; 
+            no.classList.remove('hidden'); 
+        }else{ 
+            no.classList.add('hidden'); 
+            c.innerHTML=favorites.map(m=>createCardHTML(m,'favorite')).join(''); 
+        } 
+        bindEvents(); 
+    }
+    
+    function updateReserveUI(){ 
+        let c=document.getElementById('reserveContainer'), cnt=document.getElementById('reserveCount'), no=document.getElementById('noReserveMsg'); 
+        cnt.textContent=reserves.length+' 台'; 
+        if(reserves.length===0){ 
+            c.innerHTML=''; 
+            no.classList.remove('hidden'); 
+        }else{ 
+            no.classList.add('hidden'); 
+            c.innerHTML=reserves.map(m=>createCardHTML(m,'reserve')).join(''); 
+        } 
+        bindEvents(); 
+        startAllReserveCountdowns(); 
+    }
+    
+    function applyPlayedFilter(){ 
+        playedFiltered=filterPlayedByDays(currentFilterDays, currentRawPlayed); 
+        updatePlayedUI(); 
+    }
+    
+    function updatePlayedUI(){ 
+        let c=document.getElementById('playedContainer'), cnt=document.getElementById('playedCount'), no=document.getElementById('noPlayedMsg'); 
+        cnt.textContent=playedFiltered.length+' 台'; 
+        if(playedFiltered.length===0){ 
+            c.innerHTML=''; 
+            no.classList.remove('hidden'); 
+        }else{ 
+            no.classList.add('hidden'); 
+            c.innerHTML=playedFiltered.map(m=>createCardHTML(m,'played')).join(''); 
+        } 
+        bindEvents(); 
+    }
+    
+    function bindEvents(){ 
+        document.querySelectorAll('.flip-card').forEach(card=>{ 
+            card.removeEventListener('click', handleFlip); 
+            card.addEventListener('click', handleFlip); 
+        }); 
+        document.querySelectorAll('.sub-dot').forEach(dot=>{ 
+            dot.removeEventListener('click', dot._h); 
+            let h=(e)=>{ 
+                e.stopPropagation(); 
+                let idx=Array.from(dot.parentNode.children).indexOf(dot); 
+                let parent=dot.closest('.flip-card'); 
+                let pages=parent.querySelectorAll('.sub-page'); 
+                pages.forEach((p,i)=>i===idx?p.classList.add('active'):p.classList.remove('active')); 
+                parent.querySelectorAll('.sub-dot').forEach((d,i)=>i===idx?d.classList.add('active'):d.classList.remove('active')); 
+            }; 
+            dot._h=h; 
+            dot.addEventListener('click',h); 
+        }); 
+    }
+    
+    function handleFlip(e){ 
+        if(e.target.closest('button')) return; 
+        let p1=this.querySelector('.page-1'), p2=this.querySelector('.page-2'); 
+        if(p1.classList.contains('hidden')){ 
+            p2.classList.add('hidden'); 
+            p1.classList.remove('hidden'); 
+        }else{ 
+            p1.classList.add('hidden'); 
+            p2.classList.remove('hidden'); 
+        } 
+    }
+    
+    window.toggleFavorite=function(id){ 
+        let m=machineDatabase.find(x=>x.id===id); 
+        if(!m) return; 
+        if(window.T_PACHIN_STORAGE){ 
+            T_PACHIN_STORAGE.toggleFavorite(m); 
+            favorites=T_PACHIN_STORAGE.getFavorites(); 
+        }else{ 
+            let idx=favorites.findIndex(f=>f.id===id); 
+            if(idx>-1) favorites.splice(idx,1); 
+            else favorites.push(m); 
+        } 
+        updateFavoriteUI(); 
+    };
+    
+    window.removeFromReserve=function(id,name){ 
+        if(confirm(`確定離開「${name}」嗎？`)){ 
+            if(window.T_PACHIN_STORAGE) T_PACHIN_STORAGE.removeReserve(id); 
+            else reserves=reserves.filter(r=>r.id!==id); 
+            if(countdownIntervals[id]) clearInterval(countdownIntervals[id]); 
+            updateReserveUI(); 
+        } 
+    };
+    
+    window.openSubConfirm=function(name,id,ratio){ 
+        currentSubData={machineName:name,machineId:id,ratio:parseFloat(ratio)}; 
+        const currentPoints = getCurrentPoints();
+        document.getElementById('confirmMachineName').textContent=name; 
+        document.getElementById('confirmSubName').textContent=id+'號機'; 
+        document.getElementById('confirmRatio').textContent=ratio; 
+        document.getElementById('pointDiffDisplay').textContent=POINT_DIFF.toFixed(2);
+        document.getElementById('confirmPoints').textContent=formatPointsDecimal(currentPoints); 
+        document.getElementById('remainPoints').textContent=formatPointsDecimal(currentPoints); 
+        document.getElementById('confirmTokenInput').value=100; 
+        updateCalc(); 
+        document.getElementById('subConfirmModal').classList.add('show'); 
+    };
+    
+    function updateCalc(){ 
+        if(!currentSubData) return; 
+        let tokens=parseInt(document.getElementById('confirmTokenInput').value)||0; 
+        let cost=tokens*currentSubData.ratio; 
+        let waste=tokens*POINT_DIFF; 
+        let total=cost+waste; 
+        let currentPoints = getCurrentPoints();
+        let ok=true,msg=''; 
+        if(tokens<50){ 
+            msg='⚠️ 最低50枚'; 
+            ok=false;
+        } else if(total>currentPoints){ 
+            msg=`❌ 點數不足 需${formatPointsDecimal(total)}`; 
+            ok=false;
+        } 
+        document.getElementById('warningMsg').innerHTML=msg?`<span class="text-error">${msg}</span>`:''; 
+        document.getElementById('exchangeTokens').textContent=`${tokens} 枚`; 
+        document.getElementById('costPoints').textContent=formatPointsInt(cost); 
+        document.getElementById('wastePoints').textContent=formatPointsInt(waste); 
+        document.getElementById('remainPoints').textContent=formatPointsDecimal(currentPoints-total); 
+        let btn=document.getElementById('confirmOk'); 
+        if(ok){ 
+            btn.classList.remove('disabled-btn'); 
+            btn.style.pointerEvents='auto'; 
+        }else{ 
+            btn.classList.add('disabled-btn'); 
+            btn.style.pointerEvents='none'; 
+        } 
+    }
+    
+    function doEnterGame(){ 
+        if(!currentSubData) return; 
+        let tokens=parseInt(document.getElementById('confirmTokenInput').value)||0; 
+        if(tokens<50){ 
+            showMessage('⚠️ 兌換限制','最低50枚'); 
+            return; 
+        } 
+        let total=tokens*currentSubData.ratio + tokens*POINT_DIFF; 
+        let currentPoints = getCurrentPoints();
+        if(total>currentPoints){ 
+            showMessage('❌ 點數不足',''); 
+            return; 
+        } 
+        if(window.T_PACHIN_STORAGE) {
+            T_PACHIN_STORAGE.updatePoints(-total);
+        }
+        updatePointsDisplay(); 
+        document.getElementById('subConfirmModal').classList.remove('show'); 
+        let info={name:currentSubData.machineName,ratio:currentSubData.ratio,machineId:currentSubData.machineId,coins:tokens,pointDiff:POINT_DIFF}; 
+        localStorage.setItem('t_pachin_machine_info',JSON.stringify(info)); 
+        
+        // 顯示 Loading 動畫
+        const loadingDiv = document.getElementById('hologramLoading');
+        const loadingTitle = document.getElementById('loadingMachineTitle');
+        if (loadingTitle) loadingTitle.textContent = `${currentSubData.machineName} NO.${currentSubData.machineId}`;
+        if (loadingDiv) { 
+            loadingDiv.classList.add('show'); 
+            setTimeout(()=>{ 
+                window.location.href='simulator.html'; 
+            },2000); 
+        } else { 
+            window.location.href='simulator.html'; 
+        } 
+    }
+    
+    function showMessage(t,m){ 
+        let d=document.createElement('div'); 
+        d.className='alert-popup'; 
+        d.innerHTML=`<strong style="color:#ffd700;">${t}</strong> ${m}`; 
+        d.style.cssText='position:fixed; bottom:100px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.85); color:white; padding:10px 20px; border-radius:30px; z-index:10001; border:1px solid #ffd700;'; 
+        document.body.appendChild(d); 
+        setTimeout(()=>d.remove(),2500); 
+    }
+    
+    function initNavigation(){ 
+        document.querySelectorAll('.nav-item, .logo, .combo-announce-btn').forEach(el=>{ 
+            el.addEventListener('click',e=>{ 
+                e.preventDefault(); 
+                let page=el.dataset.page; 
+                if(page==='index') location.href='index.html'; 
+                else if(page==='machines') location.href='machines.html'; 
+                else if(page==='lobby') location.href='index.html'; 
+                else if(page==='news') location.href='news.html'; 
+                else if(page==='about') location.href='about.html'; 
+            }); 
+        }); 
+    }
+    
+    document.querySelectorAll('.category-tab').forEach(tab=>{ 
+        tab.addEventListener('click',function(){ 
+            document.querySelectorAll('.category-tab').forEach(t=>t.classList.remove('active')); 
+            this.classList.add('active'); 
+            let target=this.dataset.tab; 
+            document.querySelectorAll('.category-section').forEach(s=>s.classList.add('hidden')); 
+            document.getElementById(target+'-section').classList.remove('hidden'); 
+        }); 
+    });
+    
+    document.getElementById('playedDaysFilter')?.addEventListener('change',e=>{ 
+        currentFilterDays=parseInt(e.target.value); 
+        applyPlayedFilter(); 
+    });
+    
+    document.getElementById('confirmOk')?.addEventListener('click',doEnterGame);
+    document.getElementById('confirmCancelBtn')?.addEventListener('click',()=>document.getElementById('subConfirmModal').classList.remove('show'));
+    document.getElementById('closeXBtn')?.addEventListener('click',()=>document.getElementById('subConfirmModal').classList.remove('show'));
+    document.getElementById('confirmTokenInput')?.addEventListener('input',updateCalc);
+    
+    initNavigation(); 
+    initAllData();
+    
+    // 同步暱稱
+    if(window.T_PACHIN_STORAGE) {
+        document.getElementById('nicknameDisplay').textContent = T_PACHIN_STORAGE.getNickname();
+    }
+    
+    // 確保點數顯示更新
+    setTimeout(() => {
+        updatePointsDisplay();
+    }, 100);
 })();
 </script>
 </body>

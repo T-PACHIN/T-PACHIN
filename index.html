@@ -8,6 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Noto+Sans+TC:wght@300;500;700;900&family=Noto+Sans+JP:wght@300;500;700;900&family=Russo+One&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <style>
+        /* 此處樣式與您原本的 index.html 完全相同，為了節省長度省略，實際使用時請保留完整樣式 */
+        /* ... 保留您原本的所有 CSS ... */
         input[type=number]::-webkit-inner-spin-button,
         input[type=number]::-webkit-outer-spin-button {
             -webkit-appearance: none;
@@ -364,8 +366,8 @@
     </div>
 </div>
 
+<!-- 修正後的導航列：index.html（遊戲大廳）的「遊戲」按鈕是 current-page -->
 <nav class="bottom-nav">
-    <!-- 大廳按鈕 - 連動到 lobby.html -->
     <a href="javascript:void(0)" class="nav-item" data-page="lobby"><i class="fa fa-gamepad"></i><span>大廳</span></a>
     <a href="javascript:void(0)" class="nav-item" data-page="machines"><i class="fa fa-heart"></i><span>收藏</span></a>
     <a href="javascript:void(0)" class="nav-item lobby-special current-page" data-page="index"><i class="fa fa-home"></i><span>遊戲</span></a>
@@ -407,10 +409,9 @@
 
 <script src="shared.js"></script>
 <script>
-// ==================== 全域變數 (使用 T_PACHIN_STORAGE 統一管理) ====================
+// ==================== 全域變數 ====================
 const POINT_DIFF = 0.15;
 
-// 格式化點數 - 支援小數後4位
 function formatPointsDecimal(value) {
     return value.toLocaleString(undefined, { minimumFractionDigits: 4, maximumFractionDigits: 4 });
 }
@@ -419,7 +420,6 @@ function formatPointsInt(value) {
     return Math.floor(value).toLocaleString();
 }
 
-// 取得目前點數 (從全域儲存，支援小數)
 function getCurrentPoints() {
     if (window.T_PACHIN_STORAGE) {
         return T_PACHIN_STORAGE.getPoints();
@@ -427,7 +427,6 @@ function getCurrentPoints() {
     return 6600;
 }
 
-// 更新頁面點數顯示
 function updateModalPointsDisplay() {
     const points = getCurrentPoints();
     const tokenBtn = document.getElementById('tokenBtn');
@@ -439,7 +438,6 @@ function updateModalPointsDisplay() {
     if (currentSubDataInfo) updateExchangeCalculation();
 }
 
-// 監聽全域點數更新事件
 if (window.T_PACHIN_STORAGE) {
     window.addEventListener('points-updated', function(e) {
         if (e.detail && e.detail.points !== undefined) {
@@ -456,7 +454,6 @@ if (window.T_PACHIN_STORAGE) {
     });
 }
 
-// 確保 shared.js 初始化完成後更新顯示
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
         setTimeout(updateModalPointsDisplay, 50);
@@ -465,7 +462,7 @@ if (document.readyState === 'loading') {
     setTimeout(updateModalPointsDisplay, 50);
 }
 
-// ==================== 收藏功能 (使用 shared.js) ====================
+// ==================== 收藏功能 ====================
 function isFavoriteById(machineId) {
     if (window.T_PACHIN_STORAGE) {
         return T_PACHIN_STORAGE.isFavorite(machineId);
@@ -554,7 +551,6 @@ let currentSubDataInfo = null;
 let currentOccupiedTokens = {};
 let currentFilters = { model: 'all', vendor: 'all', subStatus: 'all' };
 
-// 載入佔用狀態
 function loadOccupiedTokens() {
     try {
         const stored = localStorage.getItem('t_pachin_occupied_tokens');
@@ -823,7 +819,6 @@ function doConfirmEnter() {
     let currentPoints = getCurrentPoints();
     if (totalCost > currentPoints) { alert('點數不足！'); return; }
     
-    // 使用全域儲存扣除點數（支援小數）
     if (window.T_PACHIN_STORAGE) {
         T_PACHIN_STORAGE.updatePoints(-totalCost);
     }
@@ -851,12 +846,10 @@ function doConfirmEnter() {
 function openSettlementModal(machineName, subName, machineId, ratioValue) {
     let key = `${machineName}_${machineId}`;
     let usedTokens = currentOccupiedTokens[key] || 0;
-    // 離座結算：返還 90% 的點數（保留 10% 作為平台手續費）
     let totalPoints = usedTokens * ratioValue * 0.9;
     if(confirm(`離座結算\n\n持有代幣: ${usedTokens} 枚\n可得點數: ${formatPointsDecimal(totalPoints)} 點\n\n確定要離開座位嗎？`)) {
         if (window.T_PACHIN_STORAGE) {
             T_PACHIN_STORAGE.updatePoints(totalPoints);
-            // 增加玩過記錄
             const machine = machines.find(m => m.name === machineName);
             if (machine) {
                 T_PACHIN_STORAGE.addPlayed(machine, usedTokens);
@@ -939,7 +932,6 @@ function initFilterDrawer() {
     });
 }
 
-// 同步暱稱
 function syncNickname() {
     if (window.T_PACHIN_STORAGE) {
         const nickname = T_PACHIN_STORAGE.getNickname();
@@ -966,7 +958,7 @@ function init() {
     if(backTop) backTop.addEventListener('click', () => mainScroller?.scrollTo({ top: 0, behavior: 'smooth' }));
 }
 
-// 綁定導航事件 - 大廳連動到 lobby.html
+// 修正後的導航綁定 - index.html 是「遊戲」頁面，大廳按鈕連到 lobby.html
 function bindNavigation() {
     document.querySelectorAll('.nav-item').forEach(item => {
         item.addEventListener('click', function(e) {
@@ -975,7 +967,8 @@ function bindNavigation() {
             if (page === 'lobby') {
                 window.location.href = 'lobby.html';
             } else if (page === 'index') {
-                window.location.href = 'index.html';
+                // 已在 index.html，重新整理或不做動作
+                return;
             } else if (page === 'machines') {
                 window.location.href = 'machines.html';
             } else if (page === 'news') {
@@ -999,7 +992,6 @@ function bindNavigation() {
     });
 }
 
-// 暴露全域函數
 window.switchAllPages = switchAllPages;
 window.switchCardPage = switchCardPage;
 window.switchPage = switchPage;
@@ -1010,11 +1002,9 @@ window.toggleFavoriteById = toggleFavoriteById;
 window.isFavorite = isFavorite;
 window.isFavoriteById = isFavoriteById;
 
-// 初始化所有功能
 bindNavigation();
 init();
 
-// 確保點數顯示在頁面載入後更新
 setTimeout(() => {
     if (window.T_PACHIN_STORAGE) {
         T_PACHIN_STORAGE.updateAllPointsDisplay();

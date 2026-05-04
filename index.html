@@ -365,7 +365,8 @@
 </div>
 
 <nav class="bottom-nav">
-    <a href="javascript:void(0)" class="nav-item" data-page="index"><i class="fa fa-gamepad"></i><span>大廳</span></a>
+    <!-- 大廳按鈕 - 連動到 lobby.html -->
+    <a href="javascript:void(0)" class="nav-item" data-page="lobby"><i class="fa fa-gamepad"></i><span>大廳</span></a>
     <a href="javascript:void(0)" class="nav-item" data-page="machines"><i class="fa fa-heart"></i><span>收藏</span></a>
     <a href="javascript:void(0)" class="nav-item lobby-special current-page" data-page="index"><i class="fa fa-home"></i><span>遊戲</span></a>
     <a href="javascript:void(0)" class="nav-item" data-page="news"><i class="fa fa-bell"></i><span>公告</span></a>
@@ -965,16 +966,23 @@ function init() {
     if(backTop) backTop.addEventListener('click', () => mainScroller?.scrollTo({ top: 0, behavior: 'smooth' }));
 }
 
-// 綁定導航事件
+// 綁定導航事件 - 大廳連動到 lobby.html
 function bindNavigation() {
     document.querySelectorAll('.nav-item').forEach(item => {
         item.addEventListener('click', function(e) {
             e.preventDefault();
             const page = this.dataset.page;
-            if (page === 'index') window.location.href = 'index.html';
-            else if (page === 'machines') window.location.href = 'machines.html';
-            else if (page === 'news') window.location.href = 'news.html';
-            else if (page === 'about') window.location.href = 'about.html';
+            if (page === 'lobby') {
+                window.location.href = 'lobby.html';
+            } else if (page === 'index') {
+                window.location.href = 'index.html';
+            } else if (page === 'machines') {
+                window.location.href = 'machines.html';
+            } else if (page === 'news') {
+                window.location.href = 'news.html';
+            } else if (page === 'about') {
+                window.location.href = 'about.html';
+            }
         });
     });
     document.querySelectorAll('.logo').forEach(logo => {

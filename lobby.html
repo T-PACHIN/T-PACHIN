@@ -736,7 +736,8 @@
             item.onclick = (e) => {
                 e.stopPropagation();
                 const action = item.getAttribute('data-action');
-                if(action === 'register') showToast('📝 註冊功能開發中');
+                // ✅ 已修改：註冊功能跳轉到 register.html
+                if(action === 'register') window.location.href = 'register.html';
                 else if(action === 'login') showToast('🔐 登入功能開發中');
                 else if(action === 'shop') showToast('🛒 商城即將盛大開幕！敬請期待～');
                 closeMenu();

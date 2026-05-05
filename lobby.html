@@ -197,7 +197,6 @@
         .menu-item:last-child { 
             border-bottom: none;
         }
-        /* 修復 hover 時的圓角問題 - 確保背景不會溢出圓角邊界 */
         .menu-item:hover { 
             background: rgba(74, 128, 192, 0.5); 
             color: #fff; 
@@ -205,7 +204,6 @@
         .menu-item:active { 
             background: rgba(74, 128, 192, 0.7); 
         }
-        /* 確保第一個和最後一個項目的邊緣圓角 */
         .menu-item:first-child:hover {
             border-top-left-radius: 20px;
             border-top-right-radius: 20px;
@@ -404,6 +402,7 @@
             .menu-btn { width: 38px; height: 38px; }
         }
 
+        /* 轉盤主容器 - 無上方橫槓版本 */
         .wheel-container {
             position: fixed;
             bottom: 0;
@@ -424,6 +423,10 @@
             opacity: 1; 
             transform: translateX(-50%) translateY(0);
             pointer-events: auto;
+        }
+        /* 移除原本的 drag-handle (橫槓) 不顯示 */
+        .drag-handle {
+            display: none;
         }
         .wheel-touch-wrapper { 
             position: absolute; 
@@ -490,18 +493,6 @@
             border: 1px solid #4a80c0;
             pointer-events: none;
             z-index: 999999999;
-        }
-        .drag-handle {
-            position: absolute;
-            top: 5px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 50px;
-            height: 4px;
-            background: rgba(255, 215, 0, 0.5);
-            border-radius: 4px;
-            z-index: 999999999;
-            pointer-events: none;
         }
         @media (max-width: 450px) {
             .wheel-items-container { width: 380px; height: 380px; top: 15px; }
@@ -573,7 +564,9 @@
 </head>
 <body>
 
+<!-- 弧形選單 (轉盤) 已移除頂部橫槓 drag-handle 透過 display: none 隱藏 -->
 <div class="wheel-container" id="wheelContainer">
+    <!-- 橫槓已被移除，此處保留結構但不顯示 -->
     <div class="drag-handle"></div>
     <div class="wheel-touch-wrapper" id="wheelTouchWrapper"></div>
     <div class="wheel-items-container" id="wheelItemsContainer"></div>
@@ -736,7 +729,6 @@
             item.onclick = (e) => {
                 e.stopPropagation();
                 const action = item.getAttribute('data-action');
-                // ✅ 已修改：註冊功能跳轉到 register.html
                 if(action === 'register') window.location.href = 'register.html';
                 else if(action === 'login') showToast('🔐 登入功能開發中');
                 else if(action === 'shop') showToast('🛒 商城即將盛大開幕！敬請期待～');
@@ -753,7 +745,7 @@
         menuDropdown.addEventListener('click', function(e) { e.stopPropagation(); });
     }
 
-    // 轉盤邏輯
+    // 轉盤邏輯 (無上方橫槓版本)
     const wheelOptions = [
         { name: '柏青SLOT', id: 'pachinko', icon: '🎰', isDev: false },
         { name: '真人百家', id: 'baccarat', icon: '♠️', isDev: false },
@@ -875,14 +867,15 @@
     });
     if(wheelContainer) wheelContainer.addEventListener('click', e => e.stopPropagation());
 
-    document.getElementById('shopBtn').onclick = () => showToast('✨ 大廳主頁 ✨');
-    document.getElementById('myBtn').onclick = () => showToast('👤 個人中心開發中');
-    document.getElementById('newsBtn').onclick = () => { window.location.href = 'news.html'; };
-    document.getElementById('settingsBtn').onclick = () => { window.location.href = 'about.html'; };
-    document.getElementById('logoHomeBtn').onclick = () => { window.location.href = 'lobby.html'; };
+    // ========== 底部導航連動 ==========
+    document.getElementById('shopBtn').onclick = () => window.location.href = 'lobby.html';
+    document.getElementById('newsBtn').onclick = () => window.location.href = 'announcement.html';
+    document.getElementById('myBtn').onclick = () => window.location.href = 'points.html';
+    document.getElementById('settingsBtn').onclick = () => window.location.href = 'settings.html';
+    document.getElementById('logoHomeBtn').onclick = () => window.location.href = 'lobby.html';
     
     buildWheel();
-    setTimeout(() => showToast('✨ 點擊右上角「☰」開啟選單 ✨'), 600);
+    setTimeout(() => showToast('✨ 點擊「館別」喚出轉盤，橫槓已移除 ✨'), 600);
 })();
 </script>
 </body>

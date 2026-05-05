@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>公告 | T-PACHIN 賽博殿堂</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;500;700;900&family=Noto+Sans+JP:wght@300;500;700;900&family=Russo+One&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: radial-gradient(circle at 20% 30%, #0a0c18, #020308);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', 'Segoe UI', system-ui, sans-serif;
+            padding: 8px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .about-container {
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            background: transparent;
+            overflow: visible;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 98vh;
+            max-height: 950px;
+            min-height: 700px;
+        }
+
+        .metal-header {
+            background: linear-gradient(145deg, #2a2f3f, #1a1f2f);
+            border-bottom: 2px solid #4a80c0;
+            border-top: 2px solid #4a80c0;
+            box-shadow: 0 5px 0 #0f121c, 0 10px 15px rgba(74, 128, 192, 0.3), inset 0 2px 5px rgba(255,255,255,0.3), inset 0 -3px 8px rgba(0,0,0,0.6);
+            position: relative;
+            overflow: visible;
+            border-radius: 0 0 20px 20px;
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            z-index: 20;
+        }
+        .metal-header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: skewX(-20deg);
+            animation: shine 4s infinite;
+            pointer-events: none;
+        }
+        @keyframes shine {
+            0% { left: -100%; }
+            20% { left: 120%; }
+            100% { left: 120%; }
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            z-index: 25;
+            position: relative;
+        }
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #000, #111);
+            border-radius: 12px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(74,128,192,0.6);
+            overflow: hidden;
+            border: 1.5px solid #ffd700;
+        }
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: conic-gradient(from 0deg, transparent, #4a80c0, #ffd700, transparent);
+            animation: logoRotate 4s linear infinite;
+        }
+        .logo-icon::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: #000;
+            border-radius: 8px;
+        }
+        @keyframes logoRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .logo-icon-inner {
+            position: relative;
+            z-index: 2;
+            font-size: 16px;
+            font-weight: 900;
+            background: linear-gradient(45deg, #ffdf00, #ffec8b, #4a80c0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .logo-text { display: flex; flex-direction: column; line-height: 1.1; }
+        .logo-main {
+            font-size: 18px;
+            font-weight: 900;
+            background: linear-gradient(45deg, #ffdf00, #ffd700, #4a80c0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .logo-sub { font-size: 9px; color: #4a80c0; letter-spacing: 0.8px; }
+
+        /* 公告專用內容區 */
+        .announcement-area {
+            flex: 1;
+            overflow-y: auto;
+            min-height: 0;
+            scrollbar-width: thin;
+            scrollbar-color: #4a5568 #1a1f2f;
+            padding: 16px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .announcement-area::-webkit-scrollbar { width: 4px; }
+        .announcement-area::-webkit-scrollbar-track { background: #1a1f2f; border-radius: 10px; }
+        .announcement-area::-webkit-scrollbar-thumb { background: #4a5568; border-radius: 10px; }
+
+        .announcement-card {
+            background: linear-gradient(145deg, #1a1f2f, #0f1425);
+            border: 1px solid #4a80c0;
+            border-radius: 24px;
+            padding: 18px;
+            margin-bottom: 16px;
+            transition: all 0.15s ease;
+            cursor: pointer;
+        }
+        .announcement-card:active {
+            transform: scale(0.98);
+        }
+        .announcement-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #ffd966;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .announcement-title i {
+            color: #ffd700;
+            font-size: 14px;
+        }
+        .announcement-date {
+            font-size: 10px;
+            color: #8a9dc0;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .announcement-preview {
+            font-size: 12px;
+            color: #b0c4de;
+            line-height: 1.4;
+        }
+        .announcement-badge {
+            display: inline-block;
+            background: rgba(255, 215, 0, 0.2);
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 9px;
+            color: #ffd700;
+            margin-left: 8px;
+        }
+
+        .bottom-nav {
+            width: 100%;
+            max-width: 448px;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(145deg, #2a2f3f, #1a1f2f);
+            border-top: 2px solid #4a80c0;
+            border-bottom: 2px solid #4a80c0;
+            border-radius: 30px 30px 30px 30px;
+            box-shadow: 0 -5px 15px rgba(74, 128, 192, 0.3), 0 8px 10px rgba(0, 0, 0, 0.6), inset 0 2px 5px rgba(255, 255, 255, 0.3), inset 0 -3px 8px rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.5rem 0.6rem;
+            border-radius: 20px;
+            background: linear-gradient(145deg, #3a4050, #2a2f40);
+            box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.3), inset 0 -3px 5px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 2px 3px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(74, 128, 192, 0.2);
+            color: #b0c4de;
+            transition: all 0.1s ease;
+            font-family: 'Noto Sans TC', 'Noto Sans JP', 'Orbitron', sans-serif;
+            flex: none;
+            min-width: 50px;
+            cursor: pointer;
+        }
+        .nav-item i { font-size: 1.4rem; margin-bottom: 2px; filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.5)); }
+        .nav-item span { font-weight: 700; letter-spacing: 0.5px; font-size: 0.7rem; }
+        .nav-item:active {
+            transform: translateY(3px);
+            box-shadow: inset 0 5px 8px rgba(0, 0, 0, 0.5), inset 0 -2px 5px rgba(255, 255, 255, 0.2);
+            color: #4a80c0;
+        }
+        .nav-item.current-page {
+            background: linear-gradient(145deg, #4a5065, #3a4055);
+            box-shadow: 0 5px 0 #0f121c, 0 10px 15px rgba(74, 128, 192, 0.5), inset 0 2px 8px rgba(255, 255, 255, 0.6), inset 0 -3px 8px rgba(0, 0, 0, 0.4);
+            color: white;
+            border: 1px solid #4a80c0;
+            transform: scale(1.05);
+        }
+        .nav-item.lobby-special {
+            background: linear-gradient(145deg, #9b4dff, #6a1b9a, #4a0080);
+            transform: translateY(-28px) scale(1.1);
+            box-shadow: 0 10px 0 #2a004d, 0 18px 25px rgba(0, 0, 0, 0.5), inset 0 2px 12px rgba(255, 255, 255, 0.4), inset 0 -4px 8px rgba(0, 0, 0, 0.3), 0 0 20px #bf5eff, 0 0 8px #7c3aed;
+            color: #ffffff;
+            border: 1px solid #d8b4ff;
+            text-shadow: 0 0 8px #bf5eff;
+            animation: neonPulse 1.3s ease-in-out infinite alternate;
+            z-index: 30;
+        }
+        @keyframes neonPulse {
+            0% { box-shadow: 0 10px 0 #2a004d, 0 18px 25px rgba(0, 0, 0, 0.5), inset 0 2px 12px rgba(255, 255, 255, 0.4), inset 0 -4px 8px rgba(0, 0, 0, 0.3), 0 0 15px #9b4dff; }
+            100% { box-shadow: 0 10px 0 #2a004d, 0 20px 28px rgba(0, 0, 0, 0.55), inset 0 2px 14px rgba(255, 255, 255, 0.55), inset 0 -4px 8px rgba(0, 0, 0, 0.3), 0 0 35px #d8b4ff; }
+        }
+
+        /* ========= 弧形轉盤 - 透明感加強版 (更透更輕薄) ========= */
+        .wheel-container {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%) translateY(100%);
+            width: 100%;
+            max-width: 480px;
+            height: 280px;
+            z-index: 999999999 !important;
+            background: transparent;
+            visibility: hidden;
+            opacity: 0;
+            transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1), opacity 0.2s;
+            pointer-events: none;
+        }
+        .wheel-container.open {
+            visibility: visible;
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+            pointer-events: auto;
+        }
+        /* 移除拖曳橫槓 */
+        .drag-handle {
+            display: none;
+        }
+        .wheel-touch-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: grab;
+            background: transparent;
+            z-index: 999999999;
+        }
+        .wheel-items-container {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 420px;
+            height: 420px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999999999;
+        }
+        .wheel-item {
+            position: absolute;
+            width: auto;
+            left: 50%;
+            top: 50%;
+            cursor: pointer;
+            pointer-events: auto;
+            transition: transform 0.1s linear;
+            text-align: center;
+            z-index: 999999999 !important;
+        }
+        /* 更透明的背景：alpha 0.2 -> 更透，模糊降低至 4px 保留微微玻璃感但不厚重 */
+        .wheel-item .item-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(20, 24, 36, 0.2) !important;   /* 極淡透明底 */
+            backdrop-filter: blur(4px) !important;         /* 輕柔模糊，不搶眼 */
+            -webkit-backdrop-filter: blur(4px) !important;
+            border-radius: 40px;
+            padding: 7px 14px;
+            border: 1px solid rgba(255, 215, 0, 0.6);     /* 金邊維持辨識 */
+            transition: all 0.2s ease;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+        }
+        .wheel-item .item-content:active {
+            transform: scale(0.95);
+        }
+        .item-icon { font-size: 26px; margin-bottom: 3px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
+        .item-name { font-size: 10px; font-weight: bold; color: #ffea9e; text-shadow: 0 0 6px rgba(0,0,0,0.5), 0 0 2px #ffd700; white-space: nowrap; letter-spacing: 1px; }
+        .dev-badge { font-size: 6px; background: #ff3b6f; padding: 2px 6px; border-radius: 20px; margin-top: 3px; color: #fff; text-shadow: none; white-space: nowrap; }
+        .wheel-hint {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #cce4ff;
+            font-size: 10px;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(4px);
+            padding: 5px 14px;
+            border-radius: 40px;
+            white-space: nowrap;
+            border: 1px solid #4a80c0;
+            pointer-events: none;
+            z-index: 999999999;
+        }
+
+        @media (max-width: 450px) {
+            .wheel-items-container { width: 380px; height: 380px; top: 15px; }
+            .wheel-item .item-content { padding: 5px 12px; }
+            .item-icon { font-size: 24px; }
+            .nav-item { min-width: 44px; padding: 0.4rem 0.3rem; }
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 20, 32, 0.95);
+            color: #ffdd99;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 12px;
+            border: 1px solid #ffd700;
+            white-space: nowrap;
+            z-index: 10000;
+            font-weight: 500;
+            animation: fadeInOut 2s ease forwards;
+        }
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateX(-50%) translateY(10px); }
+            15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            85% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-8px); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="wheel-container" id="wheelContainer">
+    <div class="drag-handle"></div>
+    <div class="wheel-touch-wrapper" id="wheelTouchWrapper"></div>
+    <div class="wheel-items-container" id="wheelItemsContainer"></div>
+    <div class="wheel-hint"><i class="fas fa-arrows-alt-h"></i> 左右滑動選遊戲 · ↓ 向下滑關閉</div>
+</div>
+
+<div class="about-container">
+    <header class="metal-header">
+        <div class="logo" id="logoHomeBtn">
+            <div class="logo-icon"><div class="logo-icon-inner">TP</div></div>
+            <div class="logo-text">
+                <div class="logo-main">T-PACHIN</div>
+                <div class="logo-sub">JOKER SERIES</div>
+            </div>
+        </div>
+        <div style="width: 42px;"></div> <!-- 保持對稱 -->
+    </header>
+
+    <div class="announcement-area" id="announcementArea">
+        <!-- 公告列表會動態載入 -->
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item" id="shopBtn"><i class="fa fa-store"></i><span>大廳</span></div>
+        <div class="nav-item current-page" id="newsBtn"><i class="fa fa-bell"></i><span>公告</span></div>
+        <div class="nav-item lobby-special" id="wheelTriggerBtn"><i class="fa fa-home"></i><span>館別</span></div>
+        <div class="nav-item" id="myBtn"><i class="fa fa-user"></i><span>我的</span></div>
+        <div class="nav-item" id="settingsBtn"><i class="fa fa-cog"></i><span>設定</span></div>
+    </div>
+</div>
+
+<script>
+(function(){
+    // 公告資料
+    const announcements = [
+        {
+            id: 1,
+            title: '🎉 柏青SLOT 新機台登場！',
+            date: '2026/05/05',
+            content: '全新「櫻花大戰」彈珠台正式上線！彈珠連爆模式 + 免費旋轉獎勵，立即體驗日本原裝物理引擎。活動期間儲值滿千送百，機會難得！'
+        },
+        {
+            id: 2,
+            title: '🔥 真人百家樂 週末加碼',
+            date: '2026/05/04',
+            content: '每週五六日，晚上8點至凌晨2點，百家樂下注返水加倍！最高返水2.5%，還有幸運荷官紅包雨，不見不散！'
+        },
+        {
+            id: 3,
+            title: '💎 累積獎金突破 800 萬',
+            date: '2026/05/03',
+            content: '老虎機 Progressive Jackpot 累積獎金已達 8,234,567 點！下一位幸運得主可能就是您，快來試試手氣！'
+        },
+        {
+            id: 4,
+            title: '🎲 骰寶／輪盤 開發進度更新',
+            date: '2026/05/02',
+            content: '骰寶與輪盤預計於六月份開放測試，將帶來全新UI界面與即時開獎動畫，敬請鎖定官方公告！'
+        },
+        {
+            id: 5,
+            title: '🎁 每日簽到獎勵翻倍',
+            date: '2026/05/01',
+            content: '即日起連續簽到7天，額外贈送 500 點 + 限定轉盤券乙張！簽到中心已更新獎勵表，快來領取！'
+        },
+        {
+            id: 6,
+            title: '⚠️ 系統維護公告',
+            date: '2026/04/28',
+            content: '5/10 凌晨 02:00~06:00 進行伺服器升級，屆時遊戲大廳將暫時無法登入，造成不便敬請見諒。'
+        }
+    ];
+
+    function renderAnnouncements() {
+        const container = document.getElementById('announcementArea');
+        if (!container) return;
+        
+        container.innerHTML = announcements.map(ann => `
+            <div class="announcement-card" data-id="${ann.id}">
+                <div class="announcement-title">
+                    <i class="fas fa-bullhorn"></i>
+                    <span>${ann.title}</span>
+                    ${ann.id === 1 ? '<span class="announcement-badge">NEW</span>' : ''}
+                </div>
+                <div class="announcement-date">
+                    <i class="far fa-calendar-alt"></i>
+                    <span>${ann.date}</span>
+                </div>
+                <div class="announcement-preview">
+                    ${ann.content.length > 80 ? ann.content.substring(0, 80) + '...' : ann.content}
+                </div>
+            </div>
+        `).join('');
+
+        document.querySelectorAll('.announcement-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const id = parseInt(card.dataset.id);
+                const ann = announcements.find(a => a.id === id);
+                if (ann) {
+                    showToastDetail(ann);
+                }
+            });
+        });
+    }
+
+    function showToastDetail(announcement) {
+        const existingModal = document.querySelector('.announce-modal');
+        if (existingModal) existingModal.remove();
+        
+        const modal = document.createElement('div');
+        modal.className = 'announce-modal';
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.96);
+            backdrop-filter: blur(12px);
+            z-index: 20000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: visible;
+            opacity: 1;
+            transition: 0.2s;
+        `;
+        modal.innerHTML = `
+            <div style="width: 86%; max-width: 340px; background: linear-gradient(145deg, #151c2c, #0e1322); border-radius: 32px; border: 1.5px solid #ffd700; overflow: hidden;">
+                <div style="padding: 18px; text-align: center; background: rgba(10,14,22,0.8); border-bottom: 1.5px solid #ffd700; position: relative;">
+                    <h3 style="font-family: 'Orbitron'; font-size: 18px; background: linear-gradient(135deg, #ffd700, #ffaa55); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">${announcement.title}</h3>
+                    <div style="position: absolute; top: 14px; right: 22px; font-size: 28px; color: #ffd700; cursor: pointer;" class="close-modal-btn">&times;</div>
+                </div>
+                <div style="padding: 20px;">
+                    <p style="color: #9ac2f0; font-size: 11px; margin-bottom: 12px;"><i class="far fa-calendar-alt"></i> ${announcement.date}</p>
+                    <p style="color: #ffdd99; line-height: 1.5; font-size: 13px;">${announcement.content}</p>
+                    <div style="margin-top: 20px; padding: 10px; background: linear-gradient(145deg, #2a2f3f, #1a1f2f); border-radius: 30px; text-align: center; cursor: pointer;" class="close-modal-footer">
+                        <span style="color: #ffd700; font-size: 12px;">關閉</span>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        
+        const closeModal = () => modal.remove();
+        modal.querySelectorAll('.close-modal-btn, .close-modal-footer').forEach(el => {
+            el.addEventListener('click', closeModal);
+        });
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+    }
+
+    // 轉盤配置 (透明度更高版本)
+    const wheelOptions = [
+        { name: '柏青SLOT', id: 'pachinko', icon: '🎰', isDev: false, url: 'index.html' },
+        { name: '真人百家', id: 'baccarat', icon: '♠️', isDev: false, url: 'index.html' },
+        { name: '老虎機', id: 'slot', icon: '🎰', isDev: false, url: 'index.html' },
+        { name: '骰寶', id: 'sicbo', icon: '🎲', isDev: true, url: 'index.html' },
+        { name: '輪盤', id: 'roulette', icon: '🎡', isDev: true, url: 'index.html' },
+        { name: '德州撲克', id: 'poker', icon: '🃏', isDev: true, url: 'index.html' },
+        { name: '龍虎鬥', id: 'dragon', icon: '🐉', isDev: true, url: 'index.html' },
+        { name: '炸金花', id: 'zajinhua', icon: '🌸', isDev: true, url: 'index.html' },
+        { name: '21點', id: 'blackjack', icon: '🃑', isDev: true, url: 'index.html' },
+        { name: '彩票', id: 'lottery', icon: '🎫', isDev: true, url: 'index.html' }
+    ];
+    const radius = 170, angleStep = 360 / wheelOptions.length;
+    let currentRotation = 0, wheelItems = [];
+
+    function buildWheel() {
+        const container = document.getElementById('wheelItemsContainer');
+        if (!container) return;
+        container.innerHTML = '';
+        wheelItems = [];
+        wheelOptions.forEach((opt, idx) => {
+            const div = document.createElement('div');
+            div.className = 'wheel-item';
+            div.dataset.id = opt.id;
+            div.innerHTML = `<div class="item-content"><div class="item-icon">${opt.icon}</div><div class="item-name">${opt.name}</div>${opt.isDev ? '<div class="dev-badge">開發中</div>' : ''}</div>`;
+            div.addEventListener('click', (e) => { 
+                e.stopPropagation(); 
+                if (div.dataset.id === 'pachinko') window.location.href = 'index.html';
+                else if (!opt.isDev) {
+                    window.location.href = opt.url;
+                } else {
+                    showToast(`🔧 ${opt.name} 開發中`);
+                    closeWheel();
+                }
+            });
+            container.appendChild(div);
+            wheelItems.push(div);
+        });
+        currentRotation = -(3 * angleStep + 15);
+        updatePositions(currentRotation);
+    }
+
+    function updatePositions(rot) { 
+        if(!wheelItems.length) return; 
+        wheelItems.forEach((item, idx) => { 
+            const ang = (idx * angleStep + rot + 360) % 360; 
+            const rad = ang * Math.PI / 180; 
+            const x = Math.sin(rad) * radius; 
+            const y = -Math.cos(rad) * radius; 
+            item.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px)`; 
+        }); 
+    }
+
+    const wheelContainer = document.getElementById('wheelContainer');
+    const touchWrap = document.getElementById('wheelTouchWrapper');
+    let isDragging = false, startX = 0, startRot = 0, dragStartY = 0, isClosingDrag = false;
+
+    function onStart(e) { 
+        if (!wheelContainer?.classList.contains('open')) return; 
+        e.preventDefault(); 
+        isDragging = true; 
+        const x = e.touches ? e.touches[0].clientX : e.clientX; 
+        const y = e.touches ? e.touches[0].clientY : e.clientY; 
+        startX = x; 
+        startRot = currentRotation; 
+        dragStartY = y; 
+        isClosingDrag = false; 
+    }
+
+    function onMove(e) { 
+        if (!isDragging) return; 
+        e.preventDefault(); 
+        const x = e.touches ? e.touches[0].clientX : e.clientX; 
+        const y = e.touches ? e.touches[0].clientY : e.clientY; 
+        const dx = x - startX; 
+        const dy = y - dragStartY; 
+        if (dy > 30 && !isClosingDrag) { 
+            isClosingDrag = true; 
+            closeWheel(); 
+            isDragging = false; 
+            return; 
+        } 
+        currentRotation = startRot + dx * 1.2; 
+        updatePositions(currentRotation); 
+    }
+
+    function onEnd() { isDragging = false; isClosingDrag = false; }
+
+    if (wheelContainer) { 
+        wheelContainer.addEventListener('mousedown', onStart); 
+        window.addEventListener('mousemove', onMove); 
+        window.addEventListener('mouseup', onEnd); 
+        wheelContainer.addEventListener('touchstart', onStart, { passive: false }); 
+        window.addEventListener('touchmove', onMove, { passive: false }); 
+        window.addEventListener('touchend', onEnd); 
+        if(touchWrap) { 
+            touchWrap.addEventListener('mousedown', onStart); 
+            touchWrap.addEventListener('touchstart', onStart, { passive: false }); 
+        } 
+    }
+
+    function openWheel() { 
+        if(wheelContainer && !wheelContainer.classList.contains('open')) { 
+            wheelContainer.classList.remove('closing'); 
+            wheelContainer.classList.add('open'); 
+        } 
+    }
+
+    function closeWheel() { 
+        if(wheelContainer?.classList.contains('open')) { 
+            wheelContainer.classList.add('closing'); 
+            setTimeout(() => { 
+                wheelContainer.classList.remove('open'); 
+                wheelContainer.classList.remove('closing'); 
+            }, 250); 
+        } 
+    }
+
+    document.getElementById('wheelTriggerBtn').onclick = (e) => { e.stopPropagation(); openWheel(); };
+    document.addEventListener('click', (e) => { 
+        if(wheelContainer?.classList.contains('open') && !wheelContainer.contains(e.target) && !document.getElementById('wheelTriggerBtn').contains(e.target)) closeWheel(); 
+    });
+    if(wheelContainer) wheelContainer.addEventListener('click', e => e.stopPropagation());
+
+    // 底部導航連動
+    document.getElementById('logoHomeBtn').onclick = () => window.location.href = 'lobby.html';
+    document.getElementById('shopBtn').onclick = () => window.location.href = 'lobby.html';
+    document.getElementById('myBtn').onclick = () => window.location.href = 'points.html';
+    document.getElementById('settingsBtn').onclick = () => window.location.href = 'settings.html';
+
+    function showToast(msg) { 
+        const existingToast = document.querySelector('.toast');
+        if(existingToast) existingToast.remove();
+        const t = document.createElement('div'); 
+        t.className = 'toast'; 
+        t.innerText = msg; 
+        document.body.appendChild(t); 
+        setTimeout(() => t.remove(), 2000); 
+    }
+
+    function init() {
+        renderAnnouncements();
+        buildWheel();
+    }
+    init();
+})();
+</script>
+</body>
+</html>

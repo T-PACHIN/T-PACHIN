@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>設定 | T-PACHIN 賽博殿堂</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;500;700;900&family=Noto+Sans+JP:wght@300;500;700;900&family=Russo+One&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: radial-gradient(circle at 20% 30%, #0a0c18, #020308);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', 'Segoe UI', system-ui, sans-serif;
+            padding: 8px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(74, 128, 192, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(153, 0, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .settings-container {
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            background: linear-gradient(145deg, #0f1425, #0a0e1f);
+            box-shadow: 0 0 50px rgba(74, 128, 192, 0.2);
+            border-left: 1px solid rgba(74, 128, 192, 0.2);
+            border-right: 1px solid rgba(153, 0, 255, 0.2);
+            display: flex;
+            flex-direction: column;
+            height: 98vh;
+            max-height: 950px;
+            min-height: 700px;
+        }
+
+        .metal-header {
+            background: linear-gradient(145deg, #2a2f3f, #1a1f2f);
+            border-bottom: 2px solid #4a80c0;
+            border-top: 2px solid #4a80c0;
+            box-shadow: 0 5px 0 #0f121c, 0 10px 15px rgba(74, 128, 192, 0.3), inset 0 2px 5px rgba(255,255,255,0.3), inset 0 -3px 8px rgba(0,0,0,0.6);
+            position: relative;
+            overflow: hidden;
+            border-radius: 0 0 20px 20px;
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            z-index: 20;
+        }
+        .metal-header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: skewX(-20deg);
+            animation: shine 4s infinite;
+            pointer-events: none;
+        }
+        @keyframes shine {
+            0% { left: -100%; }
+            20% { left: 120%; }
+            100% { left: 120%; }
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            z-index: 25;
+            position: relative;
+        }
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #000, #111, #222);
+            border-radius: 12px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(74,128,192,0.5), inset 0 0 10px rgba(255,215,0,0.2);
+            overflow: hidden;
+            border: 2px solid #ffd700;
+        }
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: conic-gradient(from 0deg, transparent, #4a80c0, #c90a0a, #ffd700, transparent);
+            animation: logoRotate 4s linear infinite;
+        }
+        .logo-icon::after {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: #000;
+            border-radius: 8px;
+        }
+        @keyframes logoRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .logo-icon-inner {
+            position: relative;
+            z-index: 2;
+            font-size: 16px;
+            font-weight: 900;
+            background: linear-gradient(45deg, #ffdf00, #ffec8b, #4a80c0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+        .logo-main {
+            font-size: 18px;
+            font-weight: 900;
+            background: linear-gradient(45deg, #ffdf00, #ffd700, #4a80c0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: textShine 3s ease-in-out infinite alternate;
+        }
+        .logo-sub {
+            font-size: 9px;
+            color: #4a80c0;
+            font-weight: 500;
+            letter-spacing: 0.8px;
+            text-shadow: 0 0 4px rgba(74, 128, 192, 0.5);
+        }
+        @keyframes textShine {
+            from { filter: brightness(1); }
+            to { filter: brightness(1.2); text-shadow: 0 0 10px #ffd700; }
+        }
+
+        .user-info-area {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+        }
+        .nickname-display {
+            color: #ffffff;
+            text-shadow: 0 2px 3px black, 0 0 10px rgba(255,255,255,0.3);
+            font-weight: 600;
+            font-size: 1.1rem;
+            line-height: 1.3;
+            letter-spacing: 0.5px;
+        }
+        .points-display {
+            background: linear-gradient(145deg, #4a3a1a, #3a2a0a);
+            padding: 0.15rem 1rem;
+            border-radius: 30px;
+            box-shadow: inset 0 2px 5px rgba(255,215,0,0.5), inset 0 -3px 5px rgba(0,0,0,0.6), 0 4px 0 #2a1f0a, 0 0 12px #ffd700;
+            border: 1px solid #ffd700;
+            color: #ffd966;
+            font-weight: 900;
+            font-size: 0.9rem;
+            text-shadow: 0 2px 3px black;
+            text-align: center;
+            min-width: 80px;
+        }
+
+        .settings-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 16px 30px;
+            scrollbar-width: thin;
+            scrollbar-color: #4a80c0 rgba(74, 128, 192, 0.1);
+        }
+        .settings-content::-webkit-scrollbar {
+            width: 4px;
+            height: 0px;
+            background: transparent;
+        }
+        .settings-content::-webkit-scrollbar-track {
+            background: rgba(74, 128, 192, 0.1);
+            border-radius: 10px;
+        }
+        .settings-content::-webkit-scrollbar-thumb {
+            background: rgba(74, 128, 192, 0.5);
+            border-radius: 10px;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .page-title h1 {
+            font-family: 'Orbitron';
+            font-size: 24px;
+            background: linear-gradient(135deg, #ffd700, #ffaa55, #4a80c0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+        }
+
+        .settings-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .setting-item {
+            background: linear-gradient(145deg, #1a1f2f, #0f1425);
+            border: 1px solid #4a80c0;
+            border-radius: 24px;
+            padding: 16px 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            transition: all 0.1s ease;
+        }
+        .setting-item:active {
+            transform: scale(0.98);
+        }
+        .setting-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(145deg, #2a3a4a, #1a2a3a);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            border: 1px solid #4a80c0;
+        }
+        .setting-icon i {
+            color: #ffd700;
+        }
+        .setting-info {
+            flex: 1;
+        }
+        .setting-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #ffd966;
+            margin-bottom: 4px;
+        }
+        .setting-desc {
+            font-size: 11px;
+            color: #8a9dc0;
+        }
+        .setting-arrow {
+            color: #4a80c0;
+            font-size: 14px;
+        }
+
+        .logout-btn {
+            margin-top: 30px;
+            background: linear-gradient(145deg, #5a2a2a, #4a1a1a);
+            border: 1px solid #ff6666;
+            border-radius: 40px;
+            padding: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.1s ease;
+        }
+        .logout-btn:active {
+            transform: scale(0.98);
+        }
+        .logout-btn i {
+            color: #ff8888;
+            font-size: 18px;
+        }
+        .logout-btn span {
+            color: #ff8888;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .version-info {
+            text-align: center;
+            margin-top: 24px;
+            color: #4a5568;
+            font-size: 11px;
+            font-family: monospace;
+        }
+
+        .detail-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 100000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.2s ease;
+        }
+        .detail-modal.show {
+            visibility: visible;
+            opacity: 1;
+        }
+        .detail-modal-content {
+            width: 85%;
+            max-width: 360px;
+            background: linear-gradient(145deg, #1a1f2f, #0f1425);
+            border: 2px solid #ffd700;
+            border-radius: 32px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 1px 2px rgba(255,255,255,0.1);
+            transform: scale(0.9);
+            transition: transform 0.2s ease;
+        }
+        .detail-modal.show .detail-modal-content {
+            transform: scale(1);
+        }
+        .detail-header {
+            background: linear-gradient(145deg, #2a2f3f, #1a1f2f);
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ffd700;
+        }
+        .detail-header h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffd966;
+            font-family: 'Orbitron', monospace;
+        }
+        .detail-close {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(145deg, #3a4050, #2a2f40);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 1px solid #4a80c0;
+            transition: 0.1s;
+        }
+        .detail-close:active {
+            transform: scale(0.95);
+        }
+        .detail-close i {
+            color: #ffd700;
+            font-size: 16px;
+        }
+        .detail-body {
+            padding: 20px;
+        }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(74, 128, 192, 0.3);
+        }
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        .detail-label {
+            font-size: 13px;
+            color: #9ac2f0;
+            letter-spacing: 1px;
+        }
+        .detail-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: #ffd966;
+            font-family: 'Orbitron', monospace;
+        }
+        .detail-input {
+            background: rgba(10, 14, 22, 0.7);
+            border: 1px solid #4a80c0;
+            border-radius: 30px;
+            padding: 10px 15px;
+            color: #ffd966;
+            font-size: 14px;
+            width: 100%;
+            margin-top: 10px;
+            font-family: 'Orbitron', monospace;
+        }
+        .detail-input:focus {
+            outline: none;
+            border-color: #ffd700;
+        }
+        .detail-btn {
+            background: linear-gradient(145deg, #ffaa33, #ff8c00);
+            border: none;
+            border-radius: 30px;
+            padding: 10px;
+            color: #1a1f2f;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            width: 100%;
+            font-family: 'Orbitron', sans-serif;
+        }
+        .detail-btn:active {
+            transform: scale(0.98);
+        }
+
+        .bottom-nav {
+            width: 100%;
+            max-width: 448px;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(145deg, #2a2f3f, #1a1f2f);
+            border-top: 2px solid #4a80c0;
+            border-bottom: 2px solid #4a80c0;
+            border-radius: 30px 30px 30px 30px;
+            box-shadow: 0 -5px 15px rgba(74, 128, 192, 0.3), 0 8px 10px rgba(0, 0, 0, 0.6), inset 0 2px 5px rgba(255, 255, 255, 0.3), inset 0 -3px 8px rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.5rem 0.6rem;
+            border-radius: 20px;
+            background: linear-gradient(145deg, #3a4050, #2a2f40);
+            box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.3), inset 0 -3px 5px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 2px 3px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(74, 128, 192, 0.2);
+            color: #b0c4de;
+            transition: all 0.1s ease;
+            font-family: 'Noto Sans TC', 'Noto Sans JP', 'Orbitron', sans-serif;
+            flex: none;
+            min-width: 50px;
+            cursor: pointer;
+        }
+        .nav-item i { font-size: 1.4rem; margin-bottom: 2px; filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.5)); }
+        .nav-item span { font-weight: 700; letter-spacing: 0.5px; font-size: 0.7rem; }
+        .nav-item:active {
+            transform: translateY(3px);
+            box-shadow: inset 0 5px 8px rgba(0, 0, 0, 0.5), inset 0 -2px 5px rgba(255, 255, 255, 0.2);
+            color: #4a80c0;
+        }
+        .nav-item.current-page {
+            background: linear-gradient(145deg, #4a5065, #3a4055);
+            box-shadow: 0 5px 0 #0f121c, 0 10px 15px rgba(74, 128, 192, 0.5), inset 0 2px 8px rgba(255, 255, 255, 0.6), inset 0 -3px 8px rgba(0, 0, 0, 0.4);
+            color: white;
+            border: 1px solid #4a80c0;
+            transform: scale(1.05);
+        }
+        .nav-item.lobby-special {
+            background: linear-gradient(145deg, #9b4dff, #6a1b9a, #4a0080);
+            transform: translateY(-28px) scale(1.1);
+            box-shadow: 0 10px 0 #2a004d, 0 18px 25px rgba(0, 0, 0, 0.5), inset 0 2px 12px rgba(255, 255, 255, 0.4), inset 0 -4px 8px rgba(0, 0, 0, 0.3), 0 0 20px #bf5eff, 0 0 8px #7c3aed;
+            color: #ffffff;
+            border: 1px solid #d8b4ff;
+            text-shadow: 0 0 8px #bf5eff;
+            animation: neonPulse 1.3s ease-in-out infinite alternate;
+            z-index: 30;
+        }
+        @keyframes neonPulse {
+            0% { box-shadow: 0 10px 0 #2a004d, 0 18px 25px rgba(0, 0, 0, 0.5), inset 0 2px 12px rgba(255, 255, 255, 0.4), inset 0 -4px 8px rgba(0, 0, 0, 0.3), 0 0 15px #9b4dff; }
+            100% { box-shadow: 0 10px 0 #2a004d, 0 20px 28px rgba(0, 0, 0, 0.55), inset 0 2px 14px rgba(255, 255, 255, 0.55), inset 0 -4px 8px rgba(0, 0, 0, 0.3), 0 0 35px #d8b4ff; }
+        }
+
+        /* ========= 弧形轉盤 - 移除上方橫槓版本 ========= */
+        .wheel-container {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%) translateY(100%);
+            width: 100%;
+            max-width: 480px;
+            height: 280px;
+            z-index: 999999999 !important;
+            background: transparent;
+            visibility: hidden;
+            opacity: 0;
+            transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1), opacity 0.2s;
+            pointer-events: none;
+        }
+        .wheel-container.open {
+            visibility: visible;
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+            pointer-events: auto;
+        }
+        /* 隱藏拖曳橫槓 */
+        .drag-handle {
+            display: none;
+        }
+        .wheel-touch-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            cursor: grab;
+            background: transparent;
+            z-index: 999999999;
+        }
+        .wheel-items-container {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 420px;
+            height: 420px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999999999;
+        }
+        .wheel-item {
+            position: absolute;
+            width: auto;
+            left: 50%;
+            top: 50%;
+            cursor: pointer;
+            pointer-events: auto;
+            transition: transform 0.1s linear;
+            text-align: center;
+            z-index: 999999999 !important;
+        }
+        .wheel-item .item-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(10, 14, 22, 0.35);
+            backdrop-filter: blur(5px);
+            border-radius: 40px;
+            padding: 8px 16px;
+            border: 1px solid rgba(255, 215, 0, 0.5);
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        .wheel-item .item-content:active {
+            transform: scale(0.95);
+        }
+        .item-icon { font-size: 28px; margin-bottom: 4px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
+        .item-name { font-size: 10px; font-weight: bold; color: #ffd700; text-shadow: 0 0 6px #ffd700; white-space: nowrap; letter-spacing: 1px; }
+        .dev-badge { font-size: 6px; background: #ff3b6f; padding: 2px 6px; border-radius: 20px; margin-top: 3px; color: #fff; text-shadow: none; white-space: nowrap; }
+        .wheel-hint {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #bbd4ff;
+            font-size: 10px;
+            background: rgba(10, 14, 22, 0.9);
+            padding: 5px 14px;
+            border-radius: 40px;
+            white-space: nowrap;
+            border: 1px solid #4a80c0;
+            pointer-events: none;
+            z-index: 999999999;
+        }
+
+        @media (max-width: 450px) {
+            .wheel-items-container { width: 380px; height: 380px; top: 15px; }
+            .wheel-item .item-content { padding: 5px 12px; }
+            .item-icon { font-size: 24px; }
+            .setting-icon { width: 42px; height: 42px; font-size: 18px; }
+            .setting-title { font-size: 14px; }
+            .nickname-display { font-size: 0.9rem; }
+            .points-display { font-size: 0.75rem; min-width: 65px; padding: 0.1rem 0.6rem; }
+            .page-title h1 { font-size: 20px; }
+            .nav-item { min-width: 44px; padding: 0.4rem 0.3rem; }
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 20, 32, 0.95);
+            color: #ffdd99;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 12px;
+            border: 1px solid #ffd700;
+            white-space: nowrap;
+            z-index: 10000;
+            font-weight: 500;
+            animation: fadeInOut 2s ease forwards;
+        }
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateX(-50%) translateY(10px); }
+            15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            85% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-8px); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- 弧形選單 - 已移除上方橫槓 drag-handle 透過 CSS 隱藏 -->
+<div class="wheel-container" id="wheelContainer">
+    <div class="drag-handle"></div>
+    <div class="wheel-touch-wrapper" id="wheelTouchWrapper"></div>
+    <div class="wheel-items-container" id="wheelItemsContainer"></div>
+    <div class="wheel-hint"><i class="fas fa-arrows-alt-h"></i> 左右滑動選遊戲 · ↓ 向下滑關閉</div>
+</div>
+
+<div class="detail-modal" id="detailModal">
+    <div class="detail-modal-content">
+        <div class="detail-header">
+            <h3 id="modalTitle">設定</h3>
+            <div class="detail-close" id="detailCloseBtn">
+                <i class="fas fa-times"></i>
+            </div>
+        </div>
+        <div class="detail-body" id="modalBody"></div>
+    </div>
+</div>
+
+<div class="settings-container">
+    <header class="metal-header">
+        <div class="logo" id="logoHomeBtn">
+            <div class="logo-icon"><div class="logo-icon-inner">TP</div></div>
+            <div class="logo-text">
+                <div class="logo-main">T-PACHIN</div>
+                <div class="logo-sub">JOKER SERIES</div>
+            </div>
+        </div>
+        <div class="user-info-area">
+            <span class="nickname-display" id="userName">夫人會生氣</span>
+            <span class="points-display" id="currentPoints">0</span>
+        </div>
+    </header>
+
+    <div class="settings-content">
+        <div class="page-title">
+            <h1><i class="fas fa-cog"></i> 系統設定</h1>
+        </div>
+
+        <div class="settings-menu">
+            <div class="setting-item" data-setting="account">
+                <div class="setting-icon"><i class="fas fa-user-circle"></i></div>
+                <div class="setting-info">
+                    <div class="setting-title">帳號管理</div>
+                    <div class="setting-desc">修改密碼、綁定手機</div>
+                </div>
+                <div class="setting-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>
+
+            <div class="setting-item" data-setting="notification">
+                <div class="setting-icon"><i class="fas fa-bell"></i></div>
+                <div class="setting-info">
+                    <div class="setting-title">通知設定</div>
+                    <div class="setting-desc">推播通知、公告提醒</div>
+                </div>
+                <div class="setting-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>
+
+            <div class="setting-item" data-setting="sound">
+                <div class="setting-icon"><i class="fas fa-volume-up"></i></div>
+                <div class="setting-info">
+                    <div class="setting-title">音效設定</div>
+                    <div class="setting-desc">背景音樂、遊戲音效</div>
+                </div>
+                <div class="setting-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>
+
+            <div class="setting-item" data-setting="language">
+                <div class="setting-icon"><i class="fas fa-language"></i></div>
+                <div class="setting-info">
+                    <div class="setting-title">語言設定</div>
+                    <div class="setting-desc">繁體中文 / English</div>
+                </div>
+                <div class="setting-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>
+
+            <div class="setting-item" data-setting="privacy">
+                <div class="setting-icon"><i class="fas fa-shield-alt"></i></div>
+                <div class="setting-info">
+                    <div class="setting-title">隱私權政策</div>
+                    <div class="setting-desc">個人資料保護說明</div>
+                </div>
+                <div class="setting-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>
+
+            <div class="setting-item" data-setting="about">
+                <div class="setting-icon"><i class="fas fa-info-circle"></i></div>
+                <div class="setting-info">
+                    <div class="setting-title">關於我們</div>
+                    <div class="setting-desc">版本資訊、服務條款</div>
+                </div>
+                <div class="setting-arrow"><i class="fas fa-chevron-right"></i></div>
+            </div>
+        </div>
+
+        <div class="logout-btn" id="logoutBtn">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>登出帳號</span>
+        </div>
+
+        <div class="version-info">
+            T-PACHIN JOKER SERIES v1.0.0
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item" id="lobbyBtn"><i class="fa fa-gamepad"></i><span>大廳</span></div>
+        <div class="nav-item" id="newsBtn"><i class="fa fa-bell"></i><span>公告</span></div>
+        <div class="nav-item lobby-special" id="wheelTriggerBtn"><i class="fa fa-home"></i><span>館別</span></div>
+        <div class="nav-item" id="myBtn"><i class="fa fa-user"></i><span>我的</span></div>
+        <div class="nav-item current-page" id="settingsBtn"><i class="fa fa-cog"></i><span>設定</span></div>
+    </div>
+</div>
+
+<script>
+(function(){
+    function getCurrentPoints() {
+        if (window.T_PACHIN_STORAGE) return T_PACHIN_STORAGE.getPoints();
+        let p = localStorage.getItem('t_pachin_points');
+        return p ? parseFloat(p) : 6600;
+    }
+
+    function formatPoints(v) {
+        return v.toLocaleString(undefined, { minimumFractionDigits: 4, maximumFractionDigits: 4 });
+    }
+
+    function getUserName() {
+        if (window.T_PACHIN_STORAGE) return T_PACHIN_STORAGE.getNickname();
+        return localStorage.getItem('tp_username') || '夫人會生氣';
+    }
+
+    function updateUserInfo() {
+        const points = getCurrentPoints();
+        const pointsEl = document.getElementById('currentPoints');
+        const nameEl = document.getElementById('userName');
+        if (pointsEl) pointsEl.textContent = formatPoints(points);
+        if (nameEl) nameEl.textContent = getUserName();
+    }
+
+    const modal = document.getElementById('detailModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalBody = document.getElementById('modalBody');
+
+    function showModal(title, content) {
+        modalTitle.textContent = title;
+        modalBody.innerHTML = content;
+        modal.classList.add('show');
+    }
+
+    function closeModal() {
+        modal.classList.remove('show');
+    }
+
+    function getAccountContent() {
+        return `
+            <div class="detail-row">
+                <span class="detail-label">目前帳號</span>
+                <span class="detail-value">${getUserName()}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">會員等級</span>
+                <span class="detail-value">VIP 白銀會員</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">修改密碼</span>
+                <span class="detail-value">
+                    <input type="password" class="detail-input" id="newPassword" placeholder="新密碼">
+                </span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">確認密碼</span>
+                <span class="detail-value">
+                    <input type="password" class="detail-input" id="confirmPassword" placeholder="確認新密碼">
+                </span>
+            </div>
+            <button class="detail-btn" id="savePasswordBtn">儲存修改</button>
+        `;
+    }
+
+    function getNotificationContent() {
+        return `
+            <div class="detail-row">
+                <span class="detail-label">推播通知</span>
+                <span class="detail-value">
+                    <select class="detail-input" id="pushNotify">
+                        <option value="on">開啟</option>
+                        <option value="off">關閉</option>
+                    </select>
+                </span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">公告提醒</span>
+                <span class="detail-value">
+                    <select class="detail-input" id="announceNotify">
+                        <option value="on">開啟</option>
+                        <option value="off">關閉</option>
+                    </select>
+                </span>
+            </div>
+            <button class="detail-btn" id="saveNotifyBtn">儲存設定</button>
+        `;
+    }
+
+    function getSoundContent() {
+        return `
+            <div class="detail-row">
+                <span class="detail-label">背景音樂</span>
+                <span class="detail-value">
+                    <select class="detail-input" id="bgmVolume">
+                        <option value="100">100%</option>
+                        <option value="70">70%</option>
+                        <option value="50">50%</option>
+                        <option value="30">30%</option>
+                        <option value="0">關閉</option>
+                    </select>
+                </span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">遊戲音效</span>
+                <span class="detail-value">
+                    <select class="detail-input" id="sfxVolume">
+                        <option value="100">100%</option>
+                        <option value="70">70%</option>
+                        <option value="50">50%</option>
+                        <option value="30">30%</option>
+                        <option value="0">關閉</option>
+                    </select>
+                </span>
+            </div>
+            <button class="detail-btn" id="saveSoundBtn">儲存設定</button>
+        `;
+    }
+
+    function getLanguageContent() {
+        return `
+            <div class="detail-row">
+                <span class="detail-label">顯示語言</span>
+                <span class="detail-value">
+                    <select class="detail-input" id="languageSelect">
+                        <option value="zh-TW">繁體中文</option>
+                        <option value="en">English</option>
+                        <option value="ja">日本語</option>
+                    </select>
+                </span>
+            </div>
+            <button class="detail-btn" id="saveLanguageBtn">儲存設定</button>
+        `;
+    }
+
+    function getPrivacyContent() {
+        return `
+            <div class="detail-row">
+                <span class="detail-label">隱私權政策</span>
+            </div>
+            <div style="font-size: 12px; color: #8a9dc0; line-height: 1.6; margin-top: 10px;">
+                <p>本平台（T-PACHIN）非常重視您的隱私權。為了讓您安心使用本平台的各項服務與資訊，特此說明本平台的隱私權保護政策。</p>
+                <br>
+                <p><strong>1. 個人資料蒐集</strong><br>當您註冊成為會員時，我們會收集您的帳號、密碼、手機號碼等資訊。</p>
+                <p><strong>2. 資料使用目的</strong><br>您的資料將用於會員管理、遊戲服務提供、活動通知等用途。</p>
+                <p><strong>3. 資料保護</strong><br>本平台採用 SSL 加密技術，保護您的個人資料安全。</p>
+                <p><strong>4. Cookie 使用</strong><br>為提供最佳服務，本平台會使用 Cookie 技術。</p>
+                <p><strong>5. 條款修改</strong><br>本平台保留隨時修改本政策的權利，修改後將公告於網站。</p>
+            </div>
+            <button class="detail-btn" id="closePrivacyBtn">關閉</button>
+        `;
+    }
+
+    function getAboutContent() {
+        return `
+            <div class="detail-row">
+                <span class="detail-label">版本</span>
+                <span class="detail-value">v1.0.0</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">平台名稱</span>
+                <span class="detail-value">T-PACHIN</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">系列</span>
+                <span class="detail-value">JOKER SERIES</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">開發商</span>
+                <span class="detail-value">T-PACHIN 團隊</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">客服信箱</span>
+                <span class="detail-value">support@t-pachin.com</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">© 版權所有</span>
+                <span class="detail-value">2026 T-PACHIN</span>
+            </div>
+            <button class="detail-btn" id="closeAboutBtn">關閉</button>
+        `;
+    }
+
+    document.querySelectorAll('.setting-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const setting = item.dataset.setting;
+            let title = '';
+            let content = '';
+            
+            switch(setting) {
+                case 'account':
+                    title = '帳號管理';
+                    content = getAccountContent();
+                    break;
+                case 'notification':
+                    title = '通知設定';
+                    content = getNotificationContent();
+                    break;
+                case 'sound':
+                    title = '音效設定';
+                    content = getSoundContent();
+                    break;
+                case 'language':
+                    title = '語言設定';
+                    content = getLanguageContent();
+                    break;
+                case 'privacy':
+                    title = '隱私權政策';
+                    content = getPrivacyContent();
+                    break;
+                case 'about':
+                    title = '關於我們';
+                    content = getAboutContent();
+                    break;
+                default:
+                    return;
+            }
+            
+            showModal(title, content);
+            
+            setTimeout(() => {
+                if (setting === 'account') {
+                    const saveBtn = document.getElementById('savePasswordBtn');
+                    if (saveBtn) {
+                        saveBtn.onclick = () => {
+                            const pwd = document.getElementById('newPassword')?.value;
+                            const confirm = document.getElementById('confirmPassword')?.value;
+                            if (!pwd || pwd.length < 6) {
+                                showToast('⚠️ 密碼長度至少6位');
+                                return;
+                            }
+                            if (pwd !== confirm) {
+                                showToast('❌ 兩次輸入的密碼不一致');
+                                return;
+                            }
+                            showToast('✅ 密碼修改成功，請重新登入');
+                            setTimeout(() => {
+                                if (window.T_PACHIN_STORAGE) T_PACHIN_STORAGE.logout();
+                                localStorage.removeItem('tp_logged');
+                                window.location.href = 'lobby.html';
+                            }, 1500);
+                        };
+                    }
+                } else if (setting === 'notification') {
+                    const saveBtn = document.getElementById('saveNotifyBtn');
+                    if (saveBtn) {
+                        saveBtn.onclick = () => {
+                            showToast('✅ 通知設定已儲存');
+                            closeModal();
+                        };
+                    }
+                } else if (setting === 'sound') {
+                    const saveBtn = document.getElementById('saveSoundBtn');
+                    if (saveBtn) {
+                        saveBtn.onclick = () => {
+                            showToast('✅ 音效設定已儲存');
+                            closeModal();
+                        };
+                    }
+                } else if (setting === 'language') {
+                    const saveBtn = document.getElementById('saveLanguageBtn');
+                    if (saveBtn) {
+                        saveBtn.onclick = () => {
+                            showToast('🌐 語言設定已儲存，重新啟動後生效');
+                            closeModal();
+                        };
+                    }
+                } else if (setting === 'privacy') {
+                    const closeBtn = document.getElementById('closePrivacyBtn');
+                    if (closeBtn) closeBtn.onclick = () => closeModal();
+                } else if (setting === 'about') {
+                    const closeBtn = document.getElementById('closeAboutBtn');
+                    if (closeBtn) closeBtn.onclick = () => closeModal();
+                }
+            }, 50);
+        });
+    });
+
+    function showToast(msg) {
+        const existing = document.querySelector('.toast');
+        if (existing) existing.remove();
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.innerHTML = `<i class="fas fa-info-circle"></i> ${msg}`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2000);
+    }
+
+    document.getElementById('logoutBtn')?.addEventListener('click', () => {
+        if (confirm('確定要登出嗎？')) {
+            if (window.T_PACHIN_STORAGE) {
+                T_PACHIN_STORAGE.logout();
+            }
+            localStorage.removeItem('tp_logged');
+            localStorage.removeItem('tp_username');
+            showToast('👋 已登出，歡迎下次再來');
+            setTimeout(() => {
+                window.location.href = 'lobby.html';
+            }, 1000);
+        }
+    });
+
+    // ========== 底部導航連動 ==========
+    document.getElementById('logoHomeBtn').onclick = () => window.location.href = 'lobby.html';
+    document.getElementById('lobbyBtn').onclick = () => window.location.href = 'lobby.html';
+    document.getElementById('newsBtn').onclick = () => window.location.href = 'announcement.html';
+    document.getElementById('myBtn').onclick = () => window.location.href = 'points.html';
+    // 設定按鈕是當前頁面
+
+    document.getElementById('detailCloseBtn')?.addEventListener('click', closeModal);
+    document.getElementById('detailModal')?.addEventListener('click', (e) => {
+        if (e.target === document.getElementById('detailModal')) closeModal();
+    });
+
+    const wheelOptions = [
+        { name: '柏青SLOT', id: 'pachinko', icon: '🎰', url: 'index.html', isDev: false },
+        { name: '真人百家', id: 'baccarat', icon: '♠️', url: 'index.html', isDev: false },
+        { name: '老虎機', id: 'slot', icon: '🎰', url: 'index.html', isDev: false },
+        { name: '骰寶', id: 'sicbo', icon: '🎲', url: 'index.html', isDev: true },
+        { name: '輪盤', id: 'roulette', icon: '🎡', url: 'index.html', isDev: true },
+        { name: '德州撲克', id: 'poker', icon: '🃏', url: 'index.html', isDev: true },
+        { name: '龍虎鬥', id: 'dragon', icon: '🐉', url: 'index.html', isDev: true },
+        { name: '炸金花', id: 'zajinhua', icon: '🌸', url: 'index.html', isDev: true },
+        { name: '21點', id: 'blackjack', icon: '🃑', url: 'index.html', isDev: true },
+        { name: '彩票', id: 'lottery', icon: '🎫', url: 'index.html', isDev: true }
+    ];
+    const radius = 170, angleStep = 360 / wheelOptions.length;
+    let currentRotation = 0, wheelItems = [];
+
+    function buildWheel() {
+        const container = document.getElementById('wheelItemsContainer');
+        if (!container) return;
+        container.innerHTML = '';
+        wheelItems = [];
+        wheelOptions.forEach((opt, idx) => {
+            const div = document.createElement('div');
+            div.className = 'wheel-item';
+            div.dataset.id = opt.id;
+            div.innerHTML = `<div class="item-content"><div class="item-icon">${opt.icon}</div><div class="item-name">${opt.name}</div>${opt.isDev ? '<div class="dev-badge">開發中</div>' : ''}</div>`;
+            div.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (!opt.isDev) {
+                    window.location.href = opt.url;
+                } else {
+                    showToast(`🔧 ${opt.name} 開發中`);
+                    closeWheel();
+                }
+            });
+            container.appendChild(div);
+            wheelItems.push(div);
+        });
+        currentRotation = -(3 * angleStep + 15);
+        updatePositions(currentRotation);
+    }
+
+    function updatePositions(rot) {
+        if (!wheelItems.length) return;
+        wheelItems.forEach((item, idx) => {
+            const ang = (idx * angleStep + rot + 360) % 360;
+            const rad = ang * Math.PI / 180;
+            const x = Math.sin(rad) * radius;
+            const y = -Math.cos(rad) * radius;
+            item.style.transform = `translate(-50%, -50%) translate(${x}px, ${y}px)`;
+        });
+    }
+
+    const wheelContainer = document.getElementById('wheelContainer');
+    const touchWrap = document.getElementById('wheelTouchWrapper');
+    let isDragging = false, startX = 0, startRot = 0, dragStartY = 0, isClosingDrag = false;
+
+    function onStart(e) {
+        if (!wheelContainer?.classList.contains('open')) return;
+        e.preventDefault();
+        isDragging = true;
+        const x = e.touches ? e.touches[0].clientX : e.clientX;
+        const y = e.touches ? e.touches[0].clientY : e.clientY;
+        startX = x;
+        startRot = currentRotation;
+        dragStartY = y;
+        isClosingDrag = false;
+    }
+
+    function onMove(e) {
+        if (!isDragging) return;
+        e.preventDefault();
+        const x = e.touches ? e.touches[0].clientX : e.clientX;
+        const y = e.touches ? e.touches[0].clientY : e.clientY;
+        const dx = x - startX;
+        const dy = y - dragStartY;
+        if (dy > 30 && !isClosingDrag) {
+            isClosingDrag = true;
+            closeWheel();
+            isDragging = false;
+            return;
+        }
+        currentRotation = startRot + dx * 1.2;
+        updatePositions(currentRotation);
+    }
+
+    function onEnd() { isDragging = false; isClosingDrag = false; }
+
+    if (wheelContainer) {
+        wheelContainer.addEventListener('mousedown', onStart);
+        window.addEventListener('mousemove', onMove);
+        window.addEventListener('mouseup', onEnd);
+        wheelContainer.addEventListener('touchstart', onStart, { passive: false });
+        window.addEventListener('touchmove', onMove, { passive: false });
+        window.addEventListener('touchend', onEnd);
+        if (touchWrap) {
+            touchWrap.addEventListener('mousedown', onStart);
+            touchWrap.addEventListener('touchstart', onStart, { passive: false });
+        }
+    }
+
+    function openWheel() {
+        if (wheelContainer && !wheelContainer.classList.contains('open')) {
+            wheelContainer.classList.remove('closing');
+            wheelContainer.classList.add('open');
+        }
+    }
+
+    function closeWheel() {
+        if (wheelContainer?.classList.contains('open')) {
+            wheelContainer.classList.add('closing');
+            setTimeout(() => {
+                wheelContainer.classList.remove('open');
+                wheelContainer.classList.remove('closing');
+            }, 250);
+        }
+    }
+
+    document.getElementById('wheelTriggerBtn').onclick = (e) => { e.stopPropagation(); openWheel(); };
+    document.addEventListener('click', (e) => {
+        if (wheelContainer?.classList.contains('open') && !wheelContainer.contains(e.target) && !document.getElementById('wheelTriggerBtn').contains(e.target)) closeWheel();
+    });
+    if (wheelContainer) wheelContainer.addEventListener('click', e => e.stopPropagation());
+
+    if (window.T_PACHIN_STORAGE) {
+        window.addEventListener('t-pachin:user-updated', () => updateUserInfo());
+        window.addEventListener('points-updated', () => updateUserInfo());
+    }
+
+    updateUserInfo();
+    buildWheel();
+})();
+</script>
+</body>
+</html>

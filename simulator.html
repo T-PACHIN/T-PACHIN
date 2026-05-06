@@ -48,7 +48,6 @@
         .video-section { position: relative; margin: 15px 8px; }
         .video-area { background: #000; border-radius: 16px; overflow: hidden; border: 2px solid #4a80c0; position: relative; height: 600px; cursor: pointer; }
         video { width: 100%; height: 100%; object-fit: cover; pointer-events: auto; cursor: pointer; }
-        /* 子母畫面按鈕 - 僅符號無背景 */
         .pip-btn { 
             position: absolute; 
             top: 12px; 
@@ -106,15 +105,74 @@
         .collapse-icon { color: #4a80c0; font-size: 10px; }
         .collapsible-content { padding: 6px 0; display: none; }
         .collapsible-content.show { display: block; }
-        .machine-item { background: linear-gradient(145deg, rgba(30,35,45,0.85), rgba(20,25,35,0.85)); border: 1px solid #ff8844; border-radius: 20px; padding: 10px 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-        .machine-item-info { flex: 1; display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: nowrap; white-space: nowrap; }
-        .machine-item-name { font-size: 13px; font-weight: bold; color: #ffaa66; flex-shrink: 0; }
-        .machine-item-desc { font-size: 10px; color: #ffcc99; flex-shrink: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .machine-item-actions { display: flex; gap: 6px; flex-shrink: 0; }
-        .item-btn { padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: bold; cursor: pointer; border: none; white-space: nowrap; }
+        /* 機台列表卡片 - 彈性換行設計 (按鈕可在新行) */
+        .machine-item { 
+            background: linear-gradient(145deg, rgba(30,35,45,0.85), rgba(20,25,35,0.85)); 
+            border: 1px solid #ff8844; 
+            border-radius: 20px; 
+            padding: 10px 12px; 
+            margin-bottom: 10px; 
+            display: flex; 
+            flex-wrap: wrap; 
+            align-items: center; 
+            justify-content: space-between; 
+            gap: 8px; 
+        }
+        .machine-item-info { 
+            flex: 1 1 auto; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            gap: 8px; 
+            flex-wrap: wrap; 
+            min-width: 120px; 
+        }
+        .machine-item-name { 
+            font-size: 13px; 
+            font-weight: bold; 
+            color: #ffaa66; 
+            flex-shrink: 0; 
+        }
+        .machine-item-desc { 
+            font-size: 10px; 
+            color: #ffcc99; 
+            flex-shrink: 1; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+            white-space: nowrap; 
+        }
+        .machine-item-actions { 
+            display: flex; 
+            gap: 6px; 
+            flex-wrap: wrap; 
+            justify-content: flex-end; 
+            flex-shrink: 0; 
+        }
+        .item-btn { 
+            padding: 4px 10px; 
+            border-radius: 20px; 
+            font-size: 10px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            border: none; 
+            white-space: nowrap; 
+        }
         .item-btn.enter { background: linear-gradient(145deg, #d97a2c, #b85a1c); border: 1px solid #ffaa66; color: white; }
         .item-btn.leave { background: linear-gradient(145deg, #6a4a3a, #5a3a2a); border: 1px solid #cc8866; color: #ffddcc; }
         .item-btn.current { background: linear-gradient(145deg, #2e7d64, #1e5d4a); border: 1px solid #4cae8c; color: white; cursor: default; opacity: 0.7; }
+        /* 保留中與收藏卡片也比照彈性換行 */
+        .reserve-item, .favorite-item { 
+            background: linear-gradient(145deg, rgba(30,35,45,0.85), rgba(20,25,35,0.85)); 
+            border: 1px solid #ff8844; 
+            border-radius: 20px; 
+            padding: 10px 12px; 
+            margin-bottom: 10px; 
+            display: flex; 
+            flex-wrap: wrap; 
+            align-items: center; 
+            justify-content: space-between; 
+            gap: 8px; 
+        }
         .menu-item { padding: 10px 12px; border-bottom: 1px solid #4a80c0; color: #ffcc99; cursor: pointer; font-size: 13px; }
         .exit-btn-drawer { background: linear-gradient(145deg, #b84a3a, #983a2a); border: 1px solid #ff8866; border-radius: 40px; padding: 10px; text-align: center; margin-top: 12px; cursor: pointer; font-weight: bold; color: white; }
         .modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 3000; opacity: 0; visibility: hidden; }
@@ -159,7 +217,6 @@
             <video id="gameVideo" autoplay muted loop playsinline webkit-playsinline>
                 <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
             </video>
-            <!-- 子母畫面按鈕：只有 ◲ 符號，無文字無背景 -->
             <div class="pip-btn" id="pipButton">◲</div>
             <div class="manual-control-panel show" id="manualPanel">
                 <div class="control-group">
@@ -223,7 +280,6 @@
     const manualPanel = document.getElementById('manualPanel');
     const drawer = document.getElementById('drawer');
     
-    // 子母畫面功能 - 無需額外文字
     async function openPip() {
         try {
             if (!video) return;
@@ -345,8 +401,8 @@
     function maxSpin() { if(isAutoSpinning) return; if(machineCoins < 6) { showAlert(`代幣不足！MAX需6枚，目前${machineCoins}枚`); return; } for(let i=0; i<6; i++) normalSpin(); }
     
     function addReserve() { if(playerCurrentSpins < 100) { alert('轉數不足 100 轉，無法保留機台'); return; } if(reservedList.length >= MAX_RESERVE) { alert('保留機台已達上限'); return; } reservedList.push({ name: `${currentMachine.name}`, time: '保留 6分鐘', spins: playerCurrentSpins, machineId: currentMachine.machineId }); updateReserveUI(); alert('機台已加入保留清單'); }
-    function updateReserveUI() { const rc = document.getElementById('reserveContainer'); if(!rc) return; if(reservedList.length === 0) rc.innerHTML = '<div style="color:#ffaa66; padding:8px; text-align:center;">🎪 暫無保留機台</div>'; else rc.innerHTML = reservedList.map((item, idx) => `<div class="machine-item"><div class="machine-item-info"><span class="machine-item-name">🎪 ${item.name}</span><span class="machine-item-desc">⏰ ${item.time} | 🎲 轉數: ${item.spins} 轉</span></div><div class="machine-item-actions"><button class="item-btn enter" onclick="alert('進入機台(演示)')">進入</button><button class="item-btn leave" onclick="reservedList.splice(${idx},1); updateReserveUI();">離座</button></div></div>`).join(''); }
-    function updateFavoriteUI() { const fc = document.getElementById('favoriteContainer'); if(!fc) return; if(favoriteList.length === 0) fc.innerHTML = '<div style="color:#ffaa66; padding:8px; text-align:center;">🎈 暫無收藏機台</div>'; else fc.innerHTML = favoriteList.map((item, idx) => `<div class="machine-item"><div class="machine-item-info"><span class="machine-item-name">${item.name}</span><span class="machine-item-desc">🎪 ${item.desc} | 🎰 每枚${item.ratio} 代幣</span></div><div class="machine-item-actions"><button class="item-btn enter" onclick="alert('進入機台(演示)')">進入</button><button class="item-btn remove" onclick="favoriteList.splice(${idx},1); updateFavoriteUI();">移除</button></div></div>`).join(''); }
+    function updateReserveUI() { const rc = document.getElementById('reserveContainer'); if(!rc) return; if(reservedList.length === 0) rc.innerHTML = '<div style="color:#ffaa66; padding:8px; text-align:center;">🎪 暫無保留機台</div>'; else rc.innerHTML = reservedList.map((item, idx) => `<div class="machine-item" style="flex-wrap:wrap;"><div class="machine-item-info"><span class="machine-item-name">🎪 ${item.name}</span><span class="machine-item-desc">⏰ ${item.time} | 🎲 轉數: ${item.spins} 轉</span></div><div class="machine-item-actions"><button class="item-btn enter" onclick="alert('進入機台(演示)')">進入</button><button class="item-btn leave" onclick="reservedList.splice(${idx},1); updateReserveUI();">離座</button></div></div>`).join(''); }
+    function updateFavoriteUI() { const fc = document.getElementById('favoriteContainer'); if(!fc) return; if(favoriteList.length === 0) fc.innerHTML = '<div style="color:#ffaa66; padding:8px; text-align:center;">🎈 暫無收藏機台</div>'; else fc.innerHTML = favoriteList.map((item, idx) => `<div class="machine-item" style="flex-wrap:wrap;"><div class="machine-item-info"><span class="machine-item-name">${item.name}</span><span class="machine-item-desc">🎪 ${item.desc} | 🎰 每枚${item.ratio} 代幣</span></div><div class="machine-item-actions"><button class="item-btn enter" onclick="alert('進入機台(演示)')">進入</button><button class="item-btn leave" onclick="favoriteList.splice(${idx},1); updateFavoriteUI();">移除</button></div></div>`).join(''); }
     function returnToLobby() { document.getElementById('returnCoinsAmount').innerHTML = machineCoins; document.getElementById('returnLobbyModal').classList.add('show'); }
     function confirmReturn() { if(isAutoSpinning) stopAuto(); saveMachineCoins(); savePoints(); window.location.href = 'index.html'; }
     function cancelReturn() { document.getElementById('returnLobbyModal').classList.remove('show'); }
@@ -360,10 +416,9 @@
     function bindDailyTags() { document.querySelectorAll('.daily-tag').forEach(tag => { tag.addEventListener('click', () => { document.querySelectorAll('.daily-tag').forEach(t => t.classList.remove('active')); tag.classList.add('active'); if(tag.dataset.day === 'today') currentDataSetKey = 'today'; else if(tag.dataset.day === 'yesterday') currentDataSetKey = 'yesterday'; else currentDataSetKey = 'daybefore'; updateChartColors(); refreshStats(); }); }); document.querySelector('.daily-tag[data-day="today"]')?.classList.add('active'); }
     function renderMachineCards() { return machineList.map(machine => { const isCurrent = currentMachine.machineId === machine.id; return `<div class="machine-item"><div class="machine-item-info"><span class="machine-item-name">${machine.name}</span><span class="machine-item-desc">每枚 ${machine.ratio} 點｜${machine.desc}</span></div><div class="machine-item-actions">${isCurrent ? `<button class="item-btn current">🎮 目前機台</button><button class="item-btn leave" onclick="window.leaveCurrentMachine && window.leaveCurrentMachine()">🚪 離開</button>` : `<button class="item-btn enter" onclick="window.switchToMachine && window.switchToMachine(${machine.id})">🎮 進入</button><button class="item-btn leave" onclick='alert("尚未進入此機台")'>🚪 離開</button>`}</div></div>`; }).join(''); }
     function leaveCurrentMachine() { alert(`已離開「${currentMachine.name}」\n代幣 ${machineCoins} 枚已保留，可隨時回來繼續遊玩`); }
-    function initDrawer() { const dc = document.getElementById('drawerContent'); if(!dc) return; dc.innerHTML = `<div class="exchange-card"><div class="balance-row"><span class="balance-label">💎 點數錢包</span><span class="balance-value" id="drawerPoints">${playerPoints.toFixed(4)}</span></div><div class="balance-row"><span class="balance-label">🎰 機台代幣</span><span class="balance-value" id="drawerCoins">${machineCoins.toLocaleString()}</span></div><div class="full-buttons"><button class="full-btn add-all" id="addAllBtn">💰 全兌幣</button><button class="full-btn sub-all" id="subAllBtn">💎 全兌點</button></div><div class="custom-section"><div class="custom-input-group"><input type="number" step="any" id="exchangeAmount" class="custom-input" value="500"><button class="custom-btn add-custom" id="addCustomBtn">🎲 兌換代幣</button></div></div><div class="custom-section"><div class="custom-input-group"><input type="number" id="exchangeAmount2" class="custom-input" value="500"><button class="custom-btn sub-custom" id="subCustomBtn">🪙 兌換點數</button></div></div><div style="font-size:10px; color:#ffaa66; text-align:center; margin-top:8px;">點差 ${EXCHANGE_SPREAD}</div></div><div class="collapsible-section"><div class="section-header-click"><span class="section-title-drawer">🎰 機台列表</span><span class="collapse-icon">▶</span></div><div class="collapsible-content"><div id="machineListContainer">${renderMachineCards()}</div></div></div><div class="collapsible-section"><div class="section-header-click"><span class="section-title-drawer">⏳ 保留中</span><span class="collapse-icon">▶</span></div><div class="collapsible-content"><div id="reserveContainer"></div></div></div><div class="collapsible-section"><div class="section-header-click"><span class="section-title-drawer">❤️ 我的收藏</span><span class="collapse-icon">▶</span></div><div class="collapsible-content"><div id="favoriteContainer"></div></div></div><div class="menu-item" id="toggleManualBtn">🎮 手動面板</div><div class="menu-item" id="refreshBtn">🔄 頁面重整</div><div class="exit-btn-drawer" id="exitMachineBtn">🚪 離開座位(結算)</div>`; window.switchToMachine = (machineId) => { const machine = machineList.find(m => m.id === machineId); if (machine) switchMachine(machine); }; window.leaveCurrentMachine = leaveCurrentMachine; document.getElementById('addAllBtn')?.addEventListener('click', addAllPointsToCoins); document.getElementById('subAllBtn')?.addEventListener('click', subAllCoinsToPoints); document.getElementById('addCustomBtn')?.addEventListener('click', addCustomPointsToCoins); document.getElementById('subCustomBtn')?.addEventListener('click', subCustomCoinsToPoints); document.getElementById('toggleManualBtn')?.addEventListener('click', () => { if(manualPanel.classList.contains('show')) { manualPanel.classList.remove('show'); manualPanel.classList.add('hide'); } else { manualPanel.classList.remove('hide'); manualPanel.classList.add('show'); } }); document.getElementById('refreshBtn')?.addEventListener('click', () => location.reload()); document.getElementById('exitMachineBtn')?.addEventListener('click', showLeaveSeatConfirm); document.querySelectorAll('.collapsible-section').forEach(sec => { const h = sec.querySelector('.section-header-click'); const c = sec.querySelector('.collapsible-content'); const i = h?.querySelector('.collapse-icon'); if(c && i) { c.classList.remove('show'); i.textContent = '▶'; h.addEventListener('click', () => { c.classList.toggle('show'); i.textContent = c.classList.contains('show') ? '▼' : '▶'; }); } }); updateReserveUI(); updateFavoriteUI(); updateUI(); }
+    function initDrawer() { const dc = document.getElementById('drawerContent'); if(!dc) return; dc.innerHTML = `<div class="exchange-card"><div class="balance-row"><span class="balance-label">💎 點數錢包</span><span class="balance-value" id="drawerPoints">${playerPoints.toFixed(4)}</span></div><div class="balance-row"><span class="balance-label">🎰 機台代幣</span><span class="balance-value" id="drawerCoins">${machineCoins.toLocaleString()}</span></div><div class="full-buttons"><button class="full-btn add-all" id="addAllBtn">💰 全兌幣</button><button class="full-btn sub-all" id="subAllBtn">💎 全兌點</button></div><div class="custom-section"><div class="custom-input-group"><input type="number" step="any" id="exchangeAmount" class="custom-input" value="500"><button class="custom-btn add-custom" id="addCustomBtn">🎲 兌換代幣</button></div></div><div class="custom-section"><div class="custom-input-group"><input type="number" id="exchangeAmount2" class="custom-input" value="500"><button class="custom-btn sub-custom" id="subCustomBtn">🪙 兌換點數</button></div></div><div style="font-size:10px; color:#ffaa66; text-align:center; margin-top:8px;">點差 ${EXCHANGE_SPREAD}</div></div><div class="collapsible-section"><div class="section-header-click"><span class="section-title-drawer">🎰 機台列表</span><span class="collapse-icon">▶</span></div><div class="collapsible-content"><div id="machineListContainer">${renderMachineCards()}</div></div></div><div class="collapsible-section"><div class="section-header-click"><span class="section-title-drawer">⏳ 保留中</span><span class="collapse-icon">▶</span></div><div class="collapsible-content"><div id="reserveContainer"></div></div></div><div class="collapsible-section"><div class="section-header-click"><span class="section-title-drawer">❤️ 我的收藏</span><span class="collapse-icon">▶</span></div><div class="collapsible-content"><div id="favoriteContainer"></div></div></div><div class="menu-item" id="toggleManualBtn">🎮 手動面板</div><div class="menu-item" id="refreshBtn">🔄 頁面重整</div><div class="exit-btn-drawer" id="exitMachineBtn">🚪 離開座位(結算)</div>`; window.switchToMachine = (machineId) => { const machine = machineList.find(m => m.id === machineId); if (machine) switchMachine(machine); }; window.leaveCurrentMachine = leaveCurrentMachine; document.getElementById('addAllBtn')?.addEventListener('click', addAllPointsToCoins); document.getElementById('subAllBtn')?.addEventListener('click', subAllCoinsToPoints); document.getElementById('addCustomBtn')?.addEventListener('click', addCustomPointsToCoins); document.getElementById('subCustomBtn')?.addEventListener('click', subCustomCoinsToPoints); document.getElementById('toggleManualBtn')?.addEventListener('click', () => { if(manualPanel.classList.contains('show')) { manualPanel.classList.remove('show'); manualPanel.classList.add('hide'); } else { manualPanel.classList.remove('hide'); manualPanel.classList.add('show'); } }); document.getElementById('refreshBtn')?.addEventListener('click', () => location.reload()); document.getElementById('exitMachineBtn')?.addEventListener('click', showLeaveSeatConfirm); document.querySelectorAll('.collapsible-section').forEach(sec => { const h = sec.querySelector('.section-header-click'); const c = sec.querySelector('.collapsible-content'); const i = h?.querySelector('.collapse-icon'); if(c && i) { c.classList.remove('show'); i.textContent = '▶'; h.addEventListener('click', (e) => { e.stopPropagation(); c.classList.toggle('show'); i.textContent = c.classList.contains('show') ? '▼' : '▶'; }); } }); updateReserveUI(); updateFavoriteUI(); updateUI(); }
     function closeDrawer() { if (drawer.classList.contains('open')) drawer.classList.remove('open'); }
     
-    // 綁定事件：純符號按鈕 ◲
     document.getElementById('pipButton')?.addEventListener('click', openPip);
     document.getElementById('videoArea')?.addEventListener('click', (e) => { if(e.target !== document.getElementById('pipButton')) closeDrawer(); });
     document.getElementById('autoBtn')?.addEventListener('click', toggleAuto); document.getElementById('reserveBtnBottom')?.addEventListener('click', addReserve);

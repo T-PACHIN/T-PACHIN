@@ -493,75 +493,24 @@
     const JOKER_IMAGE_URL = "https://i.pinimg.com/736x/c3/72/db/c372db1b020ebf778ef707f63c122bf7.jpg";
     const MACHINE_NAMES = ["GOGO 小丑", "我是小丑-EX", "快樂小丑 VII", "新我是小丑-EX水晶版"];
     
-    // ==================== 輔助函數 ====================
-    // 格式化點數 - 支援小數後4位
-    function formatPointsDecimal(value) {
-        return value.toLocaleString(undefined, { minimumFractionDigits: 4, maximumFractionDigits: 4 });
-    }
-    function formatPointsInt(value) {
-        return Math.floor(value).toLocaleString();
-    }
-    
-    function showToast(message) {
-        const toast = document.createElement('div');
-        toast.className = 'toast-message';
-        toast.innerHTML = '<i class="fa fa-info-circle mr-2"></i>' + message;
-        document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 2000);
-    }
-    
-    // 取得目前點數 (從全域儲存)
-    function getCurrentPoints() {
-        if (window.T_PACHIN_STORAGE) {
-            return T_PACHIN_STORAGE.getPoints();
-        }
-        return 6600;
-    }
-    
-    function updatePointsDisplay() {
-        const points = getCurrentPoints();
-        const pointsSpan = document.getElementById('userPoints');
-        const confirmPoints = document.getElementById('confirmPoints');
-        const remainPointsSpan = document.getElementById('remainPoints');
-        if (pointsSpan) pointsSpan.innerText = formatPointsDecimal(points);
-        if (confirmPoints) confirmPoints.textContent = formatPointsDecimal(points);
-        if (remainPointsSpan && currentSubData) remainPointsSpan.textContent = formatPointsDecimal(points);
-    }
-    
-    function syncPointsWithStorage() {
-        if (window.T_PACHIN_STORAGE) {
-            userPoints = getCurrentPoints();
-            updatePointsDisplay();
-        }
-    }
+    function formatPointsDecimal(value) { return value.toLocaleString(undefined, { minimumFractionDigits: 4, maximumFractionDigits: 4 }); }
+    function formatPointsInt(value) { return Math.floor(value).toLocaleString(); }
+    function showToast(message) { const toast = document.createElement('div'); toast.className = 'toast-message'; toast.innerHTML = '<i class="fa fa-info-circle mr-2"></i>' + message; document.body.appendChild(toast); setTimeout(() => toast.remove(), 2000); }
+    function getCurrentPoints() { if (window.T_PACHIN_STORAGE) return T_PACHIN_STORAGE.getPoints(); return 6600; }
+    function updatePointsDisplay() { const points = getCurrentPoints(); const pointsSpan = document.getElementById('userPoints'); if (pointsSpan) pointsSpan.innerText = formatPointsDecimal(points); if (document.getElementById('confirmPoints')) document.getElementById('confirmPoints').textContent = formatPointsDecimal(points); if (document.getElementById('remainPoints') && currentSubData) document.getElementById('remainPoints').textContent = formatPointsDecimal(points); }
+    function syncPointsWithStorage() { if (window.T_PACHIN_STORAGE) { userPoints = getCurrentPoints(); updatePointsDisplay(); } }
     
     function showLoadingAndGoToSimulator(machineName, machineId, ratio, coinsAmount) {
-        const machineInfo = { 
-            name: machineName, 
-            ratio: parseFloat(ratio), 
-            machineId: machineId, 
-            subName: machineId + '號機', 
-            coins: coinsAmount || 100,
-            pointDiff: POINT_DIFF
-        };
+        const machineInfo = { name: machineName, ratio: parseFloat(ratio), machineId: machineId, subName: machineId + '號機', coins: coinsAmount || 100, pointDiff: POINT_DIFF };
         localStorage.setItem('t_pachin_machine_info', JSON.stringify(machineInfo));
-        
         const loadingDiv = document.getElementById('hologramLoading');
         const loadingTitle = document.getElementById('loadingMachineTitle');
-        
         if (loadingTitle) loadingTitle.textContent = `${machineName} NO.${machineId}`;
-        
-        if (loadingDiv) { 
-            loadingDiv.classList.add('show'); 
-            setTimeout(() => { 
-                window.location.href = 'simulator.html'; 
-            }, 2000); 
-        } else { 
-            window.location.href = 'simulator.html'; 
-        }
+        if (loadingDiv) { loadingDiv.classList.add('show'); setTimeout(() => { window.location.href = 'simulator.html'; }, 2000); } 
+        else { window.location.href = 'simulator.html'; }
     }
     
-    // ==================== 兌換視窗邏輯 ====================
+    // 兌換視窗邏輯
     const subConfirmModal = document.getElementById('subConfirmModal');
     const confirmTokenInput = document.getElementById('confirmTokenInput');
     const warningMsgDiv = document.getElementById('warningMsg');
@@ -582,228 +531,91 @@
         let currentPoints = getCurrentPoints();
         let isValid = true;
         let warningMsg = '';
-        if (tokenAmount <= 0) {
-            warningMsg = '⚠️ 請輸入大於 0 的代幣數量';
-            isValid = false;
-        } else if (tokenAmount < 50) {
-            warningMsg = '⚠️ 最低兌換 50 枚代幣，目前數量不足';
-            isValid = false;
-        } else if (totalCost > currentPoints) {
-            warningMsg = `❌ 點數不足！需要 ${formatPointsDecimal(totalCost)} 點，目前 ${formatPointsDecimal(currentPoints)} 點`;
-            isValid = false;
-        }
+        if (tokenAmount <= 0) { warningMsg = '⚠️ 請輸入大於 0 的代幣數量'; isValid = false; }
+        else if (tokenAmount < 50) { warningMsg = '⚠️ 最低兌換 50 枚代幣，目前數量不足'; isValid = false; }
+        else if (totalCost > currentPoints) { warningMsg = `❌ 點數不足！需要 ${formatPointsDecimal(totalCost)} 點，目前 ${formatPointsDecimal(currentPoints)} 點`; isValid = false; }
         warningMsgDiv.innerHTML = warningMsg ? `<span class="text-error">${warningMsg}</span>` : '';
         exchangeTokensSpan.textContent = `${tokenAmount} 枚`;
         costPointsSpan.textContent = formatPointsInt(costPointsVal);
         wastePointsSpan.textContent = formatPointsInt(wastePointsVal);
         let remainAfter = currentPoints - totalCost;
         remainPointsSpan.textContent = formatPointsDecimal(remainAfter >= 0 ? remainAfter : 0);
-        if (isValid) {
-            confirmOkBtn.classList.remove('disabled-btn');
-            confirmOkBtn.style.pointerEvents = 'auto';
-            confirmOkBtn.style.opacity = '1';
-        } else {
-            confirmOkBtn.classList.add('disabled-btn');
-            confirmOkBtn.style.pointerEvents = 'none';
-            confirmOkBtn.style.opacity = '0.5';
-        }
+        if (isValid) { confirmOkBtn.classList.remove('disabled-btn'); confirmOkBtn.style.pointerEvents = 'auto'; confirmOkBtn.style.opacity = '1'; }
+        else { confirmOkBtn.classList.add('disabled-btn'); confirmOkBtn.style.pointerEvents = 'none'; confirmOkBtn.style.opacity = '0.5'; }
     }
     
     function doEnterGame() {
         if (!currentSubData) return;
-        
         let tokenAmount = parseInt(confirmTokenInput.value) || 0;
-        if (tokenAmount < 50) {
-            showToast('⚠️ 最低兌換 50 枚代幣！');
-            return;
-        }
-        
+        if (tokenAmount < 50) { showToast('⚠️ 最低兌換 50 枚代幣！'); return; }
         let ratio = currentSubData.ratio;
         let totalCost = (tokenAmount * ratio) + (tokenAmount * POINT_DIFF);
         let currentPoints = getCurrentPoints();
-        
-        if (totalCost > currentPoints) {
-            showToast('❌ 點數不足，您的點數不足');
-            return;
-        }
-        
-        // 扣除點數 (支出) - 使用全域儲存
-        if (window.T_PACHIN_STORAGE) {
-            T_PACHIN_STORAGE.updatePoints(-totalCost);
-            userPoints = getCurrentPoints();
-        } else {
-            userPoints -= totalCost;
-        }
+        if (totalCost > currentPoints) { showToast('❌ 點數不足，您的點數不足'); return; }
+        if (window.T_PACHIN_STORAGE) { T_PACHIN_STORAGE.updatePoints(-totalCost); userPoints = getCurrentPoints(); }
+        else { userPoints -= totalCost; }
         updatePointsDisplay();
-        
-        // 保存資料
         const machineName = currentSubData.machineName;
         const machineId = currentSubData.machineId;
         const machineRatio = currentSubData.ratio;
-        
-        // 先關閉兌換視窗
         closeSubConfirm();
-        
-        // 顯示 Loading 並跳轉
         showLoadingAndGoToSimulator(machineName, machineId, machineRatio, tokenAmount);
     }
     
-    function closeSubConfirm() {
-        if (subConfirmModal) subConfirmModal.classList.remove('show');
-        currentSubData = null;
-    }
-    
+    function closeSubConfirm() { if (subConfirmModal) subConfirmModal.classList.remove('show'); currentSubData = null; }
     window.openSubConfirm = function(machineName, machineId, ratio) {
         syncPointsWithStorage();
-        
-        currentSubData = { 
-            machineName: machineName, 
-            machineId: machineId, 
-            ratio: parseFloat(ratio) 
-        };
-        
+        currentSubData = { machineName: machineName, machineId: machineId, ratio: parseFloat(ratio) };
         const confirmMachineName = document.getElementById('confirmMachineName');
         const confirmSubName = document.getElementById('confirmSubName');
         const confirmRatio = document.getElementById('confirmRatio');
         const confirmPoints = document.getElementById('confirmPoints');
         const remainPoints = document.getElementById('remainPoints');
         const currentPoints = getCurrentPoints();
-        
         if (confirmMachineName) confirmMachineName.textContent = machineName;
         if (confirmSubName) confirmSubName.textContent = machineId + '號機';
         if (confirmRatio) confirmRatio.textContent = ratio;
         if (confirmPoints) confirmPoints.textContent = formatPointsDecimal(currentPoints);
         if (remainPoints) remainPoints.textContent = formatPointsDecimal(currentPoints);
-        
         if (confirmTokenInput) confirmTokenInput.value = 100;
-        
         updateExchangeCalculation();
-        
-        if (subConfirmModal) {
-            subConfirmModal.classList.add('show');
-        } else {
-            console.error('找不到 subConfirmModal 元素');
-            alert('系統錯誤：無法開啟兌換視窗');
-        }
+        if (subConfirmModal) subConfirmModal.classList.add('show');
     };
+    window.enterKeepMachine = function(machineName, machineId, ratio, savedCoins) { showLoadingAndGoToSimulator(machineName, machineId, ratio, savedCoins); };
     
-    window.enterKeepMachine = function(machineName, machineId, ratio, savedCoins) {
-        showLoadingAndGoToSimulator(machineName, machineId, ratio, savedCoins);
-    };
-    
-    // ==================== 設定功能 ====================
+    // 設定功能
     const darkModeToggle = document.getElementById('darkModeToggle');
     const body = document.body;
     function loadSettings() {
         if (window.T_PACHIN_STORAGE) {
             const settings = T_PACHIN_STORAGE.getSettings();
-            if (!settings.darkMode) {
-                body.classList.add('light-mode');
-                if (darkModeToggle) darkModeToggle.checked = false;
-            } else {
-                body.classList.remove('light-mode');
-                if (darkModeToggle) darkModeToggle.checked = true;
-            }
-            const soundToggle = document.getElementById('soundToggle');
-            if (soundToggle) soundToggle.checked = settings.sound !== false;
-            const notifyToggle = document.getElementById('notifyToggle');
-            if (notifyToggle) notifyToggle.checked = settings.notify !== false;
-            const langSelect = document.getElementById('langSelect');
-            if (langSelect) langSelect.value = settings.language || 'zh-TW';
-        } else {
-            // Fallback to localStorage
-            const darkMode = localStorage.getItem('t_pachin_dark_mode');
-            if (darkMode === 'false') { body.classList.add('light-mode'); if (darkModeToggle) darkModeToggle.checked = false; }
-            else { body.classList.remove('light-mode'); if (darkModeToggle) darkModeToggle.checked = true; }
-            const soundEnabled = localStorage.getItem('t_pachin_sound');
-            const soundToggle = document.getElementById('soundToggle');
-            if (soundToggle) soundToggle.checked = soundEnabled !== 'false';
-            const notifyEnabled = localStorage.getItem('t_pachin_notify');
-            const notifyToggle = document.getElementById('notifyToggle');
-            if (notifyToggle) notifyToggle.checked = notifyEnabled !== 'false';
-            const language = localStorage.getItem('t_pachin_language') || 'zh-TW';
-            const langSelect = document.getElementById('langSelect');
-            if (langSelect) langSelect.value = language;
+            if (!settings.darkMode) body.classList.add('light-mode'); else body.classList.remove('light-mode');
+            if (darkModeToggle) darkModeToggle.checked = settings.darkMode !== false;
+            const soundToggle = document.getElementById('soundToggle'); if (soundToggle) soundToggle.checked = settings.sound !== false;
+            const notifyToggle = document.getElementById('notifyToggle'); if (notifyToggle) notifyToggle.checked = settings.notify !== false;
+            const langSelect = document.getElementById('langSelect'); if (langSelect) langSelect.value = settings.language || 'zh-TW';
         }
     }
-    function saveDarkMode(enabled) { 
-        if (window.T_PACHIN_STORAGE) {
-            T_PACHIN_STORAGE.updateSetting('darkMode', enabled);
-        } else {
-            if (enabled) { body.classList.remove('light-mode'); localStorage.setItem('t_pachin_dark_mode', 'true'); } 
-            else { body.classList.add('light-mode'); localStorage.setItem('t_pachin_dark_mode', 'false'); }
-        }
-    }
-    function saveSound(enabled) { 
-        if (window.T_PACHIN_STORAGE) {
-            T_PACHIN_STORAGE.updateSetting('sound', enabled);
-        } else {
-            localStorage.setItem('t_pachin_sound', enabled);
-        }
-    }
-    function saveNotify(enabled) { 
-        if (window.T_PACHIN_STORAGE) {
-            T_PACHIN_STORAGE.updateSetting('notify', enabled);
-        } else {
-            localStorage.setItem('t_pachin_notify', enabled);
-        }
-    }
-    function saveLanguage(lang) { 
-        if (window.T_PACHIN_STORAGE) {
-            T_PACHIN_STORAGE.updateSetting('language', lang);
-        } else {
-            localStorage.setItem('t_pachin_language', lang);
-        }
-        const langNames = { 'zh-TW': '繁體中文', 'zh-CN': '简体中文', 'en': 'English', 'ja': '日本語', 'ko': '한국어' }; 
-        showToast(`🌐 語言已切換為 ${langNames[lang] || lang}`); 
-    }
+    function saveDarkMode(enabled) { if (window.T_PACHIN_STORAGE) T_PACHIN_STORAGE.updateSetting('darkMode', enabled); else { if (enabled) body.classList.remove('light-mode'); else body.classList.add('light-mode'); } }
+    function saveSound(enabled) { if (window.T_PACHIN_STORAGE) T_PACHIN_STORAGE.updateSetting('sound', enabled); }
+    function saveNotify(enabled) { if (window.T_PACHIN_STORAGE) T_PACHIN_STORAGE.updateSetting('notify', enabled); }
+    function saveLanguage(lang) { if (window.T_PACHIN_STORAGE) T_PACHIN_STORAGE.updateSetting('language', lang); showToast(`🌐 語言已切換`); }
     if (darkModeToggle) darkModeToggle.addEventListener('change', function() { saveDarkMode(this.checked); });
-    const soundToggle = document.getElementById('soundToggle');
-    if (soundToggle) soundToggle.addEventListener('change', function() { saveSound(this.checked); });
-    const notifyToggle = document.getElementById('notifyToggle');
-    if (notifyToggle) notifyToggle.addEventListener('change', function() { saveNotify(this.checked); });
-    const langSelect = document.getElementById('langSelect');
-    if (langSelect) langSelect.addEventListener('change', function() { saveLanguage(this.value); });
-    const settingsBtn = document.getElementById('settingsBtn');
-    const settingsModal = document.getElementById('settingsModal');
-    const closeSettingsBtn = document.getElementById('closeSettingsBtn');
+    const soundToggle = document.getElementById('soundToggle'); if (soundToggle) soundToggle.addEventListener('change', function() { saveSound(this.checked); });
+    const notifyToggle = document.getElementById('notifyToggle'); if (notifyToggle) notifyToggle.addEventListener('change', function() { saveNotify(this.checked); });
+    const langSelect = document.getElementById('langSelect'); if (langSelect) langSelect.addEventListener('change', function() { saveLanguage(this.value); });
+    const settingsBtn = document.getElementById('settingsBtn'); const settingsModal = document.getElementById('settingsModal'); const closeSettingsBtn = document.getElementById('closeSettingsBtn');
     if (settingsBtn) settingsBtn.addEventListener('click', () => { loadSettings(); settingsModal.classList.add('show'); });
     if (closeSettingsBtn) closeSettingsBtn.addEventListener('click', () => { settingsModal.classList.remove('show'); });
     if (settingsModal) settingsModal.addEventListener('click', (e) => { if (e.target === settingsModal) settingsModal.classList.remove('show'); });
     
-    // VIP 經驗值
     let currentVipLevel = 1, currentExp = 680;
     const vipExpNeeded = { 1: 1200, 2: 2500, 3: 5000, 4: 10000, 5: 20000 };
-    function updateVipProgress() {
-        const needed = vipExpNeeded[currentVipLevel] || 1200;
-        const percent = Math.min(100, Math.floor((currentExp / needed) * 100));
-        const progressFill = document.querySelector('.progress-fill');
-        const vipBadge = document.getElementById('vipBadge');
-        const expText = document.getElementById('expText');
-        if (progressFill) progressFill.style.width = percent + '%';
-        if (vipBadge) vipBadge.textContent = 'VIP ' + currentVipLevel;
-        if (expText) expText.textContent = '經驗值 ' + currentExp + '/' + needed;
-    }
+    function updateVipProgress() { const needed = vipExpNeeded[currentVipLevel] || 1200; const percent = Math.min(100, Math.floor((currentExp / needed) * 100)); const progressFill = document.querySelector('.progress-fill'); const vipBadge = document.getElementById('vipBadge'); const expText = document.getElementById('expText'); if (progressFill) progressFill.style.width = percent + '%'; if (vipBadge) vipBadge.textContent = 'VIP ' + currentVipLevel; if (expText) expText.textContent = '經驗值 ' + currentExp + '/' + needed; }
     function showVipInfo() { const needed = vipExpNeeded[currentVipLevel] || 1200; const remaining = needed - currentExp; alert('🎖️ VIP ' + currentVipLevel + ' 特權\n\n• 返水 ' + (currentVipLevel * 0.2).toFixed(1) + '%\n• 每日免費 ' + (currentVipLevel * 10) + ' 枚代幣\n• 專屬客服通道\n\n📊 升級進度\n目前 ' + currentExp + ' / ' + needed + '\n距離下一級還需 ' + remaining + ' 經驗'); }
     function showExpInfo() { const needed = vipExpNeeded[currentVipLevel] || 1200; const remaining = needed - currentExp; alert('📊 經驗值詳解\n\n目前：' + currentExp + ' / ' + needed + '\n距離下一級：' + remaining + ' 經驗\n\n✨ 獲得經驗方式：\n• 每遊玩 1 轉 = +1 經驗\n• 每日登入 = +50 經驗\n• 活動任務 = 額外加成'); }
     
-    function initNavigation() {
-        document.querySelectorAll('.nav-item, .home-icon-btn, [data-page]').forEach(el => {
-            if (el.classList && (el.classList.contains('nav-item') || el.classList.contains('home-icon-btn') || el.hasAttribute('data-page'))) {
-                if (el._navHandler) return;
-                el._navHandler = function(e) {
-                    e.preventDefault();
-                    const page = this.dataset.page;
-                    if (page === 'index') window.location.href = 'index.html';
-                    else if (page === 'machines') window.location.href = 'machines.html';
-                    else if (page === 'lobby') window.location.href = 'index.html';
-                    else if (page === 'news') window.location.href = 'news.html';
-                    else if (page === 'about') window.location.href = 'about.html';
-                };
-                el.addEventListener('click', el._navHandler);
-            }
-        });
-    }
+    function initNavigation() { document.querySelectorAll('.nav-item, .home-icon-btn, [data-page]').forEach(el => { if (el.classList && (el.classList.contains('nav-item') || el.classList.contains('home-icon-btn') || el.hasAttribute('data-page'))) { el.addEventListener('click', function(e) { e.preventDefault(); const page = this.dataset.page; if (page === 'index') window.location.href = 'index.html'; else if (page === 'machines') window.location.href = 'machines.html'; else if (page === 'lobby') window.location.href = 'index.html'; else if (page === 'news') window.location.href = 'news.html'; else if (page === 'about') window.location.href = 'about.html'; }); } }); }
     
     let favoriteMachines = [], keepMachines = [];
     function initFavoriteAndReserve() {
@@ -811,288 +623,32 @@
             favoriteMachines = T_PACHIN_STORAGE.getFavorites();
             keepMachines = T_PACHIN_STORAGE.getReserves();
         } else {
-            favoriteMachines = [
-                { id: 1, name: 'GOGO 小丑', number: 'J001', image: JOKER_IMAGE_URL, ratio: '2.5', spread: 0.15 },
-                { id: 2, name: '我是小丑-EX', number: 'J002', image: JOKER_IMAGE_URL, ratio: '2.8', spread: 0.15 }
-            ];
-            keepMachines = [
-                { id: 4, name: '新我是小丑-EX水晶版', number: 'J004', image: JOKER_IMAGE_URL, ratio: '3.0', spread: 0.15, savedCoins: 250 }
-            ];
+            favoriteMachines = [{ id: 1, name: 'GOGO 小丑', number: 'J001', image: JOKER_IMAGE_URL, ratio: '2.5', spread: 0.15 }, { id: 2, name: '我是小丑-EX', number: 'J002', image: JOKER_IMAGE_URL, ratio: '2.8', spread: 0.15 }];
+            keepMachines = [{ id: 4, name: '新我是小丑-EX水晶版', number: 'J004', image: JOKER_IMAGE_URL, ratio: '3.0', spread: 0.15, savedCoins: 250 }];
         }
         updateBadges();
     }
-    function updateBadges() { 
-        const favCountSpan = document.getElementById('favCount');
-        const keepCountSpan = document.getElementById('keepCount');
-        if (favCountSpan) favCountSpan.innerText = favoriteMachines.length;
-        if (keepCountSpan) keepCountSpan.innerText = keepMachines.length;
-    }
-    
-    window.removeFromFavorite = function(machineId) {
-        if (window.T_PACHIN_STORAGE) {
-            const favorites = T_PACHIN_STORAGE.getFavorites();
-            const newFavorites = favorites.filter(m => m.id !== machineId);
-            T_PACHIN_STORAGE.saveFavorites(newFavorites);
-            favoriteMachines = newFavorites;
-        } else {
-            favoriteMachines = favoriteMachines.filter(m => m.id !== machineId);
-        }
-        updateBadges();
-        renderFavoriteModal();
-        showToast('已取消收藏');
-    };
-    
-    window.removeFromKeep = function(machineId) {
-        if (window.T_PACHIN_STORAGE) {
-            T_PACHIN_STORAGE.removeReserve(machineId);
-            keepMachines = T_PACHIN_STORAGE.getReserves();
-        } else {
-            keepMachines = keepMachines.filter(m => m.id !== machineId);
-        }
-        updateBadges();
-        renderKeepModal();
-        showToast('已取消保留');
-    };
+    function updateBadges() { const favCountSpan = document.getElementById('favCount'); const keepCountSpan = document.getElementById('keepCount'); if (favCountSpan) favCountSpan.innerText = favoriteMachines.length; if (keepCountSpan) keepCountSpan.innerText = keepMachines.length; }
+    window.removeFromFavorite = function(machineId) { if (window.T_PACHIN_STORAGE) { const favorites = T_PACHIN_STORAGE.getFavorites(); const newFavorites = favorites.filter(m => m.id !== machineId); T_PACHIN_STORAGE.saveFavorites(newFavorites); favoriteMachines = newFavorites; } else { favoriteMachines = favoriteMachines.filter(m => m.id !== machineId); } updateBadges(); renderFavoriteModal(); showToast('已取消收藏'); };
+    window.removeFromKeep = function(machineId) { if (window.T_PACHIN_STORAGE) { T_PACHIN_STORAGE.removeReserve(machineId); keepMachines = T_PACHIN_STORAGE.getReserves(); } else { keepMachines = keepMachines.filter(m => m.id !== machineId); } updateBadges(); renderKeepModal(); showToast('已取消保留'); };
     
     function renderFavoriteModal() {
         let html = '';
-        if (favoriteMachines.length === 0) {
-            html = '<div class="empty-state"><i class="fa fa-heart-o"></i><p>暫無收藏機台</p><p class="hint">可至機台頁面點擊收藏您喜愛的機台</p></div>';
-        } else {
-            favoriteMachines.forEach((m, idx) => { 
-                const lastPlay = '2026/03/' + (10 + idx) + ' 14:30'; 
-                const hotText = idx === 0 ? '<span class="hot-badge">熱門</span>' : ''; 
-                const machineImage = m.image || JOKER_IMAGE_URL; 
-                const spreadValue = (m.spread !== undefined) ? m.spread : 0.15; 
-                html += '<div class="machine-card"><img src="' + machineImage + '" alt="小丑機台" onerror="this.src=\'https://i.pravatar.cc/150?img=13\'"><div class="machine-info"><div class="machine-name">' + m.name + ' ' + hotText + '</div><div class="machine-stats"><span>' + (m.number || 'J' + m.id) + '</span><span>每枚 ' + (m.ratio || '2.5') + '</span><span>點差 ' + spreadValue.toFixed(2) + '</span><span>上次 ' + lastPlay + '</span><span>天井 1280</span></div><div class="action-buttons"><div class="play-btn" onclick="window.openSubConfirm(\'' + m.name.replace(/'/g, "\\'") + '\', ' + m.id + ', \'' + (m.ratio || 2.5) + '\')">進入遊戲</div><div class="cancel-btn" onclick="window.removeFromFavorite(' + m.id + ')">取消收藏</div></div></div></div>'; 
-            });
-        }
-        const favoriteModalBody = document.getElementById('favoriteModalBody');
-        const favoriteModal = document.getElementById('favoriteModal');
-        if (favoriteModalBody) favoriteModalBody.innerHTML = html;
-        if (favoriteModal) favoriteModal.classList.add('active');
+        if (favoriteMachines.length === 0) html = '<div class="empty-state"><i class="fa fa-heart-o"></i><p>暫無收藏機台</p><p class="hint">可至機台頁面點擊收藏您喜愛的機台</p></div>';
+        else { favoriteMachines.forEach((m, idx) => { const lastPlay = '2026/03/' + (10 + idx) + ' 14:30'; const hotText = idx === 0 ? '<span class="hot-badge">熱門</span>' : ''; const machineImage = m.image || JOKER_IMAGE_URL; const spreadValue = (m.spread !== undefined) ? m.spread : 0.15; html += '<div class="machine-card"><img src="' + machineImage + '" alt="小丑機台" onerror="this.src=\'https://i.pravatar.cc/150?img=13\'"><div class="machine-info"><div class="machine-name">' + m.name + ' ' + hotText + '</div><div class="machine-stats"><span>' + (m.number || 'J' + m.id) + '</span><span>每枚 ' + (m.ratio || '2.5') + '</span><span>點差 ' + spreadValue.toFixed(2) + '</span><span>上次 ' + lastPlay + '</span><span>天井 1280</span></div><div class="action-buttons"><div class="play-btn" onclick="window.openSubConfirm(\'' + m.name.replace(/'/g, "\\'") + '\', ' + m.id + ', \'' + (m.ratio || 2.5) + '\')">進入遊戲</div><div class="cancel-btn" onclick="window.removeFromFavorite(' + m.id + ')">取消收藏</div></div></div></div>'; }); }
+        const favoriteModalBody = document.getElementById('favoriteModalBody'); const favoriteModal = document.getElementById('favoriteModal'); if (favoriteModalBody) favoriteModalBody.innerHTML = html; if (favoriteModal) favoriteModal.classList.add('active');
     }
-    
     function renderKeepModal() {
         let html = '';
-        if (keepMachines.length === 0) {
-            html = '<div class="empty-state"><i class="fa fa-bookmark-o"></i><p>暫無保留機台</p><p class="hint">可至機台頁面點擊保留，下次快速進入</p></div>';
-        } else {
-            keepMachines.forEach((m, idx) => { 
-                const lastPlay = '2026/03/' + (15 + idx) + ' 20:15'; 
-                const saveNote = idx === 0 ? '最愛玩這台' : '試試手氣'; 
-                const machineImage = m.image || JOKER_IMAGE_URL; 
-                const spreadValue = (m.spread !== undefined) ? m.spread : 0.15;
-                const savedCoins = m.savedCoins || 100;
-                html += '<div class="machine-card"><img src="' + machineImage + '" alt="小丑保留機台" onerror="this.src=\'https://i.pravatar.cc/150?img=13\'"><div class="machine-info"><div class="machine-name">' + m.name + '</div><div class="machine-stats"><span>' + (m.number || 'J' + m.id) + '</span><span>每枚 ' + (m.ratio || '2.5') + '</span><span>點差 ' + spreadValue.toFixed(2) + '</span><span>保留代幣 ' + savedCoins + ' 枚</span><span>上次 ' + lastPlay + '</span><span>' + saveNote + '</span><span>天井 980</span></div><div class="action-buttons"><div class="play-btn" onclick="window.enterKeepMachine(\'' + m.name.replace(/'/g, "\\'") + '\', ' + m.id + ', \'' + (m.ratio || 2.5) + '\', ' + savedCoins + ')">進入遊戲</div><div class="cancel-btn" onclick="window.removeFromKeep(' + m.id + ')">取消保留</div></div></div></div>'; 
-            });
-        }
-        const keepModalBody = document.getElementById('keepModalBody');
-        const keepModal = document.getElementById('keepModal');
-        if (keepModalBody) keepModalBody.innerHTML = html;
-        if (keepModal) keepModal.classList.add('active');
+        if (keepMachines.length === 0) html = '<div class="empty-state"><i class="fa fa-bookmark-o"></i><p>暫無保留機台</p><p class="hint">可至機台頁面點擊保留，下次快速進入</p></div>';
+        else { keepMachines.forEach((m, idx) => { const lastPlay = '2026/03/' + (15 + idx) + ' 20:15'; const saveNote = idx === 0 ? '最愛玩這台' : '試試手氣'; const machineImage = m.image || JOKER_IMAGE_URL; const spreadValue = (m.spread !== undefined) ? m.spread : 0.15; const savedCoins = m.savedCoins || 100; html += '<div class="machine-card"><img src="' + machineImage + '" alt="小丑保留機台" onerror="this.src=\'https://i.pravatar.cc/150?img=13\'"><div class="machine-info"><div class="machine-name">' + m.name + '</div><div class="machine-stats"><span>' + (m.number || 'J' + m.id) + '</span><span>每枚 ' + (m.ratio || '2.5') + '</span><span>點差 ' + spreadValue.toFixed(2) + '</span><span>保留代幣 ' + savedCoins + ' 枚</span><span>上次 ' + lastPlay + '</span><span>' + saveNote + '</span><span>天井 980</span></div><div class="action-buttons"><div class="play-btn" onclick="window.enterKeepMachine(\'' + m.name.replace(/'/g, "\\'") + '\', ' + m.id + ', \'' + (m.ratio || 2.5) + '\', ' + savedCoins + ')">進入遊戲</div><div class="cancel-btn" onclick="window.removeFromKeep(' + m.id + ')">取消保留</div></div></div></div>'; }); }
+        const keepModalBody = document.getElementById('keepModalBody'); const keepModal = document.getElementById('keepModal'); if (keepModalBody) keepModalBody.innerHTML = html; if (keepModal) keepModal.classList.add('active');
     }
     
-    function bindStorageEvents() { 
-        if (!window.T_PACHIN_STORAGE) return; 
-        window.addEventListener('t-pachin:favorites-updated', function(e) { favoriteMachines = e.detail; updateBadges(); const favModal = document.getElementById('favoriteModal'); if (favModal && favModal.classList.contains('active')) renderFavoriteModal(); }); 
-        window.addEventListener('t-pachin:reserves-updated', function(e) { keepMachines = e.detail; updateBadges(); const keepModal = document.getElementById('keepModal'); if (keepModal && keepModal.classList.contains('active')) renderKeepModal(); }); 
-        window.addEventListener('points-updated', function(e) { if (e.detail && e.detail.points !== undefined) { userPoints = e.detail.points; updatePointsDisplay(); } }); 
-        window.addEventListener('t-pachin:user-updated', function(e) {
-            if (e.detail && e.detail.points !== undefined) {
-                updatePointsDisplay();
-            }
-            if (e.detail && e.detail.nickname) {
-                document.getElementById('displayNickname').textContent = e.detail.nickname;
-            }
-        });
-    }
+    function bindStorageEvents() { if (!window.T_PACHIN_STORAGE) return; window.addEventListener('t-pachin:favorites-updated', function(e) { favoriteMachines = e.detail; updateBadges(); const favModal = document.getElementById('favoriteModal'); if (favModal && favModal.classList.contains('active')) renderFavoriteModal(); }); window.addEventListener('t-pachin:reserves-updated', function(e) { keepMachines = e.detail; updateBadges(); const keepModal = document.getElementById('keepModal'); if (keepModal && keepModal.classList.contains('active')) renderKeepModal(); }); window.addEventListener('points-updated', function(e) { if (e.detail && e.detail.points !== undefined) { userPoints = e.detail.points; updatePointsDisplay(); } }); window.addEventListener('t-pachin:user-updated', function(e) { if (e.detail && e.detail.points !== undefined) updatePointsDisplay(); if (e.detail && e.detail.nickname) document.getElementById('displayNickname').textContent = e.detail.nickname; }); }
     
-    // ==================== 模擬資料產生函數 ====================
-    function generateSessions() { 
-        const machines = [{ name: 'GOGO 小丑', number: 'J001' }, { name: '我是小丑-EX', number: 'J002' }, { name: '快樂小丑 VII', number: 'J003' }, { name: '新我是小丑-EX水晶版', number: 'J004' }]; 
-        const sessions = []; 
-        for (let i = 0; i < machines.length; i++) { 
-            const m = machines[i]; 
-            const day = 5 + i * 6; 
-            const bringInTime = new Date(2026, 2, day, 14, 30); 
-            const bringOutTime = new Date(2026, 2, day, 15, 45); 
-            const bringInAmount = 500 + i * 150; 
-            const details = []; 
-            details.push({ date: new Date(bringInTime), type: 'BRING_IN', bet: 0, win: bringInAmount, total: bringInAmount, betId: 'IN' + (i+1) }); 
-            let currentTotal = bringInAmount; 
-            let totalBet = 0, totalWin = 0; 
-            const spinCount = 10 + Math.floor(Math.random() * 10); 
-            for (let s = 0; s < spinCount; s++) { 
-                const spinTime = new Date(bringInTime.getTime() + (s + 1) * 75000); 
-                const bet = 6 + Math.floor(Math.random() * 14); 
-                const win = Math.random() < 0.42 ? bet * (1 + Math.floor(Math.random() * 3)) : 0; 
-                currentTotal = currentTotal - bet + win; 
-                totalBet += bet; 
-                totalWin += win; 
-                details.push({ date: spinTime, type: 'SPIN', bet: bet, win: win, total: currentTotal, betId: 'SP' + (i+1) + '-' + (s+1), isFirstSpin: (s === 0) }); 
-            } 
-            const bringOutAmount = Math.max(100, currentTotal - Math.random() * 280); 
-            details.push({ date: new Date(bringOutTime), type: 'BRING_OUT', bet: 0, win: 0, total: bringOutAmount, betId: 'OUT' + (i+1) }); 
-            sessions.push({ machineName: m.name, machineNumber: m.number, bringInTime, bringOutTime, bringInAmount, bringOutAmount: Math.floor(bringOutAmount), netProfit: Math.floor(bringOutAmount - bringInAmount), details, stats: { totalSpins: spinCount, totalBet, totalWin }, videoUrl: videoUrls[i % videoUrls.length] }); 
-        } 
-        return sessions; 
-    }
-    
-    // 產生交易記錄
-    function generateTransactions() { 
-        const txs = []; 
-        let idCounter = 1;
-        
-        // 人工開點 (無平台)
-        for (let i = 0; i < 5; i++) { 
-            let day = 5 + Math.floor(Math.random() * 25); 
-            let date = new Date(2026, 2, day, Math.floor(Math.random() * 24), Math.floor(Math.random() * 60)); 
-            let points = Math.floor(Math.random() * 3000) + 100; 
-            txs.push({ 
-                id: 'platform_add_' + idCounter++, 
-                type: 'platform_add', 
-                name: '人工開點', 
-                icon: 'fa-user-plus', 
-                platform: null,
-                machineName: null,
-                points: points, 
-                isOut: false, 
-                unit: '點', 
-                hasPlatform: false,
-                date: date 
-            }); 
-        }
-        
-        // 人工洗點 (無平台)
-        for (let i = 0; i < 5; i++) { 
-            let day = 5 + Math.floor(Math.random() * 25); 
-            let date = new Date(2026, 2, day, Math.floor(Math.random() * 24), Math.floor(Math.random() * 60)); 
-            let points = Math.floor(Math.random() * 3000) + 100; 
-            txs.push({ 
-                id: 'platform_sub_' + idCounter++, 
-                type: 'platform_sub', 
-                name: '人工洗點', 
-                icon: 'fa-user-minus', 
-                platform: null,
-                machineName: null,
-                points: points, 
-                isOut: true, 
-                unit: '點', 
-                hasPlatform: false,
-                date: date 
-            }); 
-        }
-        
-        // 購買代幣（用點數購買代幣 => 點數支出，綠色 -）
-        for (let i = 0; i < 4; i++) {
-            let day = 8 + Math.floor(Math.random() * 22);
-            let date = new Date(2026, 2, day, Math.floor(Math.random() * 24), Math.floor(Math.random() * 60));
-            let coinsAmount = [100, 200, 300, 500, 1000][Math.floor(Math.random() * 5)];
-            let ratio = [2.5, 2.8, 3.0][Math.floor(Math.random() * 3)];
-            let pointDiff = 0.15;
-            let costPoints = coinsAmount * ratio;
-            let wastePoints = coinsAmount * pointDiff;
-            let totalPointsCost = Math.floor(costPoints + wastePoints);
-            let machineName = MACHINE_NAMES[Math.floor(Math.random() * MACHINE_NAMES.length)];
-            let machineId = Math.floor(Math.random() * 5) + 1;
-            
-            txs.push({
-                id: 'token_in_' + idCounter++,
-                type: 'token_in',
-                name: '購買代幣',
-                icon: 'fa-arrow-down',
-                platform: null,
-                machineName: machineName,
-                machineId: machineId,
-                points: totalPointsCost,
-                isOut: true,
-                unit: '點',
-                detailInfo: {
-                    coins: coinsAmount,
-                    ratio: ratio,
-                    pointDiff: pointDiff,
-                    costPoints: costPoints,
-                    wastePoints: wastePoints
-                },
-                hasPlatform: false,
-                date: date
-            });
-        }
-        
-        // 兌換點數（用代幣兌換點數 => 點數收入，紅色 +）
-        for (let i = 0; i < 3; i++) {
-            let day = 10 + Math.floor(Math.random() * 20);
-            let date = new Date(2026, 2, day, Math.floor(Math.random() * 24), Math.floor(Math.random() * 60));
-            let coinsAmount = [50, 100, 200, 500][Math.floor(Math.random() * 4)];
-            let ratio = [2.5, 2.8, 3.0][Math.floor(Math.random() * 3)];
-            let earnedPoints = Math.floor(coinsAmount * ratio);
-            let machineName = MACHINE_NAMES[Math.floor(Math.random() * MACHINE_NAMES.length)];
-            let machineId = Math.floor(Math.random() * 5) + 1;
-            
-            txs.push({
-                id: 'token_out_' + idCounter++,
-                type: 'token_out',
-                name: '兌換點數',
-                icon: 'fa-arrow-up',
-                platform: null,
-                machineName: machineName,
-                machineId: machineId,
-                points: earnedPoints,
-                isOut: false,
-                unit: '點',
-                detailInfo: {
-                    coins: coinsAmount,
-                    ratio: ratio,
-                    earnedPoints: earnedPoints
-                },
-                hasPlatform: false,
-                date: date
-            });
-        }
-        
-        // 活動贈分
-        for (let i = 0; i < 3; i++) {
-            let day = 5 + Math.floor(Math.random() * 25);
-            let date = new Date(2026, 2, day, Math.floor(Math.random() * 24), Math.floor(Math.random() * 60));
-            let points = Math.floor(Math.random() * 800) + 50;
-            txs.push({
-                id: 'bonus_' + idCounter++,
-                type: 'bonus',
-                name: '活動贈分',
-                icon: 'fa-gift',
-                platform: '活動中心',
-                machineName: null,
-                points: points,
-                isOut: false,
-                unit: '點',
-                hasPlatform: true,
-                date: date
-            });
-        }
-        
-        // 購買道具
-        for (let i = 0; i < 3; i++) {
-            let day = 5 + Math.floor(Math.random() * 25);
-            let date = new Date(2026, 2, day, Math.floor(Math.random() * 24), Math.floor(Math.random() * 60));
-            let points = Math.floor(Math.random() * 500) + 50;
-            txs.push({
-                id: 'shop_' + idCounter++,
-                type: 'shop',
-                name: '購買道具',
-                icon: 'fa-shopping-cart',
-                platform: '商城',
-                machineName: null,
-                points: points,
-                isOut: true,
-                unit: '點',
-                hasPlatform: true,
-                date: date
-            });
-        }
-        
-        return txs.sort((a, b) => b.date - a.date); 
-    }
+    function generateSessions() { const machines = [{ name: 'GOGO 小丑', number: 'J001' }, { name: '我是小丑-EX', number: 'J002' }, { name: '快樂小丑 VII', number: 'J003' }, { name: '新我是小丑-EX水晶版', number: 'J004' }]; const sessions = []; for (let i = 0; i < machines.length; i++) { const m = machines[i]; const day = 5 + i * 6; const bringInTime = new Date(2026, 2, day, 14, 30); const bringOutTime = new Date(2026, 2, day, 15, 45); const bringInAmount = 500 + i * 150; const details = []; details.push({ date: new Date(bringInTime), type: 'BRING_IN', bet: 0, win: bringInAmount, total: bringInAmount, betId: 'IN' + (i+1) }); let currentTotal = bringInAmount; let totalBet = 0, totalWin = 0; const spinCount = 10 + Math.floor(Math.random() * 10); for (let s = 0; s < spinCount; s++) { const spinTime = new Date(bringInTime.getTime() + (s + 1) * 75000); const bet = 6 + Math.floor(Math.random() * 14); const win = Math.random() < 0.42 ? bet * (1 + Math.floor(Math.random() * 3)) : 0; currentTotal = currentTotal - bet + win; totalBet += bet; totalWin += win; details.push({ date: spinTime, type: 'SPIN', bet: bet, win: win, total: currentTotal, betId: 'SP' + (i+1) + '-' + (s+1), isFirstSpin: (s === 0) }); } const bringOutAmount = Math.max(100, currentTotal - Math.random() * 280); details.push({ date: new Date(bringOutTime), type: 'BRING_OUT', bet: 0, win: 0, total: bringOutAmount, betId: 'OUT' + (i+1) }); sessions.push({ machineName: m.name, machineNumber: m.number, bringInTime, bringOutTime, bringInAmount, bringOutAmount: Math.floor(bringOutAmount), netProfit: Math.floor(bringOutAmount - bringInAmount), details, stats: { totalSpins: spinCount, totalBet, totalWin }, videoUrl: videoUrls[i % videoUrls.length] }); } return sessions; }
+    function generateTransactions() { const txs = []; let idCounter = 1; for (let i = 0; i < 5; i++) { let day = 5 + Math.floor(Math.random() * 25); let date = new Date(2026, 2, day, Math.floor(Math.random() * 24), Math.floor(Math.random() * 60)); let points = Math.floor(Math.random() * 3000) + 100; txs.push({ id: 'platform_add_' + idCounter++, type: 'platform_add', name: '人工開點', icon: 'fa-user-plus', platform: null, machineName: null, points: points, isOut: false, unit: '點', hasPlatform: false, date: date }); } for (let i = 0; i < 5; i++) { let day = 5 + Math.floor(Math.random() * 25); let date = new Date(2026, 2, day, Math.floor(Math.random() * 24), Math.floor(Math.random() * 60)); let points = Math.floor(Math.random() * 3000) + 100; txs.push({ id: 'platform_sub_' + idCounter++, type: 'platform_sub', name: '人工洗點', icon: 'fa-user-minus', platform: null, machineName: null, points: points, isOut: true, unit: '點', hasPlatform: false, date: date }); } for (let i = 0; i < 4; i++) { let day = 8 + Math.floor(Math.random() * 22); let date = new Date(2026, 2, day, Math.floor(Math.random() * 24), Math.floor(Math.random() * 60)); let coinsAmount = [100, 200, 300, 500, 1000][Math.floor(Math.random() * 5)]; let ratio = [2.5, 2.8, 3.0][Math.floor(Math.random() * 3)]; let costPoints = coinsAmount * ratio; let wastePoints = coinsAmount * POINT_DIFF; let totalPointsCost = Math.floor(costPoints + wastePoints); let machineName = MACHINE_NAMES[Math.floor(Math.random() * MACHINE_NAMES.length)]; let machineId = Math.floor(Math.random() * 5) + 1; txs.push({ id: 'token_in_' + idCounter++, type: 'token_in', name: '購買代幣', icon: 'fa-arrow-down', platform: null, machineName: machineName, machineId: machineId, points: totalPointsCost, isOut: true, unit: '點', detailInfo: { coins: coinsAmount, ratio: ratio, pointDiff: POINT_DIFF, costPoints: costPoints, wastePoints: wastePoints }, hasPlatform: false, date: date }); } for (let i = 0; i < 3; i++) { let day = 10 + Math.floor(Math.random() * 20); let date = new Date(2026, 2, day, Math.floor(Math.random() * 24), Math.floor(Math.random() * 60)); let coinsAmount = [50, 100, 200, 500][Math.floor(Math.random() * 4)]; let ratio = [2.5, 2.8, 3.0][Math.floor(Math.random() * 3)]; let earnedPoints = Math.floor(coinsAmount * ratio); let machineName = MACHINE_NAMES[Math.floor(Math.random() * MACHINE_NAMES.length)]; let machineId = Math.floor(Math.random() * 5) + 1; txs.push({ id: 'token_out_' + idCounter++, type: 'token_out', name: '兌換點數', icon: 'fa-arrow-up', platform: null, machineName: machineName, machineId: machineId, points: earnedPoints, isOut: false, unit: '點', detailInfo: { coins: coinsAmount, ratio: ratio, earnedPoints: earnedPoints }, hasPlatform: false, date: date }); } for (let i = 0; i < 3; i++) { let day = 5 + Math.floor(Math.random() * 25); let date = new Date(2026, 2, day, Math.floor(Math.random() * 24), Math.floor(Math.random() * 60)); let points = Math.floor(Math.random() * 800) + 50; txs.push({ id: 'bonus_' + idCounter++, type: 'bonus', name: '活動贈分', icon: 'fa-gift', platform: '活動中心', machineName: null, points: points, isOut: false, unit: '點', hasPlatform: true, date: date }); } for (let i = 0; i < 3; i++) { let day = 5 + Math.floor(Math.random() * 25); let date = new Date(2026, 2, day, Math.floor(Math.random() * 24), Math.floor(Math.random() * 60)); let points = Math.floor(Math.random() * 500) + 50; txs.push({ id: 'shop_' + idCounter++, type: 'shop', name: '購買道具', icon: 'fa-shopping-cart', platform: '商城', machineName: null, points: points, isOut: true, unit: '點', hasPlatform: true, date: date }); } return txs.sort((a, b) => b.date - a.date); }
     
     let allSessions = generateSessions();
     let allTransactions = generateTransactions();
@@ -1107,7 +663,6 @@
     function formatTime(d) { return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0'); }
     function getFilteredSessions() { let f = allSessions.filter(s => s.bringInTime >= dateStart && s.bringInTime <= dateEnd); if (searchTerm) f = f.filter(s => s.machineName.toLowerCase().includes(searchTerm) || s.machineNumber.toLowerCase().includes(searchTerm)); return f; }
     function getFilteredTransactions() { let f = allTransactions.filter(t => t.date >= dateStart && t.date <= dateEnd); if (currentFilter !== 'all' && currentFilter !== 'bet_detail') f = f.filter(t => t.type === currentFilter); if (searchTerm && currentFilter !== 'bet_detail') f = f.filter(t => t.name.toLowerCase().includes(searchTerm) || (t.machineName && t.machineName.toLowerCase().includes(searchTerm))); return f; }
-    function getPointStatsLabels() { if (currentFilter === 'all') return { inLabel: '總轉入', outLabel: '總轉出', hasOut: true }; return { inLabel: '總存入', outLabel: '總提出', hasOut: true }; }
     function render() { if (currentFilter === 'bet_detail') { document.getElementById('transactionContainer').style.display = 'none'; document.getElementById('sessionsContainer').style.display = 'block'; renderSessions(); } else { document.getElementById('transactionContainer').style.display = 'block'; document.getElementById('sessionsContainer').style.display = 'none'; renderTransactions(); } }
     
     function renderSessions() { 
@@ -1117,139 +672,26 @@
         let net = totalWin - totalBet; 
         const statsContainer = document.getElementById('statsContainer');
         const sessionsContainer = document.getElementById('sessionsContainer');
-        if (statsContainer) {
-            statsContainer.innerHTML = '<div class="stats-card-compact"><div class="stats-group"><div class="stats-group-title"><i class="fa fa-bar-chart"></i> 📊 注單統計</div><div class="stats-row-compact"><div class="stats-item"><div class="stats-item-label">總投注</div><div class="stats-item-value in">' + totalBet + '</div></div><div class="stats-item"><div class="stats-item-label">總獲得</div><div class="stats-item-value out">' + totalWin + '</div></div><div class="stats-item"><div class="stats-item-label">淨損益</div><div class="stats-item-value net ' + (net >= 0 ? 'positive' : 'negative') + '">' + (net >= 0 ? '+' : '') + net + '</div></div></div></div><div class="stats-group"><div class="stats-group-title"><i class="fa fa-gamepad"></i> 🎰 機台數據</div><div class="stats-row-compact"><div class="stats-item"><div class="stats-item-label">總轉數</div><div class="stats-item-value in">' + f.reduce((a, b) => a + b.stats.totalSpins, 0) + '</div></div><div class="stats-item"><div class="stats-item-label">BB次數</div><div class="stats-item-value out">' + f.reduce((a, b) => a + b.stats.totalBB || 0, 0) + '</div></div><div class="stats-item"><div class="stats-item-label">RB次數</div><div class="stats-item-value net">' + f.reduce((a, b) => a + b.stats.totalRB || 0, 0) + '</div></div></div></div></div>'; 
-        }
-        if (f.length === 0) { 
-            if (sessionsContainer) sessionsContainer.innerHTML = '<div class="text-center text-gray-400 py-8">沒有注單記錄</div>'; 
-            return; 
-        } 
-        let html = ''; 
-        f.forEach((s, idx) => { 
-            let profitClass = s.netProfit >= 0 ? 'positive' : 'negative'; 
-            html += '<div class="main-row" onclick="openBetModal(' + idx + ')"><div><div class="machine-title"><span class="name">' + s.machineName + '</span><span class="number">' + s.machineNumber + '</span></div><div class="date-range">' + formatDate(s.bringInTime) + ' ~ ' + formatDate(s.bringOutTime) + ' ' + formatTime(s.bringInTime) + '~' + formatTime(s.bringOutTime) + '</div><div class="amount-info"><span class="bring-in">帶入 ' + s.bringInAmount + '</span> → <span class="bring-out">帶出 ' + s.bringOutAmount + '</span> | <span class="net-profit ' + profitClass + '">淨利 ' + (s.netProfit >= 0 ? '+' : '') + s.netProfit + '</span></div></div></div>'; 
-        }); 
-        if (sessionsContainer) sessionsContainer.innerHTML = html; 
-    }
+        if (statsContainer) statsContainer.innerHTML = '<div class="stats-card-compact"><div class="stats-group"><div class="stats-group-title"><i class="fa fa-bar-chart"></i> 📊 注單統計</div><div class="stats-row-compact"><div class="stats-item"><div class="stats-item-label">總投注</div><div class="stats-item-value in">' + totalBet + '</div></div><div class="stats-item"><div class="stats-item-label">總獲得</div><div class="stats-item-value out">' + totalWin + '</div></div><div class="stats-item"><div class="stats-item-label">淨損益</div><div class="stats-item-value net ' + (net >= 0 ? 'positive' : 'negative') + '">' + (net >= 0 ? '+' : '') + net + '</div></div></div></div><div class="stats-group"><div class="stats-group-title"><i class="fa fa-gamepad"></i> 🎰 機台數據</div><div class="stats-row-compact"><div class="stats-item"><div class="stats-item-label">總轉數</div><div class="stats-item-value in">' + f.reduce((a, b) => a + b.stats.totalSpins, 0) + '</div></div><div class="stats-item"><div class="stats-item-label">BB次數</div><div class="stats-item-value out">0</div></div><div class="stats-item"><div class="stats-item-label">RB次數</div><div class="stats-item-value net">0</div></div></div></div></div>'; 
+        if (f.length === 0) { if (sessionsContainer) sessionsContainer.innerHTML = '<div class="text-center text-gray-400 py-8">沒有注單記錄</div>'; return; } 
+        let html = ''; f.forEach((s, idx) => { let profitClass = s.netProfit >= 0 ? 'positive' : 'negative'; html += '<div class="main-row" onclick="openBetModal(' + idx + ')"><div><div class="machine-title"><span class="name">' + s.machineName + '</span><span class="number">' + s.machineNumber + '</span></div><div class="date-range">' + formatDate(s.bringInTime) + ' ~ ' + formatDate(s.bringOutTime) + ' ' + formatTime(s.bringInTime) + '~' + formatTime(s.bringOutTime) + '</div><div class="amount-info"><span class="bring-in">帶入 ' + s.bringInAmount + '</span> → <span class="bring-out">帶出 ' + s.bringOutAmount + '</span> | <span class="net-profit ' + profitClass + '">淨利 ' + (s.netProfit >= 0 ? '+' : '') + s.netProfit + '</span></div></div></div>'; }); if (sessionsContainer) sessionsContainer.innerHTML = html; }
     
-    // 顯示交易卡片
     function renderTransactions() { 
         let f = getFilteredTransactions(); 
         let pointIn = f.filter(t => !t.isOut && t.unit === '點').reduce((a, b) => a + b.points, 0); 
         let pointOut = f.filter(t => t.isOut && t.unit === '點').reduce((a, b) => a + b.points, 0); 
         let pointNet = pointIn - pointOut; 
-        let labels = getPointStatsLabels(); 
-        let pointStatsHtml = '<div class="stats-row-compact"><div class="stats-item"><div class="stats-item-label">' + labels.inLabel + '</div><div class="stats-item-value in">+' + pointIn.toLocaleString() + '</div></div><div class="stats-item"><div class="stats-item-label">' + labels.outLabel + '</div><div class="stats-item-value out">-' + pointOut.toLocaleString() + '</div></div><div class="stats-item"><div class="stats-item-label">淨變化</div><div class="stats-item-value net ' + (pointNet >= 0 ? 'positive' : 'negative') + '">' + (pointNet >= 0 ? '+' : '') + pointNet.toLocaleString() + '</div></div></div>'; 
         const statsContainer = document.getElementById('statsContainer');
         const transactionContainer = document.getElementById('transactionContainer');
-        if (statsContainer) {
-            statsContainer.innerHTML = '<div class="stats-card-compact"><div class="stats-group"><div class="stats-group-title"><i class="fa fa-credit-card"></i> 💰 點數統計</div>' + pointStatsHtml + '</div></div>'; 
-        }
-        if (f.length === 0) { 
-            if (transactionContainer) transactionContainer.innerHTML = '<div class="text-center text-gray-400 py-8">沒有交易記錄</div>'; 
-            return; 
-        } 
-        let html = ''; 
-        f.forEach((tx) => { 
-            let isOut = tx.isOut; 
-            let symbol = isOut ? '-' : '+'; 
-            let colorClass = isOut ? 'out' : 'in';
-            let infoHtml = '';
-            if (tx.hasPlatform && tx.platform) {
-                infoHtml = '<div class="tx-platform">' + tx.platform + '</div>';
-            } else if (!tx.hasPlatform && tx.machineName) {
-                infoHtml = '<div class="tx-machine-name">🎰 ' + tx.machineName + (tx.machineId ? ' ' + tx.machineId + '號機' : '') + '</div>';
-            }
-            
-            html += '<div class="tx-card" onclick="showTxDetail(\'' + tx.id + '\')">' + 
-                '<div class="tx-name">' + tx.name + '</div>' + infoHtml + 
-                '<div class="tx-points ' + colorClass + '">' + symbol + tx.points + ' ' + tx.unit + '</div>' + 
-                '<div class="tx-date">' + formatDateTime(tx.date) + '</div></div>'; 
-        }); 
-        if (transactionContainer) transactionContainer.innerHTML = html; 
-    }
+        if (statsContainer) statsContainer.innerHTML = '<div class="stats-card-compact"><div class="stats-group"><div class="stats-group-title"><i class="fa fa-credit-card"></i> 💰 點數統計</div><div class="stats-row-compact"><div class="stats-item"><div class="stats-item-label">總轉入</div><div class="stats-item-value in">+' + pointIn.toLocaleString() + '</div></div><div class="stats-item"><div class="stats-item-label">總轉出</div><div class="stats-item-value out">-' + pointOut.toLocaleString() + '</div></div><div class="stats-item"><div class="stats-item-label">淨變化</div><div class="stats-item-value net ' + (pointNet >= 0 ? 'positive' : 'negative') + '">' + (pointNet >= 0 ? '+' : '') + pointNet.toLocaleString() + '</div></div></div></div></div>'; 
+        if (f.length === 0) { if (transactionContainer) transactionContainer.innerHTML = '<div class="text-center text-gray-400 py-8">沒有交易記錄</div>'; return; } 
+        let html = ''; f.forEach((tx) => { let isOut = tx.isOut; let symbol = isOut ? '-' : '+'; let colorClass = isOut ? 'out' : 'in'; let infoHtml = ''; if (tx.hasPlatform && tx.platform) infoHtml = '<div class="tx-platform">' + tx.platform + '</div>'; else if (!tx.hasPlatform && tx.machineName) infoHtml = '<div class="tx-machine-name">🎰 ' + tx.machineName + (tx.machineId ? ' ' + tx.machineId + '號機' : '') + '</div>'; html += '<div class="tx-card" onclick="showTxDetail(\'' + tx.id + '\')"><div class="tx-name">' + tx.name + '</div>' + infoHtml + '<div class="tx-points ' + colorClass + '">' + symbol + tx.points + ' ' + tx.unit + '</div><div class="tx-date">' + formatDateTime(tx.date) + '</div></div>'; }); if (transactionContainer) transactionContainer.innerHTML = html; }
     
-    // 顯示詳細明細視窗
-    window.showTxDetail = function(txId) { 
-        const tx = allTransactions.find(t => t.id === txId);
-        if (!tx) return;
-        
-        let symbol = tx.isOut ? '-' : '+'; 
-        let color = tx.isOut ? '#88ff88' : '#ff6666';
-        
-        let detailHtml = '<div class="detail-row"><span class="detail-label">明細編號</span><span class="detail-value">' + tx.id + '</span></div>';
-        detailHtml += '<div class="detail-row"><span class="detail-label">類型</span><span class="detail-value">' + tx.name + '</span></div>';
-        
-        if (tx.hasPlatform && tx.platform) {
-            detailHtml += '<div class="detail-row"><span class="detail-label">平台</span><span class="detail-value">' + tx.platform + '</span></div>';
-        }
-        if (tx.machineName) {
-            detailHtml += '<div class="detail-row"><span class="detail-label">機台</span><span class="detail-value">' + tx.machineName + (tx.machineId ? ' ' + tx.machineId + '號機' : '') + '</span></div>';
-        }
-        
-        if (tx.type === 'token_in' && tx.detailInfo) {
-            detailHtml += '<div class="detail-row"><span class="detail-label">購買代幣</span><span class="detail-value">' + tx.detailInfo.coins + ' 枚</span></div>';
-            detailHtml += '<div class="detail-row"><span class="detail-label">每枚價格</span><span class="detail-value">' + tx.detailInfo.ratio + ' 點</span></div>';
-            detailHtml += '<div class="detail-row"><span class="detail-label">消耗點數</span><span class="detail-value">' + Math.floor(tx.detailInfo.costPoints) + ' 點</span></div>';
-            detailHtml += '<div class="detail-row"><span class="detail-label">損耗點數</span><span class="detail-value">' + Math.floor(tx.detailInfo.wastePoints) + ' 點</span></div>';
-            detailHtml += '<div class="detail-row"><span class="detail-label">總支出</span><span class="detail-value" style="color:' + color + '">' + symbol + tx.points + ' ' + tx.unit + '</span></div>';
-        } 
-        else if (tx.type === 'token_out' && tx.detailInfo) {
-            detailHtml += '<div class="detail-row"><span class="detail-label">消耗代幣</span><span class="detail-value">' + tx.detailInfo.coins + ' 枚</span></div>';
-            detailHtml += '<div class="detail-row"><span class="detail-label">每枚價格</span><span class="detail-value">' + tx.detailInfo.ratio + ' 點</span></div>';
-            detailHtml += '<div class="detail-row"><span class="detail-label">獲得點數</span><span class="detail-value" style="color:' + color + '">+' + tx.points + ' ' + tx.unit + '</span></div>';
-            detailHtml += '<div class="detail-row"><span class="detail-label">備註</span><span class="detail-value" style="color:#888;">&nbsp;</span></div>';
-        }
-        else {
-            detailHtml += '<div class="detail-row"><span class="detail-label">數量</span><span class="detail-value" style="color:' + color + '">' + symbol + tx.points + ' ' + tx.unit + '</span></div>';
-        }
-        
-        detailHtml += '<div class="detail-row"><span class="detail-label">時間日期</span><span class="detail-value">' + formatDateTime(tx.date) + '</span></div>';
-        
-        const txDetailContent = document.getElementById('txDetailContent');
-        const txDetailModal = document.getElementById('txDetailModal');
-        if (txDetailContent) txDetailContent.innerHTML = detailHtml;
-        if (txDetailModal) txDetailModal.classList.add('active'); 
-    };
+    window.showTxDetail = function(txId) { const tx = allTransactions.find(t => t.id === txId); if (!tx) return; let symbol = tx.isOut ? '-' : '+'; let color = tx.isOut ? '#88ff88' : '#ff6666'; let detailHtml = '<div class="detail-row"><span class="detail-label">明細編號</span><span class="detail-value">' + tx.id + '</span></div><div class="detail-row"><span class="detail-label">類型</span><span class="detail-value">' + tx.name + '</span></div>'; if (tx.hasPlatform && tx.platform) detailHtml += '<div class="detail-row"><span class="detail-label">平台</span><span class="detail-value">' + tx.platform + '</span></div>'; if (tx.machineName) detailHtml += '<div class="detail-row"><span class="detail-label">機台</span><span class="detail-value">' + tx.machineName + (tx.machineId ? ' ' + tx.machineId + '號機' : '') + '</span></div>'; if (tx.type === 'token_in' && tx.detailInfo) { detailHtml += '<div class="detail-row"><span class="detail-label">購買代幣</span><span class="detail-value">' + tx.detailInfo.coins + ' 枚</span></div><div class="detail-row"><span class="detail-label">每枚價格</span><span class="detail-value">' + tx.detailInfo.ratio + ' 點</span></div><div class="detail-row"><span class="detail-label">消耗點數</span><span class="detail-value">' + Math.floor(tx.detailInfo.costPoints) + ' 點</span></div><div class="detail-row"><span class="detail-label">損耗點數</span><span class="detail-value">' + Math.floor(tx.detailInfo.wastePoints) + ' 點</span></div><div class="detail-row"><span class="detail-label">總支出</span><span class="detail-value" style="color:' + color + '">' + symbol + tx.points + ' ' + tx.unit + '</span></div>'; } else if (tx.type === 'token_out' && tx.detailInfo) { detailHtml += '<div class="detail-row"><span class="detail-label">消耗代幣</span><span class="detail-value">' + tx.detailInfo.coins + ' 枚</span></div><div class="detail-row"><span class="detail-label">每枚價格</span><span class="detail-value">' + tx.detailInfo.ratio + ' 點</span></div><div class="detail-row"><span class="detail-label">獲得點數</span><span class="detail-value" style="color:' + color + '">+' + tx.points + ' ' + tx.unit + '</span></div>'; } else { detailHtml += '<div class="detail-row"><span class="detail-label">數量</span><span class="detail-value" style="color:' + color + '">' + symbol + tx.points + ' ' + tx.unit + '</span></div>'; } detailHtml += '<div class="detail-row"><span class="detail-label">時間日期</span><span class="detail-value">' + formatDateTime(tx.date) + '</span></div>'; const txDetailContent = document.getElementById('txDetailContent'); const txDetailModal = document.getElementById('txDetailModal'); if (txDetailContent) txDetailContent.innerHTML = detailHtml; if (txDetailModal) txDetailModal.classList.add('active'); };
     
-    function renderBetModalTable() { 
-        if (!currentSession) return; 
-        let details = [...currentSession.details].sort((a, b) => betSortOrder === 'desc' ? new Date(b.date) - new Date(a.date) : new Date(a.date) - new Date(b.date)); 
-        let rows = ''; 
-        let bringInAmount = currentSession.bringInAmount; 
-        details.forEach(d => { 
-            let typeLabel = '', typeClass = ''; 
-            if (d.type === 'BRING_IN') { typeLabel = '帶入'; typeClass = 'type-bringin'; } 
-            else if (d.type === 'BRING_OUT') { typeLabel = '帶出'; typeClass = 'type-bringout'; } 
-            else { typeLabel = '一般轉'; typeClass = 'type-spin'; } 
-            let betDisplay = d.type === 'SPIN' ? '-' + d.bet : '-'; 
-            let winDisplay = d.type === 'SPIN' ? (d.win > 0 ? '+' + d.win : '-') : '-'; 
-            let totalDisplay = ''; 
-            if (d.type === 'BRING_IN') totalDisplay = '+' + d.win; 
-            else if (d.type === 'BRING_OUT') { let diff = d.total - bringInAmount; let prefix = diff >= 0 ? '+' : ''; totalDisplay = prefix + Math.floor(diff); } 
-            else totalDisplay = Math.floor(d.total); 
-            let isFirstSpinBet = (d.type === 'SPIN' && d.isFirstSpin === true); 
-            rows += '<tr class="' + (isFirstSpinBet ? 'video-bet-row' : '') + '" ' + (isFirstSpinBet ? 'onclick="playCurrentVideo()"' : '') + ' style="' + (isFirstSpinBet ? 'cursor:pointer' : '') + '"><td style="white-space:nowrap">' + formatDateTime(d.date) + '<td><span class="record-type ' + typeClass + '">' + typeLabel + '</span></td><td class="amount-bet">' + betDisplay + '</td><td class="amount-win">' + winDisplay + '</td><td class="total-amount">' + totalDisplay + '<td><span class="text-blue-300 text-xs">' + d.betId + '</span>' + (isFirstSpinBet ? '<span class="play-hint">點擊觀看</span>' : '') + '</span></td></tr>'; 
-        }); 
-        const betTableHead = document.getElementById('betTableHead');
-        const betModalTableBody = document.getElementById('betModalTableBody');
-        if (betTableHead) betTableHead.innerHTML = '<tr><th onclick="toggleBetSort()">日期時間 <span class="sort-icon">' + (betSortOrder === 'desc' ? '▼' : '▲') + '</span></th><th>類型</th><th>投注</th><th>獲得</th><th>小計</th><th>注單編號</th></tr>';
-        if (betModalTableBody) betModalTableBody.innerHTML = rows; 
-    }
-    
+    function renderBetModalTable() { if (!currentSession) return; let details = [...currentSession.details].sort((a, b) => betSortOrder === 'desc' ? new Date(b.date) - new Date(a.date) : new Date(a.date) - new Date(b.date)); let rows = ''; let bringInAmount = currentSession.bringInAmount; details.forEach(d => { let typeLabel = '', typeClass = ''; if (d.type === 'BRING_IN') { typeLabel = '帶入'; typeClass = 'type-bringin'; } else if (d.type === 'BRING_OUT') { typeLabel = '帶出'; typeClass = 'type-bringout'; } else { typeLabel = '一般轉'; typeClass = 'type-spin'; } let betDisplay = d.type === 'SPIN' ? '-' + d.bet : '-'; let winDisplay = d.type === 'SPIN' ? (d.win > 0 ? '+' + d.win : '-') : '-'; let totalDisplay = ''; if (d.type === 'BRING_IN') totalDisplay = '+' + d.win; else if (d.type === 'BRING_OUT') { let diff = d.total - bringInAmount; let prefix = diff >= 0 ? '+' : ''; totalDisplay = prefix + Math.floor(diff); } else totalDisplay = Math.floor(d.total); let isFirstSpinBet = (d.type === 'SPIN' && d.isFirstSpin === true); rows += '<tr class="' + (isFirstSpinBet ? 'video-bet-row' : '') + '" ' + (isFirstSpinBet ? 'onclick="playCurrentVideo()"' : '') + ' style="' + (isFirstSpinBet ? 'cursor:pointer' : '') + '"><td style="white-space:nowrap">' + formatDateTime(d.date) + '<td><span class="record-type ' + typeClass + '">' + typeLabel + '</span></td><td class="amount-bet">' + betDisplay + '</td><td class="amount-win">' + winDisplay + '</td><td class="total-amount">' + totalDisplay + '<td><span class="text-blue-300 text-xs">' + d.betId + '</span>' + (isFirstSpinBet ? '<span class="play-hint">點擊觀看</span>' : '') + '</span></td></tr>'; }); const betTableHead = document.getElementById('betTableHead'); const betModalTableBody = document.getElementById('betModalTableBody'); if (betTableHead) betTableHead.innerHTML = '<tr><th onclick="toggleBetSort()">日期時間 <span class="sort-icon">' + (betSortOrder === 'desc' ? '▼' : '▲') + '</span></th><th>類型</th><th>投注</th><th>獲得</th><th>小計</th><th>注單編號</th></tr>'; if (betModalTableBody) betModalTableBody.innerHTML = rows; }
     window.toggleBetSort = function() { betSortOrder = betSortOrder === 'desc' ? 'asc' : 'desc'; renderBetModalTable(); };
-    window.openBetModal = function(idx) { 
-        let f = getFilteredSessions(); 
-        currentSession = f[idx]; 
-        if (!currentSession) return; 
-        const betModalTitle = document.getElementById('betModalTitle');
-        const betStats = document.getElementById('betStats');
-        const betModal = document.getElementById('betModal');
-        if (betModalTitle) betModalTitle.innerHTML = currentSession.machineName + ' ' + currentSession.machineNumber;
-        if (betStats) betStats.innerHTML = '<div class="stat-card">總轉數 ' + currentSession.stats.totalSpins + '</div><div class="stat-card">總投注 ' + currentSession.stats.totalBet + '</div><div class="stat-card">總獲得 ' + currentSession.stats.totalWin + '</div>';
-        renderBetModalTable(); 
-        if (betModal) betModal.classList.add('active'); 
-    };
+    window.openBetModal = function(idx) { let f = getFilteredSessions(); currentSession = f[idx]; if (!currentSession) return; const betModalTitle = document.getElementById('betModalTitle'); const betStats = document.getElementById('betStats'); const betModal = document.getElementById('betModal'); if (betModalTitle) betModalTitle.innerHTML = currentSession.machineName + ' ' + currentSession.machineNumber; if (betStats) betStats.innerHTML = '<div class="stat-card">總轉數 ' + currentSession.stats.totalSpins + '</div><div class="stat-card">總投注 ' + currentSession.stats.totalBet + '</div><div class="stat-card">總獲得 ' + currentSession.stats.totalWin + '</div>'; renderBetModalTable(); if (betModal) betModal.classList.add('active'); };
     window.playCurrentVideo = function() { if (currentSession && currentSession.videoUrl) { let v = document.getElementById('videoPlayer'); v.src = currentSession.videoUrl; v.load(); v.play().catch(e=>console.log); const videoModal = document.getElementById('videoModal'); if (videoModal) videoModal.classList.add('active'); } else { alert('影片載入中'); } };
     window.closeBetModal = () => { const betModal = document.getElementById('betModal'); if (betModal) betModal.classList.remove('active'); };
     window.closeVideoModal = () => { let v = document.getElementById('videoPlayer'); if (v) { v.pause(); v.src = ''; } const videoModal = document.getElementById('videoModal'); if (videoModal) videoModal.classList.remove('active'); };
@@ -1257,19 +699,7 @@
     window.closeFavoriteModal = () => { const favoriteModal = document.getElementById('favoriteModal'); if (favoriteModal) favoriteModal.classList.remove('active'); };
     window.closeKeepModal = () => { const keepModal = document.getElementById('keepModal'); if (keepModal) keepModal.classList.remove('active'); };
     
-    // 綁定按鈕事件
-    const favMachinesBtn = document.getElementById('favMachinesBtn');
-    const keepMachinesBtn = document.getElementById('keepMachinesBtn');
-    const supportBtn = document.getElementById('supportBtn');
-    const dateSearchBtn = document.getElementById('dateSearchBtn');
-    const searchInput = document.getElementById('searchInput');
-    const filterSelect = document.getElementById('filterSelect');
-    const avatarContainer = document.getElementById('avatarContainer');
-    const displayNickname = document.getElementById('displayNickname');
-    const headerPoints = document.getElementById('headerPoints');
-    const vipBadge = document.getElementById('vipBadge');
-    const expText = document.getElementById('expText');
-    
+    const favMachinesBtn = document.getElementById('favMachinesBtn'); const keepMachinesBtn = document.getElementById('keepMachinesBtn'); const supportBtn = document.getElementById('supportBtn'); const dateSearchBtn = document.getElementById('dateSearchBtn'); const searchInput = document.getElementById('searchInput'); const filterSelect = document.getElementById('filterSelect'); const avatarContainer = document.getElementById('avatarContainer'); const displayNickname = document.getElementById('displayNickname'); const headerPoints = document.getElementById('headerPoints'); const vipBadge = document.getElementById('vipBadge'); const expText = document.getElementById('expText');
     if (favMachinesBtn) favMachinesBtn.onclick = () => renderFavoriteModal();
     if (keepMachinesBtn) keepMachinesBtn.onclick = () => renderKeepModal();
     if (supportBtn) supportBtn.onclick = () => alert('客服專線: 0800-666-888');
@@ -1282,10 +712,7 @@
     if (vipBadge) vipBadge.onclick = showVipInfo;
     if (expText) expText.onclick = showExpInfo;
     
-    const confirmOk = document.getElementById('confirmOk');
-    const confirmCancelBtn = document.getElementById('confirmCancelBtn');
-    const closeXBtn = document.getElementById('closeXBtn');
-    
+    const confirmOk = document.getElementById('confirmOk'); const confirmCancelBtn = document.getElementById('confirmCancelBtn'); const closeXBtn = document.getElementById('closeXBtn');
     if (confirmOk) confirmOk.addEventListener('click', doEnterGame);
     if (confirmCancelBtn) confirmCancelBtn.addEventListener('click', closeSubConfirm);
     if (closeXBtn) closeXBtn.addEventListener('click', closeSubConfirm);
